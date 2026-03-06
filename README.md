@@ -1,0 +1,1 @@
+# akilli-sehir-yonetim-sistemi
