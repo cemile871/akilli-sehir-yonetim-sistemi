@@ -1,3 +1,6 @@
+## Nisanur Eltekin
+Proje yönetim ve işbirliği sorumluluğu bu bölümde yürütülmektedir. 
+
 # Proje Akışı: Akıllı Şehir Yönetim Sistemi
 
 Bu proje süreci iki ana platform üzerinden yürütülmektedir:  
@@ -54,6 +57,3 @@ Hoca Ozalyildirim üzerinden sizi GitHub repo’suna yönlendirir. GitHub sürec
 4. Scrum AI asistanı görev ilerlemesini ve repo aktivitelerini analiz eder.  
 5. Görevler tamamlandığında site üzerinden onaylanır ve grup performansı güncellenir.
 
----
-
-Bu akış sayesinde proje yönetimi **sitenin sunduğu görsel pano ve AI destekli takibi** ile sağlanırken, **GitHub’da kod geliştirme süreci** de güvenli ve organize bir şekilde yürütülmektedir.
