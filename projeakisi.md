@@ -56,4 +56,3 @@ Hoca Ozalyildirim üzerinden sizi GitHub repo’suna yönlendirir. GitHub sürec
 3. Kod değişiklikleri commitlenir ve Pull Request ile ana branch’e eklenir.  
 4. Scrum AI asistanı görev ilerlemesini ve repo aktivitelerini analiz eder.  
 5. Görevler tamamlandığında site üzerinden onaylanır ve grup performansı güncellenir.
-
