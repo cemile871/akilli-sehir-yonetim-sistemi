@@ -75,3 +75,4 @@ Proje yönetim araçları incelendi.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 Fonksiyonel gereksinimler toplanmaya başlandı.
+
