@@ -57,7 +57,6 @@ Hoca Ozalyildirim üzerinden sizi GitHub repo’suna yönlendirir. GitHub sürec
 Projenin genel analizi yapıldı. Projenin amacı, kapsamı ve paydaşları belirlendi.
 
 ### Abdullah Gümüş
-### Abdullah Gümüş
 # Akıllı Şehir Yönetim Sistemi - Gereksinimler
 
 ---
