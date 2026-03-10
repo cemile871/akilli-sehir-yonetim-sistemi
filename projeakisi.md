@@ -57,11 +57,7 @@ Hoca Ozalyildirim üzerinden sizi GitHub repo’suna yönlendirir. GitHub sürec
 Projenin genel analizi yapıldı. Projenin amacı, kapsamı ve paydaşları belirlendi.
 
 ### Abdullah Gümüş
-# Akıllı Şehir Yönetim Sistemi - Proje Raporu
-
-**Hazırlayan:** Abdullah Gümüş
-**Öğrenci No:** 250542016
-**Bölüm:** Yazılım Mühendisliği, Fırat Üniversitesi
+# Akıllı Şehir Yönetim Sistemi - Gereksinimler
 
 ---
 
@@ -91,21 +87,21 @@ Simülatörden gelen araç yoğunluğu ve hız verileri, TensorFlow kullanılara
 * Sisteme düşen bir ambulans veya itfaiye rotası için "yeşil dalga" oluşturarak acil durum müdahale sürelerini kısaltır.
 
 ### 3.3. Yönetim Paneli ve Enerji Yönetimi (React)
-Belediye yetkililerinin sistemi kontrol edebilmesi için React ile iki ana web paneli geliştirdim:
+Belediye yetkililerinin sistemi kontrol edebilmesi için React ile iki ana web paneli geliştirilmeli:
 1.  **Yönetim Paneli:** Şehrin genel sağlık durumunun, trafik yoğunluk haritalarının ve acil durum alarmlarının izlendiği ana merkez.
 2.  **Enerji Yönetimi Paneli:** Şehrin sokak aydınlatmaları ve kamu binalarındaki enerji tüketiminin izlendiği alan. Sensörlerden gelen randomize verilerle gereksiz tüketim tespit edildiğinde yetkiliye uyarı verir veya sistem otonom olarak tasarruf moduna geçer.
 
 ### 3.4. Vatandaş Mobil Uygulaması (Native)
-Vatandaşların şehirle etkileşimini artırmak için cross-platform araçlar yerine, daha akıcı ve cihaza özgü bir deneyim sunması adına Native (Kotlin) bir Android uygulaması kodladım. Kullanıcılar bu uygulama üzerinden trafik durumunu görebilir, kendi bölgelerindeki enerji kesintilerini veya belediye duyurularını takip edebilirler.
+Vatandaşların şehirle etkileşimini artırmak için cross-platform araçlar yerine, daha akıcı ve cihaza özgü bir deneyim sunması adına Native (Kotlin) veya Python + React bir Android uygulaması kodlanacak. Kullanıcılar bu uygulama üzerinden trafik durumunu görebilir, kendi bölgelerindeki enerji kesintilerini veya belediye duyurularını takip edebilecekler.
 
 ## 4. Platformlar Arası Entegrasyon ve Veri Akışı
-Projenin en kritik noktalarından biri web panelleri ile mobil uygulama arasındaki gerçek zamanlı entegrasyondur. Sistemde izole çalışan hiçbir parça yoktur.
+Projenin en kritik noktalarından biri web panelleri ile mobil uygulama arasındaki gerçek zamanlı entegrasyondur. Sistemde izole çalışan hiçbir parça olmamalı.
 
 **Akış Örneği:**
-Belediye yetkilisi, React ile geliştirilen web tabanlı Yönetim Paneli'ne giriş yapıp bir sokağı bakım çalışması nedeniyle trafiğe kapattığında veya Enerji Paneli üzerinden bir bölge için "Planlı Kesinti" uyarısı girdiğinde; backend bu veriyi anında işler. Değişiklik, mobil uygulama tarafına anlık bildirim (push notification) olarak gönderilir ve uygulamanın arayüzündeki harita/duyuru ekranı doğrudan güncellenir. Yani web panelinden girilen her kritik aksiyon, doğrudan vatandaşın cebindeki mobil uygulamaya entegre çalışmaktadır.
+Belediye yetkilisi, React ile geliştirilen web tabanlı Yönetim Paneli'ne giriş yapıp bir sokağı bakım çalışması nedeniyle trafiğe kapattığında veya Enerji Paneli üzerinden bir bölge için "Planlı Kesinti" uyarısı girdiğinde; backend bu veriyi anında işler. Değişiklik, mobil uygulama tarafına anlık bildirim (push notification) olarak gönderilir ve uygulamanın arayüzündeki harita/duyuru ekranı doğrudan güncellenir. Yani web panelinden girilen her kritik aksiyon, doğrudan vatandaşın cebindeki mobil uygulamaya entegre çalışmalıdır.
 
 ## 5. Sonuç
-Bu proje ile farklı yazılım disiplinlerinin (Makine Öğrenmesi, Web Geliştirme, Native Mobil Geliştirme ve Veritabanı Yönetimi) birbiriyle uyumlu ve gerçek zamanlı olarak nasıl haberleşebileceği başarılı bir şekilde gösterilmiştir. Simülasyon verileriyle de olsa, kurulan mimari gerçek bir şehre entegre edilmeye hazır, ölçeklenebilir bir yapıdadır.
+Bu proje ile farklı yazılım disiplinlerinin (Makine Öğrenmesi, Web Geliştirme, Native Mobil Geliştirme ve Veritabanı Yönetimi) birbiriyle uyumlu ve gerçek zamanlı olarak nasıl haberleşebileceği başarılı bir şekilde gösterilmelidir. Simülasyon verileriyle de olsa, kurulan mimari gerçek bir şehre entegre edilmeye hazır, ölçeklenebilir bir yapıda olmalıdır.
 
 Akıllı şehir uygulamalarında kullanılan teknolojiler araştırıldı.
 
