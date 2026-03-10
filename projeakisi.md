@@ -116,6 +116,61 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 Proje yönetim araçları incelendi.
 
 ### Efecan Önal
-GÖREVİN BURAYA YAPIŞTIRILACAK.
 
-Fonksiyonel gereksinimler toplanmaya başlandı..
+# 🏙️ Akıllı Şehir Yönetim Sistemi  🚀
+### "Geleceğin Kentsel İşletim Sistemi"
+
+Bu proje; kentsel alanlarda yaşam kalitesini artırmak, kaynakları verimli kullanmak ve sürdürülebilirliği sağlamak amacıyla teknoloji ve veri analitiğini birleştiren kapsamlı bir **Akıllı Şehir** vizyonudur. Şehri devasa bir veri üretim merkezine dönüştürerek; **IoT, Yapay Zeka (AI) ve Büyük Veri** teknolojilerini kullanır.
+
+---
+
+## 🔍 1. Stratejik Vizyon & Analiz
+Modern metropoller artık sadece yönetilmiyor, adeta **"hayatta kalmaya çalışıyor."** AŞYS, reaktif (olay olduktan sonra müdahale eden) yönetimden, **proaktif** (sorunu oluşmadan öngören) bir yönetim modeline geçişin anahtarıdır. 🔑
+
+* **Veri Madenciliği:** Milyonlarca sensörden gelen veriyi anlamlı kararlara dönüştürmek.
+* **Optimizasyon:** Kaynakların (zaman, enerji, para) en verimli şekilde dağıtılması.
+
+---
+
+## 🛠️ 2. Projenin Temel Sütunları (Kapsam)
+
+### 🚦 A. Akıllı Hareketlilik 
+* **Dinamik Trafik Yönetimi:** Sensör verilerine göre trafik ışıklarının sürelerini anlık optimize eder. 🚥
+* **V2X Entegrasyonu:** Araçların trafik altyapısıyla konuştuğu bir iletişim ağı kurar. 📡
+
+### ⚡ B. Enerji & Ekolojik Denge
+* **Akıllı Şebekeler (Smart Grids):** Enerji talebini tahmin ederek yük dengelemesi yapar. 🔌
+* **Adaptif Aydınlatma:** Hareket sensörlü sokak lambaları ile enerji tasarrufu sağlar. 💡
+
+### 🚨 C. Acil Durum & Güvenlik
+* **Yeşil Koridor:** Ambulans ve itfaiye için trafik ışıklarını otomatik olarak yönetir. 🚑💨
+* **AI Olay Algılama:** Kazaları ve acil durumları operatörden önce tespit eder. 🛡️
+
+---
+
+## 🎯 3. Hedefler & Başarı Göstergeleri (KPI)
+
+| Hedef Kategorisi | Metrik | Beklenen Sonuç 🏆 |
+| :--- | :--- | :--- |
+| **Zaman Yönetimi** | Trafikte Geçen Süre | **-%30 Azalış** ⏳ |
+| **Çevresel Etki** | Karbon Emisyonu | **-%25 Düşüş** 🌱 |
+| **Kamu Güvenliği** | Müdahale Süresi | **-%45 Hızlanma** ⚡ |
+| **Ekonomi** | Enerji Maliyetleri | **-%20 Tasarruf** 💰 
+
+---
+
+## 👥 4. Paydaş Analizi
+* **Belediyeler:** Ana karar vericiler ve veri yöneticileri. 🏛️
+* **Yazılım Mimarları:** Sistemin algoritma ve veri güvenliğini sağlayan ekip. 👨‍💻
+* **Vatandaşlar:** Sistemin nihai kullanıcıları ve veri kaynakları. 🤳
+* **Güvenlik Birimleri:** Sahadaki operasyonel hızı artacak ekipler (Polis, İtfaiye). 🚔
+
+---
+
+## 🚀 Beklenen Sonuçlar
+1.  **Ekonomik Tasarruf:** Optimize edilmiş kamu kaynakları.
+2.  **Sürdürülebilirlik:** Gelecek nesillere daha yeşil bir şehir.
+3.  **Yaşam Kalitesi:** Vatandaşların ulaşım ve güvenliğe daha hızlı erişimi.
+
+---
+
