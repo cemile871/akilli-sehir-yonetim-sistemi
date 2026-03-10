@@ -105,8 +105,6 @@ Bu proje ile farklı yazılım disiplinlerinin (Makine Öğrenmesi, Web Gelişti
 
 Akıllı şehir uygulamalarında kullanılan teknolojiler araştırıldı.
 
-Akıllı şehir uygulamalarında kullanılan teknolojiler araştırıldı.
-
 ### Melih Ahmet Kocaman
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
