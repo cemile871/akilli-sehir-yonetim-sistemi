@@ -115,7 +115,7 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 Geliştirme ortamı kurulumu araştırıldı.
 
 ### Cemile Akay
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+Proje için GitHub üzerinden bir repository oluşturuldu. Proje klasör yapısı hazırlandı. Ekip üyeleri repositorye eklenerek projeye erişimleri sağlandı. Böylece ekip üyeleri ortak geliştirme ortamında çalışabilecek hale getirildi.
 
 Proje yönetim araçları incelendi.
 
