@@ -304,7 +304,45 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 # Hafta 4
 
 ## Nisanur Eltekin
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+## Çevresel Sensör Veri Görselleştirme ve Raporlama Modülü
+
+## Genel Bakış
+Hafta 3'te toplanan çevresel sensör verileri (sensor_data.json) okunarak anlamlı grafikler ve detaylı raporlar oluşturulmuştur.
+
+## Geliştirilen Modül: `sensor_visualizer.py`
+
+### Oluşturulan Grafikler
+
+**Lokasyon Bazlı Karşılaştırma:**
+Her lokasyonun ortalama AQI ve gürültü değerleri yatay bar grafikleriyle karşılaştırılmıştır. Tehlike sınırları görsel olarak işaretlenmiştir.
+
+**AQI Zaman Trendi:**
+Her sensörün hava kalitesi indeksinin zamana göre değişimi çizgi grafik ile gösterilmiştir. İyi (30) ve kötü (60) sınır çizgileri eklenmiştir.
+
+**Gürültü Dağılımı:**
+Her lokasyon için gürültü seviyesi dağılımı violin plot ile görselleştirilmiştir.
+
+**PM2.5 Isı Haritası:**
+Sensör ve zaman ekseninde PM2.5 partikül yoğunluğu ısı haritasıyla gösterilmiştir.
+
+**Gürültü Etiket Dağılımı:**
+Düşük, Orta, Yüksek ve Tehlikeli gürültü okumalarının genel dağılımı pasta grafikle sunulmuştur.
+
+### Özet Rapor
+Tüm grafikler ve istatistiksel özet (ortalama AQI, en kirli/en sessiz lokasyon, tehlikeli okuma sayısı vb.) otomatik olarak `raporlar/` klasörüne kaydedilmektedir.
+
+### Teknolojiler
+- Python 3.11
+- Pandas (Veri işleme)
+- Matplotlib (Grafik oluşturma)
+- Seaborn (İstatistiksel görselleştirme)
+
+### Çalıştırma
+```bash
+pip install matplotlib pandas seaborn
+python sensor_visualizer.py
+```
 
 ## Abdullah Gümüş
 GÖREVİN BURAYA YAPIŞTIRILACAK.
