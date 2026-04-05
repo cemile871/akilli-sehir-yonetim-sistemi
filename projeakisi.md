@@ -231,7 +231,63 @@ Grup üyelerine görev tanımlanmadı.
 # Hafta 3
 
 ## Nisanur Eltekin
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+## Çevresel Sensör Veri Toplama Modülü
+
+## Genel Bakış
+Hafta 3 görevi kapsamında, şehirdeki çevresel sensörlerden hava kalitesi ve gürültü seviyesi verilerini toplayan, doğrulayan ve kaydeden bir Python modülü geliştirilmiştir.
+
+## Geliştirilen Modül: `sensor_data_collector.py`
+
+### Sensör Lokasyonları
+Sistemde 5 farklı İstanbul lokasyonunda sensör simülasyonu kurulmuştur:
+- SNS-001: Kadıköy Meydan
+- SNS-002: Beşiktaş Sahil
+- SNS-003: Şişli Merkez
+- SNS-004: Üsküdar Meydanı
+- SNS-005: Bakırköy Sahil
+
+### Toplanan Metrikler
+
+**Hava Kalitesi:**
+- PM2.5 (Partikül madde, µg/m³)
+- PM10 (Kaba partikül, µg/m³)
+- CO2 (Karbondioksit, ppm)
+- NO2 (Azot dioksit, µg/m³)
+- O3 (Ozon, µg/m³)
+- Sıcaklık (°C) ve Nem (%)
+
+**Gürültü:**
+- Anlık gürültü seviyesi (dB)
+- 1 saatlik ortalama gürültü (dB)
+
+### Temel Özellikler
+
+**Gerçekçi Simülasyon:**
+Modül, gerçek şehir koşullarını yansıtmak için iki faktör içermektedir. Şehir merkezindeki sensörler (Kadıköy, Şişli) çevre sensörlerine göre %40 daha yüksek kirlilik değeri üretmektedir. Sabah 07-09 ve akşam 17-19 yoğun saatlerinde ise tüm değerler %50 artmaktadır.
+
+**Hava Kalitesi İndeksi (AQI):**
+PM2.5, PM10, NO2 ve Ozon değerleri birleştirilerek 0-100 arası tek bir skor üretilmektedir. 0-30 arası temiz, 30-60 arası orta, 60-100 arası kötü/tehlikeli olarak sınıflandırılmaktadır.
+
+**Veri Doğrulama:**
+Sensör arızası veya aşırı değerleri otomatik olarak tespit eden bir doğrulama katmanı eklenmiştir. Geçersiz veriler veritabanına yazılmamaktadır.
+
+**Çift Katmanlı Kayıt:**
+Veriler hem PostgreSQL veritabanına (batch insert ile verimli şekilde) hem de JSON dosyasına yedek olarak kaydedilmektedir.
+
+### Teknolojiler
+- Python 3.11
+- psycopg2 (PostgreSQL bağlantısı)
+- logging (Hata ve işlem takibi)
+- dataclasses (Veri modeli)
+
+### Çalıştırma
+```bash
+pip install psycopg2-binary
+python sensor_data_collector.py
+```
+
+Sistem çalıştırıldığında her 5 saniyede bir tüm sensörlerden veri toplayarak `sensor_data.json` dosyasına kaydetmektedir. `cycles=0` ayarı ile sürekli çalışır servis moduna alınmaktadır.
 
 ## Abdullah Gümüş
 GÖREVİN BURAYA YAPIŞTIRILACAK.
