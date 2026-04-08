@@ -440,7 +440,7 @@ study = optuna.create_study(direction="minimize")
 study.optimize(objective, n_trials=50)
 
 print("En iyi parametreler:", study.best_params)
-
+```
 ## Cemile Akay
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
