@@ -348,7 +348,98 @@ python sensor_visualizer.py
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Melih Ahmet Kocaman
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akıllı Şehir Yönetim Sistemi: Proje Dokümantasyonu
+
+**Proje Hedefi:** Şehirdeki trafik akışını optimize eden, enerji tüketimini izleyen ve acil durum müdahale sürelerini kısaltan; sensör verilerini analiz ederek gerçek zamanlı karar alan bir sistem geliştirmek.
+
+---
+
+## Bölüm 1: Teknoloji Araştırması ve Değerlendirme Raporu
+
+### 1.1. Arka Plan (Backend) ve Ana Programlama Dili
+Sensör verilerinin işlenmesi, algoritmaların çalıştırılması ve yapay zeka modelleriyle entegrasyon için bir arka plan diline ihtiyaç vardır.
+
+| Teknoloji | Avantajlar | Dezavantajlar | Karar & Değerlendirme |
+| :--- | :--- | :--- | :--- |
+| **Python** *(Seçilen)* | Veri bilimi ve yapay zeka (TensorFlow) ile kusursuz entegrasyon. | Diğer dillere göre işlem hızı nispeten yavaş olabilir. | **Kesinlikle Uygun.** API'ler için **FastAPI** veya **Django** kullanılabilir. |
+| **Go (Golang)** | İnanılmaz hızlı, eşzamanlı işlemlerde çok başarılı. | Makine öğrenmesi ekosistemi zayıf. | Mikroservis mimarisinde, API gateway kısmında destek olarak eklenebilir. |
+
+### 1.2. Yapay Zeka ve Makine Öğrenmesi
+Trafik akışını tahmin etme, enerji anormalliklerini tespit etme gibi özellikler için.
+
+| Teknoloji | Avantajlar | Dezavantajlar | Karar & Değerlendirme |
+| :--- | :--- | :--- | :--- |
+| **TensorFlow** *(Seçilen)* | Üretime alma konusunda çok güçlü. TF Lite desteği var. | Öğrenme eğrisi PyTorch'a göre biraz daha diktir. | **İdeal Seçim.** Sensör tabanlı IoT cihazlarında model çalıştırmak için çok avantajlı. |
+| **PyTorch** | Araştırma ve model geliştirme sürecinde daha esnek. | Edge AI (IoT) dağıtımları TensorFlow kadar olgun değil. | Canlı sistemler ve IoT için TensorFlow bir adım önde. |
+
+### 1.3. Veritabanı ve Veri Depolama
+Hem ilişkisel verilere hem de zaman serisi verilerine ihtiyaç vardır.
+
+| Teknoloji | Avantajlar | Dezavantajlar | Karar & Değerlendirme |
+| :--- | :--- | :--- | :--- |
+| **PostgreSQL** *(Seçilen)* | Güvenilir, ACID uyumlu, coğrafi veriler (PostGIS) için mükemmel. | Milyarlarca satırlık zaman serisinde tek başına hantal kalabilir. | **Mükemmel Seçim.** Sensör verileri için **TimescaleDB** eklentisi kullanılmalıdır. |
+
+### 1.4. Frontend (Kullanıcı ve Yönetim Arayüzü)
+Operatörlerin şehir durumunu haritalar ve grafikler üzerinden izleyeceği dashboard ekranları için.
+
+| Teknoloji | Avantajlar | Dezavantajlar | Karar & Değerlendirme |
+| :--- | :--- | :--- | :--- |
+| **React** *(Seçilen)* | Bileşen tabanlı mimari, devasa ekosistem. | Sadece bir UI kütüphanesidir, ek araçlar gerektirir. | **En İyi Seçim.** Canlı veri panelleri için biçilmiş kaftandır. |
+
+### 1.5. Önerilen Sistem Mimarisi Veri Akışı
+1.  **Veri Toplama (IoT):** Sensörler `->` MQTT `->` Apache Kafka
+2.  **Arka Plan & Yapay Zeka:** Python (FastAPI) + TensorFlow
+3.  **Veritabanı:** PostgreSQL *(PostGIS ve TimescaleDB ile)*
+4.  **Arayüz:** React *(WebSocket ile)*
+
+---
+
+## Bölüm 2: Enerji Verimliliği Algoritması Optimizasyonu
+
+### 2.1. Başarı Metriklerinin (KPI) Belirlenmesi
+* **Tasarruf Edilen Enerji (kWh):** Algoritmanın müdahalesi ile harcanmayan enerji miktarı.
+* **Tahmin Doğruluğu (MSE / MAE):** Modelin enerji ihtiyacını doğru tahmin etme oranı.
+* **Sistem Gecikmesi (Latency):** Sensör verisinin alınması ile kararın verilmesi arasındaki süre.
+
+### 2.2. Test Edilecek Parametreler (Hyperparameter Tuning)
+* **Yapay Zeka Parametreleri:** Learning Rate (Öğrenme Oranı), Batch Size (Yığın Boyutu), Epoch Sayısı.
+* **Operasyonel Parametreler:** Karar Eşiği (Threshold), Sensör Okuma Sıklığı.
+
+### 2.3. Python ile Optimizasyon Yaklaşımı
+**Optuna** kütüphanesi kullanılarak hiperparametre optimizasyonu gerçekleştirilir.
+
+```python
+import tensorflow as tf
+import optuna
+from sklearn.model_selection import train_test_split
+
+# Varsayımsal veritabanı simülasyonu
+# X_train, X_test, y_train, y_test = train_test_split(veri_X, veri_y, test_size=0.2)
+
+def objective(trial):
+    learning_rate = trial.suggest_float("learning_rate", 1e-4, 1e-1, log=True)
+    batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 128])
+    neurons = trial.suggest_int("neurons", 32, 256, step=32)
+    
+    model = tf.keras.Sequential([
+        tf.keras.layers.Dense(neurons, activation='relu'),
+        tf.keras.layers.Dropout(0.2),
+        tf.keras.layers.Dense(neurons // 2, activation='relu'),
+        tf.keras.layers.Dense(1, activation='linear')
+    ])
+    
+    optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+    model.compile(optimizer=optimizer, loss='mse', metrics=['mae'])
+    
+    model.fit(X_train, y_train, batch_size=batch_size, epochs=10, verbose=0)
+    loss, mae = model.evaluate(X_test, y_test, verbose=0)
+    
+    return mae
+
+study = optuna.create_study(direction="minimize")
+study.optimize(objective, n_trials=50)
+
+print("En iyi parametreler:", study.best_params)
 
 ## Cemile Akay
 GÖREVİN BURAYA YAPIŞTIRILACAK.
