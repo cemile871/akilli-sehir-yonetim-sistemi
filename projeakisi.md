@@ -118,4 +118,4 @@ Proje yönetim araçları incelendi.
 ### Efecan Önal
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
-Fonksiyonel gereksinimler toplanmaya başlandı..
+Fonksiyonel gereksinimler toplanmaya başlandı.. 
