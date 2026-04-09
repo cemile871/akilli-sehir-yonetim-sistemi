@@ -296,7 +296,72 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Cemile Akay
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+AKILLI ULAŞIM UI TASARIMI 
+🎯 1. Amaç
+
+Bu çalışmada, kullanıcıların ulaşım bilgilerine hızlı ve kolay erişebilmesi için sade ve anlaşılır bir kullanıcı arayüzü tasarlanmıştır.
+
+🖥️ 2. Tasarlanan Arayüzler
+📌 1. Ana Sayfa
+
+Ana sayfa, kullanıcıyı yönlendiren basit bir menü içerir.
+
+İçerik:
+
+Başlık: Akıllı Ulaşım Sistemi
+Butonlar:
+Rota Ara
+Otobüs Saatleri
+Bildirimler
+
+📌 2. Rota Arama Ekranı
+
+İçerik:
+
+"Nereden" giriş alanı
+"Nereye" giriş alanı
+"Rota Bul" butonu
+
+Çalışma Mantığı:
+Kullanıcı başlangıç ve varış noktasını girerek uygun rotayı görüntüler.
+
+📌 3. Otobüs Saatleri Ekranı
+
+İçerik:
+
+Otobüs saatleri listesi
+Hat bilgileri
+
+Çalışma Mantığı:
+Kullanıcı seçtiği hattın saatlerini görüntüler.
+
+📌 4. Bildirim Ekranı
+
+İçerik:
+
+Gecikme bildirimleri
+Duyurular
+Sistem mesajları
+
+Çalışma Mantığı:
+Kullanıcı ulaşım ile ilgili anlık bilgilere erişir.
+
+🎨 3. Tasarım Kararları
+
+Sade ve kullanıcı dostu tasarım tercih edilmiştir
+Karmaşıklıktan kaçınılmıştır
+Büyük ve anlaşılır butonlar kullanılmıştır
+Açık ve okunabilir yazı tipleri seçilmiştir
+Mobil uyumlu düşünülmüştür
+
+👤 4. Kullanıcı Senaryosu
+
+Kullanıcı uygulamaya giriş yapar.
+Ana ekrandan “Rota Ara” seçeneğini seçer.
+Gidiş ve varış noktalarını girer.
+Sistem uygun rotayı gösterir.
+Kullanıcı daha sonra otobüs saatlerini kontrol eder.
+Eğer gecikme varsa bildirim ekranından bilgi alır.
 
 ## Efecan Önal
 Efecan Önal
