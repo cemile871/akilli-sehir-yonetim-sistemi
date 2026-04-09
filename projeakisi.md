@@ -297,11 +297,13 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Cemile Akay
 AKILLI ULAŞIM UI TASARIMI 
+
 🎯 1. Amaç
 
 Bu çalışmada, kullanıcıların ulaşım bilgilerine hızlı ve kolay erişebilmesi için sade ve anlaşılır bir kullanıcı arayüzü tasarlanmıştır.
 
 🖥️ 2. Tasarlanan Arayüzler
+
 📌 1. Ana Sayfa
 
 Ana sayfa, kullanıcıyı yönlendiren basit bir menü içerir.
