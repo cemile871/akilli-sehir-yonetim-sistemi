@@ -227,6 +227,21 @@ Modern metropoller artık sadece yönetilmiyor, adeta **"hayatta kalmaya çalı�
 
 # Hafta 2
 
+## Nisanur Eltekin
+GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+## Abdullah Gümüş
+GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+## Melih Ahmet Kocaman
+GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+## Cemile Akay
+GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+## Efecan Önal
+GÖREVİN BURAYA YAPIŞTIRILACAK.
+
 # Hafta 3
 
 ## Nisanur Eltekin
