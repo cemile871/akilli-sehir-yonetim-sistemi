@@ -237,7 +237,155 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Cemile Akay
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# 📊 Veri Toplama Modülü Gereksinim Analizi
+
+## Akıllı Şehir Yönetim Sistemi
+
+---
+
+## 1. Giriş
+
+Akıllı şehir sistemleri, şehir yaşamını daha verimli, güvenli ve sürdürülebilir hale getirmek için veri odaklı çalışır. Bu nedenle farklı kaynaklardan veri toplanması, işlenmesi ve güvenli şekilde saklanması kritik öneme sahiptir.
+
+---
+
+## 2. Toplanacak Veri Türleri
+
+### 🚗 Trafik Verileri
+
+* Araç yoğunluğu
+* Ortalama hız
+* Trafik kazaları
+* Kavşak doluluk oranı
+
+**Kaynaklar:**
+
+* Trafik kameraları
+* Plaka tanıma sistemleri
+* GPS verileri
+
+---
+
+### ⚡ Enerji Tüketimi Verileri
+
+* Elektrik tüketimi (bina/mahalle bazlı)
+* Sokak aydınlatma durumu
+* Yenilenebilir enerji üretimi
+
+**Kaynaklar:**
+
+* Akıllı sayaçlar
+* Enerji yönetim sistemleri
+
+---
+
+### 🌫️ Hava Kalitesi Verileri
+
+* CO2 seviyesi
+* PM2.5 / PM10 değerleri
+* Nem ve sıcaklık
+
+**Kaynaklar:**
+
+* Hava sensörleri
+* Meteoroloji istasyonları
+
+---
+
+### 🚰 Su ve Atık Yönetimi Verileri
+
+* Su tüketimi
+* Atık doluluk oranı
+* Geri dönüşüm miktarı
+
+**Kaynaklar:**
+
+* Akıllı su sayaçları
+* Çöp konteyner sensörleri
+
+---
+
+## 3. Veri Toplama Sıklığı
+
+| Veri Türü     | Sıklık            |
+| ------------- | ----------------- |
+| Trafik        | Anlık (real-time) |
+| Enerji        | 5-15 dakika       |
+| Hava Kalitesi | 1-5 dakika        |
+| Su & Atık     | 15-30 dakika      |
+
+---
+
+## 4. Veri Formatı
+
+Toplanan verilerin standart olması gerekir:
+
+* JSON (en yaygın)
+* XML (eski sistemler için)
+* CSV (raporlama için)
+
+**Örnek JSON veri:**
+
+```
+{
+  "sensor_id": "TRF123",
+  "type": "traffic",
+  "value": 45,
+  "unit": "vehicle/min",
+  "timestamp": "2026-05-04T20:00:00"
+}
+```
+
+---
+
+## 5. Veri Güvenliği Gereksinimleri
+
+* Veri şifreleme (SSL/TLS)
+* Kimlik doğrulama (API key, token)
+* Yetkilendirme (rol bazlı erişim)
+* Veri yedekleme
+* Anomali tespiti
+
+---
+
+## 6. Mevcut Altyapı Analizi
+
+### Güçlü Yönler
+
+* Sensör ağlarının yaygın olması
+* IoT cihazlarının artışı
+* Bulut sistemlerinin kullanımı
+
+### Zayıf Yönler
+
+* Eski sistemlerle uyumsuzluk
+* Veri formatlarının farklı olması
+* Gerçek zamanlı veri işleme eksikliği
+
+---
+
+## 7. Entegrasyon Zorlukları
+
+* Farklı marka sensör uyumsuzluğu
+* Veri gecikmesi (latency)
+* Büyük veri yönetimi
+* Güvenlik açıkları
+
+---
+
+## 8. Çözüm Önerileri
+
+* Ortak veri standardı (JSON API) kullanımı
+* IoT platform entegrasyonu (MQTT)
+* Bulut tabanlı veri işleme
+* Gerçek zamanlı veri analizi
+* Güçlü siber güvenlik altyapısı
+
+---
+
+## 9. Sonuç
+
+Akıllı şehir sistemlerinin verimli çalışabilmesi için doğru veri toplama stratejisi büyük önem taşır. Sensörlerden gelen verilerin doğru sıklıkta, güvenli ve standart formatta toplanması sistemin başarısını doğrudan etkiler.
 
 ## Efecan Önal
 GÖREVİN BURAYA YAPIŞTIRILACAK.
