@@ -234,7 +234,93 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Melih Ahmet Kocaman
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akıllı Şehir Mobil Uygulaması: Gereksinim ve Tasarım Dokümanı
+
+Bu doküman, vatandaşların akıllı şehir altyapısıyla etkileşime geçmesini sağlayacak mobil uygulamanın teknik, işlevsel ve güvenlik gereksinimlerini tanımlamaktadır.
+
+---
+
+## 1. Platform ve Teknoloji Gereksinimleri
+Uygulama, maksimum kullanıcıya ulaşmak ve geliştirme maliyetlerini optimize etmek amacıyla **Çapraz Platform (Cross-Platform)** olarak geliştirilmelidir.
+
+*   **Desteklenen Platformlar:** iOS 14.0+ (Apple App Store) ve Android 9.0+ (Google Play Store).
+*   **Önerilen Teknoloji:** **React Native**. Şehrin ana yönetim paneli (Frontend) React ile geliştirildiği için, kod paylaşımı ve ekip uyumu açısından React Native en mantıklı seçimdir. 
+*   **Arka Plan (Backend) İletişimi:** RESTful API'ler (FastAPI) ve gerçek zamanlı bildirimler/harita güncellemeleri için WebSocket/MQTT.
+
+---
+
+## 2. Temel Özellikler ve Modüller
+
+### 2.1. Akıllı Trafik Modülü
+*   **Canlı Trafik Haritası:** Şehirdeki trafik yoğunluğunu renk kodlarıyla (Yeşil, Sarı, Kırmızı) gösteren etkileşimli harita.
+*   **Akıllı Rota Önerisi:** Hedef girildiğinde anlık sensör verilerine dayanarak en hızlı, en az karbon salınımlı veya toplu taşımaya en uygun alternatif rotaları sunma.
+*   **Park Yeri Durumu:** Akıllı sensörlerden alınan verilerle boş otopark kapasitelerinin canlı gösterimi.
+
+### 2.2. Enerji Tüketimi ve Farkındalık Modülü
+*   **Bölgesel Tüketim Takibi:** Kullanıcının bulunduğu mahalledeki genel enerji tüketim yoğunluğunu ve şebeke durumunu gösterme.
+*   **Kesinti Bildirimleri:** Altyapı çalışmaları veya aşırı yüklenme kaynaklı planlı/plansız elektrik ve su kesintilerinin harita üzerinde ve liste halinde sunulması.
+*   **Oyunlaştırma (Gamification):** Şehrin genel enerji tasarruf hedeflerine katkıda bulunan vatandaşlara (örneğin yoğun saatlerde elektrikli araç şarjını erteleyenlere) dijital rozetler veya şehir içi ulaşım indirimleri sunma.
+
+### 2.3. Acil Durum ve Güvenlik Modülü
+*   **Anlık Bildirimler (Push Notifications):** Deprem, sel, yangın gibi acil durumlarda bölgedeki vatandaşların ekranına düşen yüksek öncelikli, sesli bildirimler.
+*   **Toplanma Alanları ve Güvenli Rotalar:** Afet anında kullanıcının konumuna en yakın güvenli toplanma alanına internetsiz (önbelleğe alınmış harita ile) yönlendirme.
+*   **SOS Bildirimi:** Kullanıcının tehlike anında tek tuşla konumunu acil çağrı merkezlerine iletebilmesi.
+
+---
+
+## 3. Kullanıcı Etkileşimi (UI/UX Yaklaşımı)
+*   **Harita Odaklı Tasarım:** Uygulamanın ana ekranı kişiselleştirilmiş bir şehir haritası olmalıdır. Kullanıcılar menülerde kaybolmak yerine "Ne, nerede oluyor?" sorusunun cevabını harita üzerindeki pinler ve katmanlar (Layers) ile bulmalıdır.
+*   **Kişiselleştirme:** Kullanıcılar sadece ilgilendikleri modülleri veya güzergahları (örn: Ev-İş arası) ana ekrana sabitleyebilmelidir.
+*   **Erişilebilirlik:** Sesli komut desteği (VoiceOver/TalkBack uyumluluğu), yüksek kontrast modu ve büyük metin seçenekleri.
+
+---
+
+## 4. Kullanıcı Hikayesi Haritası (User Story Map)
+
+| Epic (Ana Tema) | User Story (Kullanıcı Hikayesi) | Öncelik |
+| :--- | :--- | :--- |
+| **Kayıt ve Profil** | "Bir vatandaş olarak, T.C. Kimlik veya e-Devlet ile uygulamaya güvenle giriş yapmak istiyorum, böylece bilgilerim doğrulanmış olur." | Yüksek |
+| **Kayıt ve Profil** | "Bir vatandaş olarak, ev ve iş adreslerimi kaydetmek istiyorum, böylece sadece bana özel bölgesel bildirimler alabilirim." | Orta |
+| **Trafik Yönetimi** | "Bir sürücü olarak, işe gitmeden önce güzergahımdaki anlık trafik durumunu haritada görmek istiyorum, böylece gecikmeleri önleyebilirim." | Yüksek |
+| **Trafik Yönetimi** | "Bir vatandaş olarak, şehir merkezindeki boş otopark sayısını canlı görmek istiyorum, böylece park yeri aramakla vakit kaybetmem." | Orta |
+| **Enerji Takibi** | "Bölge sakini olarak, mahallemdeki planlı elektrik kesintilerini önceden bilmek istiyorum, böylece önlem alabilirim." | Yüksek |
+| **Acil Durum** | "Bir afet anında, internetim zayıf olsa bile en yakın toplanma alanını haritada görmek istiyorum, böylece güvenle tahliye olabilirim." | Kritik |
+| **Acil Durum** | "Bir tehlike anında, ekrandaki panik butonunu kullanarak yetkililere anında konumumu iletmek istiyorum." | Kritik |
+
+---
+
+## 5. Kullanıcı Akışları (User Flows)
+
+### Akış 1: Günlük Ulaşım Planlaması
+1.  **Giriş:** Kullanıcı uygulamayı açar.
+2.  **Karşılama:** Ana harita ekranı yüklenir, kullanıcının GPS konumu merkeze alınır.
+3.  **Etkileşim:** Kullanıcı "Ev -> İş" kayıtlı rotasına dokunur.
+4.  **İşlem:** Uygulama, arka plandan (Kafka/Python) anlık trafik ve kaza verilerini çeker.
+5.  **Karar:** Eğer ana rotada %70 üzeri yoğunluk veya kaza varsa, sistem alternatif rota önerir.
+6.  **Sonuç:** Kullanıcı önerilen rotayı seçer ve harita navigasyon moduna geçer.
+
+### Akış 2: Acil Durum Tahliyesi
+1.  **Tetikleyici:** Şehir yönetim sisteminden "Deprem Alarmı" sinyali gelir.
+2.  **Bildirim:** Kullanıcının telefonu kilitli olsa dahi yüksek sesli bir "Acil Durum" bildirimi (Push Notification) ekranda belirir.
+3.  **Etkileşim:** Kullanıcı bildirime tıklar. Uygulama "Acil Durum Modu"nda açılır (grafikler sadeleşir, batarya tasarrufuna geçilir).
+4.  **İşlem:** Uygulama kullanıcının konumunu algılar ve veri tabanından (PostGIS) en yakın toplanma alanını çeker.
+5.  **Sonuç:** Ekranda hasarlı olduğu bilinen yollar kırmızı ile çizilirken, toplanma alanına giden en güvenli yeşil yaya rotası gösterilir.
+
+---
+
+## 6. Güvenlik ve Gizlilik Gereksinimleri
+
+Bu uygulama doğrudan vatandaşların günlük alışkanlıklarını ve konum verilerini işleyeceği için güvenlik ve gizlilik (KVKK/GDPR uyumluluğu) en üst düzeyde olmalıdır.
+
+### 6.1. Veri Gizliliği (Privacy)
+*   **KVKK/GDPR Uyumluluğu:** Uygulama ilk açıldığında açık rıza metinleri onaylatılmalı, kullanıcılar verilerinin hangi amaçla kullanılacağını şeffafça görebilmelidir.
+*   **Konum Verisi Anonimleştirme:** Trafik yoğunluk haritası oluşturulurken kullanıcıların hız ve konum verileri sunucuya gönderilmeden önce cihazda anonimleştirilmeli (kimlik bilgisinden arındırılmalı), merkezi sisteme sadece "1 birim araç şu koordinatta" şeklinde gitmelidir.
+*   **Opt-in Sistemi:** Arka planda konum izleme varsayılan olarak kapalı olmalı, sadece kullanıcı "Trafik verisine katkıda bulun" seçeneğini aktif ettiğinde çalışmalıdır.
+
+### 6.2. Uygulama ve Ağ Güvenliği
+*   **Uçtan Uca Şifreleme:** Mobil uygulama ile API arasındaki tüm iletişim güçlü TLS/SSL protokolleri (HTTPS) ile şifrelenmelidir.
+*   **Kimlik Doğrulama:** Oturum açma işlemleri OAuth 2.0 veya JWT (JSON Web Tokens) ile yönetilmelidir. Hassas bölümlere erişimde Biyometrik Doğrulama (FaceID / Parmak İzi) desteklenmelidir.
+*   **Veri Saklama:** Cihazda saklanması gereken hassas veriler (ev adresi, kişisel rota tercihleri vb.), iOS'ta Keychain ve Android'de Keystore kullanılarak AES-256 standardında şifrelenerek saklanmalıdır.
 
 ## Cemile Akay
 GÖREVİN BURAYA YAPIŞTIRILACAK.
