@@ -266,7 +266,7 @@ Elazığ Zübeyde Hanım Caddesi ve Kampüs Kavşağı gibi kritik noktalarda "N
 3. Sistem Entegrasyonu
 
 Ayrı ayrı geliştirilen Enerji ve Trafik modülleri, sayfa yenilenmeden sekmeler arası geçiş yapılabilen (SPA) dinamik bir menü altyapısı ile tek bir dosya sisteminde (index.html, style.css, script.js) birleştirilerek GitHub repository'sine eklendi.
-[GÖREVİN BURAYA YAPIŞTIRILACAK.](https://akillisehir.netlify.app/)
+(https://akillisehir.netlify.app/)
 
 
 # Hafta 3
