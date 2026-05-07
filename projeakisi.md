@@ -240,7 +240,34 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Efecan Önal
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+Hafta 3 Çalışma Özeti
+Rol/Odak: Frontend (Arayüz) Geliştirme & UX/UI Tasarımı
+
+Bu hafta kapsamında "Akıllı Şehir Yönetim Sistemi"nin kullanıcı arayüzü (UI) geliştirilmiş ve arka planda çalışacak yapay zeka/optimizasyon algoritmalarının yetkililer tarafından kontrol edilebilmesi için interaktif bir kontrol paneli tasarlanmıştır. Tüm modüller Single Page Application (SPA) mimarisiyle tek bir sayfada birleştirilmiştir.
+
+Neler Yapıldı?
+
+1. Enerji Yönetim Paneli (UI/UX ve Veri Görselleştirme)
+
+Modern web tasarım trendlerinden olan Glassmorphism (Buzlu Cam) efekti ve göz yorgunluğunu önleyen Karanlık Mod (Dark Mode) kullanılarak kullanıcı dostu bir arayüz (HTML/CSS) kodlandı.
+
+Chart.js kütüphanesi sisteme entegre edilerek pilot bölge olan Elazığ'ın (Merkez, Çaydaçıra, Fırat Üni vb.) günlük enerji tüketim verileri interaktif çubuk grafiklerle görselleştirildi.
+
+Yöneticilerin bölge seçip, sokak aydınlatmalarını açıp kapatabileceği veya aydınlatma şiddetini (%0-100) ayarlayabileceği kontrol düğmeleri (toggle/slider) JavaScript ile işlevsel hale getirildi.
+
+2. Trafik Optimizasyon Modülü (React ve Simülasyon)
+
+Sistemdeki makine öğrenmesi algoritmalarını görselleştirmek amacıyla React.js tabanlı bağımsız bir simülasyon ekranı geliştirildi.
+
+Kullanıcıların (belediye görevlisi) ambulans önceliği, yapay zeka otonomisi ve bekleme eşiği gibi algoritma parametrelerini dinamik olarak ayarlayabileceği bir kontrol mekanizması kuruldu.
+
+Elazığ Zübeyde Hanım Caddesi ve Kampüs Kavşağı gibi kritik noktalarda "Normal Akış, Trafik Kazası, Yol Çalışması" gibi kriz senaryolarını anlık olarak harita üzerinde simüle eden yapı kodlandı.
+
+3. Sistem Entegrasyonu
+
+Ayrı ayrı geliştirilen Enerji ve Trafik modülleri, sayfa yenilenmeden sekmeler arası geçiş yapılabilen (SPA) dinamik bir menü altyapısı ile tek bir dosya sisteminde (index.html, style.css, script.js) birleştirilerek GitHub repository'sine eklendi.
+[GÖREVİN BURAYA YAPIŞTIRILACAK.](https://akillisehir.netlify.app/)
+
 
 # Hafta 3
 
