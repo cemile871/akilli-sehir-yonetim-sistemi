@@ -458,75 +458,436 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Cemile Akay
-AKILLI ULAŞIM UI TASARIMI 
+# Veri Toplama Modülü – PostgreSQL Veritabanı Şema Tasarımı
 
-🎯 1. Amaç
+## 1. Proje Amacı
 
-Bu çalışmada, kullanıcıların ulaşım bilgilerine hızlı ve kolay erişebilmesi için sade ve anlaşılır bir kullanıcı arayüzü tasarlanmıştır.
+Bu veritabanı tasarımı, şehirde bulunan sensörlerden gelen verilerin güvenli, hızlı ve ölçeklenebilir şekilde saklanması amacıyla hazırlanmıştır.
 
-🖥️ 2. Tasarlanan Arayüzler
+Sistem aşağıdaki kaynaklardan veri toplayacaktır:
 
-📌 1. Ana Sayfa
+- Trafik kameraları
+- Enerji sayaçları
+- Hava kalite sensörleri
+- Sıcaklık sensörleri
+- Nem sensörleri
+- Akıllı şehir IoT cihazları
 
-Ana sayfa, kullanıcıyı yönlendiren basit bir menü içerir.
+Tasarlanan PostgreSQL veritabanı:
 
-İçerik:
+- Büyük miktarda veriyi yönetebilir
+- Gerçek zamanlı veri akışını destekler
+- Hızlı sorgulama sağlar
+- Gelecekte yeni sensörlerin eklenmesine uygundur
 
-Başlık: Akıllı Ulaşım Sistemi
-Butonlar:
-Rota Ara
-Otobüs Saatleri
-Bildirimler
+---
 
-📌 2. Rota Arama Ekranı
+# 2. Veritabanı Teknolojisi
 
-İçerik:
+## Kullanılan Sistem
 
-"Nereden" giriş alanı
-"Nereye" giriş alanı
-"Rota Bul" butonu
+- PostgreSQL 16
 
-Çalışma Mantığı:
-Kullanıcı başlangıç ve varış noktasını girerek uygun rotayı görüntüler.
+## Kullanılma Sebepleri
 
-📌 3. Otobüs Saatleri Ekranı
+- Güçlü performans
+- Yüksek güvenlik
+- Büyük veri desteği
+- JSON desteği
+- Indexleme sistemlerinin gelişmiş olması
+- Ölçeklenebilir yapı sunması
 
-İçerik:
+---
 
-Otobüs saatleri listesi
-Hat bilgileri
+# 3. Veritabanı Genel Yapısı
 
-Çalışma Mantığı:
-Kullanıcı seçtiği hattın saatlerini görüntüler.
+Sistem aşağıdaki temel tablolardan oluşacaktır:
 
-📌 4. Bildirim Ekranı
+| Tablo Adı | Açıklama |
+|---|---|
+| sensor_types | Sensör türleri |
+| locations | Sensör konum bilgileri |
+| sensors | Sistemdeki sensörler |
+| sensor_data | Sensörlerden gelen veriler |
+| alerts | Alarm kayıtları |
+| users | Sistem kullanıcıları |
+| maintenance_logs | Bakım kayıtları |
 
-İçerik:
+---
 
-Gecikme bildirimleri
-Duyurular
-Sistem mesajları
+# 4. Tabloların Ayrıntılı Tasarımı
 
-Çalışma Mantığı:
-Kullanıcı ulaşım ile ilgili anlık bilgilere erişir.
+## 4.1 sensor_types Tablosu
 
-🎨 3. Tasarım Kararları
+Sensör kategorilerini saklar.
 
-Sade ve kullanıcı dostu tasarım tercih edilmiştir
-Karmaşıklıktan kaçınılmıştır
-Büyük ve anlaşılır butonlar kullanılmıştır
-Açık ve okunabilir yazı tipleri seçilmiştir
-Mobil uyumlu düşünülmüştür
+```sql
+CREATE TABLE sensor_types (
+    type_id SERIAL PRIMARY KEY,
+    type_name VARCHAR(100) NOT NULL,
+    description TEXT
+);
+```
 
-👤 4. Kullanıcı Senaryosu
+### Açıklama
 
-Kullanıcı uygulamaya giriş yapar.
-Ana ekrandan “Rota Ara” seçeneğini seçer.
-Gidiş ve varış noktalarını girer.
-Sistem uygun rotayı gösterir.
-Kullanıcı daha sonra otobüs saatlerini kontrol eder.
-Eğer gecikme varsa bildirim ekranından bilgi alır.
+Örnek sensör türleri:
 
+- Trafik Kamerası
+- Enerji Sayacı
+- Hava Kalite Sensörü
+- Sıcaklık Sensörü
+
+---
+
+## 4.2 locations Tablosu
+
+Sensörlerin fiziksel konumlarını tutar.
+
+```sql
+CREATE TABLE locations (
+    location_id SERIAL PRIMARY KEY,
+    city VARCHAR(100),
+    district VARCHAR(100),
+    street VARCHAR(150),
+    latitude DECIMAL(9,6),
+    longitude DECIMAL(9,6)
+);
+```
+
+### Açıklama
+
+Bu tablo sayesinde:
+
+- Harita işlemleri yapılabilir
+- Bölgesel analizler yapılabilir
+- Sensörler konum bazlı filtrelenebilir
+
+---
+
+## 4.3 sensors Tablosu
+
+Sistemdeki tüm sensör bilgilerini tutar.
+
+```sql
+CREATE TABLE sensors (
+    sensor_id SERIAL PRIMARY KEY,
+    sensor_name VARCHAR(100) NOT NULL,
+    type_id INT REFERENCES sensor_types(type_id),
+    location_id INT REFERENCES locations(location_id),
+    installation_date DATE,
+    status VARCHAR(50),
+    serial_number VARCHAR(100) UNIQUE
+);
+```
+
+### Açıklama
+
+Her sensör:
+
+- Bir sensör türüne bağlıdır
+- Bir lokasyonda bulunur
+- Kendine ait seri numarasına sahiptir
+
+### Örnek Durumlar
+
+- Active
+- Passive
+- Maintenance
+- Offline
+
+---
+
+## 4.4 sensor_data Tablosu
+
+Sensörlerden gelen büyük veri burada saklanır.
+
+```sql
+CREATE TABLE sensor_data (
+    data_id BIGSERIAL PRIMARY KEY,
+    sensor_id INT REFERENCES sensors(sensor_id),
+    data_value NUMERIC(10,2),
+    unit VARCHAR(20),
+    recorded_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Açıklama
+
+Bu tablo sistemin en büyük tablosudur.
+
+Örnek veriler:
+
+| sensor_id | data_value | unit |
+|---|---|---|
+| 1 | 45 | araç/dk |
+| 2 | 220 | volt |
+| 3 | 31 | °C |
+
+---
+
+## 4.5 alerts Tablosu
+
+Sensörlerde oluşan kritik durumları saklar.
+
+```sql
+CREATE TABLE alerts (
+    alert_id SERIAL PRIMARY KEY,
+    sensor_id INT REFERENCES sensors(sensor_id),
+    alert_type VARCHAR(100),
+    alert_message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Örnek Alarm Durumları
+
+- Yüksek sıcaklık
+- Kamera bağlantı kesildi
+- Enerji tüketimi kritik seviyede
+- Sensör çevrimdışı
+
+---
+
+## 4.6 users Tablosu
+
+Sistemi kullanan yöneticileri tutar.
+
+```sql
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(100),
+    email VARCHAR(150) UNIQUE,
+    password_hash TEXT,
+    role VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Kullanıcı Rolleri
+
+- Admin
+- Operatör
+- Teknik Personel
+
+---
+
+## 4.7 maintenance_logs Tablosu
+
+Sensör bakım geçmişini tutar.
+
+```sql
+CREATE TABLE maintenance_logs (
+    maintenance_id SERIAL PRIMARY KEY,
+    sensor_id INT REFERENCES sensors(sensor_id),
+    performed_by INT REFERENCES users(user_id),
+    maintenance_date TIMESTAMP,
+    notes TEXT
+);
+```
+
+---
+
+# 5. Tablolar Arasındaki İlişkiler
+
+## İlişkiler
+
+### sensor_types → sensors
+
+- Bir sensör türünün birden fazla sensörü olabilir.
+- İlişki tipi: One-to-Many
+
+### locations → sensors
+
+- Bir lokasyonda birden fazla sensör bulunabilir.
+- İlişki tipi: One-to-Many
+
+### sensors → sensor_data
+
+- Bir sensörden milyonlarca veri gelebilir.
+- İlişki tipi: One-to-Many
+
+### sensors → alerts
+
+- Bir sensörün birçok alarm kaydı olabilir.
+
+### users → maintenance_logs
+
+- Bir kullanıcı birçok bakım işlemi yapabilir.
+
+---
+
+# 6. ER Diyagram Mantığı
+
+```text
+sensor_types
+    |
+    |----< sensors >---- locations
+                |
+                |----< sensor_data
+                |
+                |----< alerts
+                |
+                |----< maintenance_logs >---- users
+```
+
+---
+
+# 7. Indexleme Stratejileri
+
+Sistem büyük veri ile çalışacağı için indexleme çok önemlidir.
+
+## 7.1 Sensor Data Indexleri
+
+```sql
+CREATE INDEX idx_sensor_data_sensor_id
+ON sensor_data(sensor_id);
+
+CREATE INDEX idx_sensor_data_recorded_at
+ON sensor_data(recorded_at);
+```
+
+### Neden Gereklidir?
+
+Bu indexler sayesinde:
+
+- Tarihe göre hızlı sorgu yapılır
+- Sensöre göre filtreleme hızlanır
+- Dashboard performansı artar
+
+---
+
+## 7.2 Sensors Tablosu Indexi
+
+```sql
+CREATE INDEX idx_sensors_type
+ON sensors(type_id);
+```
+
+---
+
+## 7.3 Alerts Tablosu Indexi
+
+```sql
+CREATE INDEX idx_alerts_created_at
+ON alerts(created_at);
+```
+
+---
+
+# 8. Performans Optimizasyonu
+
+## Partitioning (Tablo Bölme)
+
+sensor_data tablosu çok büyüyeceği için aylık partition kullanılacaktır.
+
+Örnek:
+
+```sql
+CREATE TABLE sensor_data_2026_05
+PARTITION OF sensor_data
+FOR VALUES FROM ('2026-05-01') TO ('2026-06-01');
+```
+
+### Avantajları
+
+- Daha hızlı sorgu
+- Daha düşük RAM kullanımı
+- Kolay arşivleme
+- Büyük veri performansı
+
+---
+
+# 9. Ölçeklenebilirlik
+
+Sistem gelecekte:
+
+- Yeni sensör tipleri
+- Yeni şehirler
+- Milyonlarca veri kaydı
+
+eklenmesine uygun şekilde tasarlanmıştır.
+
+## Kullanılan Ölçeklenebilirlik Yöntemleri
+
+| Yöntem | Amaç |
+|---|---|
+| Indexleme | Hızlı sorgu |
+| Partitioning | Büyük veri yönetimi |
+| Foreign Key | Veri bütünlüğü |
+| Unique Constraint | Tekrarlı veri önleme |
+
+---
+
+# 10. Güvenlik Önlemleri
+
+## Alınan Önlemler
+
+- Şifreler hashlenmiş şekilde tutulur
+- Yetki sistemi vardır
+- SQL Injection önlenir
+- Foreign Key kullanılır
+- Veri doğrulama yapılır
+
+---
+
+# 11. Örnek SQL Sorguları
+
+## Belirli Sensörün Son Verileri
+
+```sql
+SELECT *
+FROM sensor_data
+WHERE sensor_id = 1
+ORDER BY recorded_at DESC
+LIMIT 10;
+```
+
+---
+
+## Kritik Alarm Listesi
+
+```sql
+SELECT *
+FROM alerts
+ORDER BY created_at DESC;
+```
+
+---
+
+## Belirli Bölgedeki Sensörler
+
+```sql
+SELECT s.sensor_name, l.city, l.district
+FROM sensors s
+JOIN locations l
+ON s.location_id = l.location_id
+WHERE l.city = 'İstanbul';
+```
+
+---
+
+# 12. Sonuç
+
+Bu PostgreSQL veritabanı tasarımı:
+
+- Büyük veri işleyebilen
+- Performanslı
+- Güvenli
+- Ölçeklenebilir
+- Gerçek zamanlı veri toplamaya uygun
+
+bir akıllı şehir veri toplama sistemi altyapısı sunmaktadır.
+
+Tasarlanan yapı sayesinde:
+
+- Sensör verileri düzenli şekilde saklanabilir
+- Hızlı analiz yapılabilir
+- Alarm sistemleri çalıştırılabilir
+- Gelecekte sistem kolayca büyütülebilir
+
+ve sistem yüksek performansla çalışmaya devam eder.
 ## Efecan Önal
 Efecan Önal
 Hafta 3: Akıllı Şehir Modülleri Güvenlik Açığı Analizi ve Protokol Güçlendirmesi
