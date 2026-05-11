@@ -53,7 +53,7 @@ Ozalyildirim sitesi proje yönetimi için merkezi bir pano sunar. Bu platformda 
 Projenin genel analizi yapıldı. Projenin amacı, kapsamı ve paydaşları belirlendi.
 
 ## Abdullah Gümüş
-## Akıllı Şehir Yönetim Sistemi - Gereksinimler
+
 ---
 
 ## 1. Projenin Amacı ve Kapsamı
