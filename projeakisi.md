@@ -67,41 +67,41 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Abdullah Gümüş
-# Akıllı Şehir Yönetim Sistemi - Veritabanı Mimari Tasarımı
+# Akilli Sehir Yonetim Sistemi - Veritabani Mimari Tasarimi
 
-[cite_start]Bu proje, yüksek hacimli sensör verisi, coğrafi konum verisi ve standart kullanıcı/yönetim verisi barındıran Akıllı Şehir Yönetim Sistemi için geliştirilmiş kapsamlı bir veritabanı mimarisini içermektedir[cite: 1, 2]. 
+Bu proje, yuksek hacimli sensor verisi, cografi konum verisi ve standart kullanici/yonetim verisi barindiran Akilli Sehir Yonetim Sistemi icin gelistirilmis kapsamli bir veritabani mimarisini icermektedir.
 
 ## Veri Modeli ve Teknolojiler
 
-[cite_start]Saniyede binlerce kayıt atan sensör verilerinde tıkanmaları önlemek amacıyla sistemde Hibrit Veri Modeli (İlişkisel + Zaman Serisi + Coğrafi) kullanılmıştır[cite: 2, 3].
-* [cite_start]Veritabanı yönetim sistemi olarak PostgreSQL tercih edilmiş ve Table Partitioning (Tablo Bölümleme) kullanılmıştır[cite: 4].
-* [cite_start]Coğrafi verilerin işlenmesi için PostGIS uzantısı sisteme entegre edilmiştir[cite: 4].
-* [cite_start]Esnek veri yapıları (metrikler) için JSONB veri tipi kullanılmıştır[cite: 4].
+Saniyede binlerce kayit atan sensor verilerinde tikanmalari onlemek amaciyla sistemde Hibrit Veri Modeli (Iliskisel + Zaman Serisi + Cografi) kullanilmistir.
+* Veritabani yonetim sistemi olarak PostgreSQL tercih edilmis ve Table Partitioning (Tablo Bolumleme) kullanilmistir.
+* Cografi verilerin islenmesi icin PostGIS uzantisi sisteme entegre edilmistir.
+* Esnek veri yapilari (metrikler) icin JSONB veri tipi kullanilmistir.
 
-## Veritabanı Tabloları ve İlişkiler
+## Veritabani Tablolari ve Iliskiler
 
-Sistem bütünlüğünü sağlamak adına temel mimari dört ana tablo üzerinden şekillendirilmiştir:
-* [cite_start]Kullanıcılar (users): Sistemi yönetecek yetkililer ve vatandaşların bilgilerini barındırır[cite: 8, 9].
-* [cite_start]Sensörler (sensors): Şehrin farklı noktalarındaki donanımların PostGIS koordinatları ile tanımlandığı tablodur[cite: 11, 12, 13].
-* [cite_start]Sensör Okumaları (sensor_readings): Sürekli akan verilerin depolandığı ana zaman serisi tablosudur[cite: 14, 15]. [cite_start]Bu tablo ile sensörler arasında 1:N (Bire Çok) ilişki bulunmaktadır[cite: 22].
-* [cite_start]Olaylar (incidents): Sistem tarafından tespit edilen veya vatandaşlarca bildirilen anormalliklerin tutulduğu tablodur[cite: 17, 18]. [cite_start]Kullanıcılar ile olaylar arasında 1:N (Bire Çok) ilişki kurulmuştur[cite: 26].
+Sistem butunlugunu saglamak adina temel mimari dort ana tablo uzerinden sekillendirilmistir:
+* Kullanicilar (users): Sistemi yonetecek yetkililer ve vatandaslarin bilgilerini barindirir.
+* Sensorler (sensors): Sehrin farkli noktalarindaki donanimlarin PostGIS koordinatlari ile tanimlandigi tablodur.
+* Sensor Okumalari (sensor_readings): Surekli akan verilerin depolandigi ana zaman serisi tablosudur. Bu tablo ile sensorler arasinda 1:N (Bire Cok) iliski bulunmaktadir.
+* Olaylar (incidents): Sistem tarafindan tespit edilen veya vatandaslarca bildirilen anormalliklerin tutuldugu tablodur. Kullanicilar ile olaylar arasinda 1:N (Bire Cok) iliski kurulmustur.
 
-## Performans Optimizasyonu ve İndeksleme
+## Performans Optimizasyonu ve Indeksleme
 
-[cite_start]Büyük veri konseptine uygun olarak yazma performansını en üst seviyede tutmak için spesifik indeksleme yöntemleri kullanılmıştır[cite: 30]:
-* [cite_start]BRIN İndeksi: Zaman serileri (sensor_readings) için tercih edilmiş olup, geçmiş verilere yönelik toplu taramaların çok daha hızlı çalışmasını sağlar[cite: 32, 33, 36].
-* [cite_start]GiST İndeksi: Coğrafi sınırları filtrelemek ve 2 boyutlu uzaysal sorgular yapabilmek için konum verilerinde (location) kullanılmıştır[cite: 37, 39, 40].
-* [cite_start]GIN İndeksi: Esnek JSON belgelerinin içine girerek anahtar-değer ikililerini indekslemek için tercih edilmiştir[cite: 41, 43].
-* [cite_start]B-Tree İndeksi: Doğrudan eşleşme aranan foreign key ve benzersiz e-posta gibi alanlarda kullanılmıştır[cite: 45, 47].
+Buyuk veri konseptine uygun olarak yazma performansini en ust seviyede tutmak icin spesifik indeksleme yontemleri kullanilmistir:
+* BRIN Indeksi: Zaman serileri (sensor_readings) icin tercih edilmis olup, gecmis verilere yonelik toplu taramalarin cok daha hizli calismasini saglar.
+* GiST Indeksi: Cografi sinirlari filtrelemek ve 2 boyutlu uzaysal sorgular yapabilmek icin konum verilerinde (location) kullanilmistir.
+* GIN Indeksi: Esnek JSON belgelerinin icine girerek anahtar-deger ikililerini indekslemek icin tercih edilmistir.
+* B-Tree Indeksi: Dogrudan eslesme aranan foreign key ve benzersiz e-posta gibi alanlarda kullanilmistir.
 
-## Güvenlik ve Yedekleme Stratejisi
+## Guvenlik ve Yedekleme Stratejisi
 
-[cite_start]Kritik şehir ve kullanıcı verilerinin gizliliğini ve erişilebilirliğini güvence altına almak için şu adımlar atılmıştır[cite: 49]:
-* [cite_start]Erişim Yönetimi: Rol Bazlı Erişim Kontrolü (RBAC) ve Satır Bazlı Güvenlik (RLS) politikaları uygulanmıştır[cite: 51, 57].
-* [cite_start]Şifreleme: Veritabanı izole bir ağda (VPC) barındırılmış, TLS/SSL ve AES-256 şifrelemeleri kullanılmıştır[cite: 54, 55, 56].
-* [cite_start]İzleme ve Loglama: PostgreSQL üzerinde pgaudit eklentisi aktif edilerek log verileri Güvenlik Operasyon Merkezi'ne (SOC) yönlendirilmiştir[cite: 59, 60].
-* [cite_start]Yedekleme: Continuous Archiving ve WAL dosyaları kullanılarak sistemi geçmişteki tam bir saniyeye döndürebilme (PITR) kapasitesi sağlanmıştır[cite: 64, 65].
-* [cite_start]Ölçeklenebilirlik: Sistem üzerindeki yükü dengelemek için PgBouncer ile bağlantı havuzlama (Connection Pooling) ve okuma kopyaları (Read Replicas) mimarisi devreye alınmıştır[cite: 69, 71, 73].
+Kritik sehir ve kullanici verilerinin gizliligini ve erisilebilirligini guvence altina almak icin su adimlar atilmistir:
+* Erisim Yonetimi: Rol Bazli Erisim Kontrolu (RBAC) ve Satir Bazli Guvenlik (RLS) politikalari uygulanmistir.
+* Sifreleme: Veritabani izole bir agda (VPC) barindirilmis, TLS/SSL ve AES-256 sifrelemeleri kullanilmistir.
+* Izleme ve Loglama: PostgreSQL uzerinde pgaudit eklentisi aktif edilerek log verileri Guvenlik Operasyon Merkezi'ne (SOC) yonlendirilmistir.
+* Yedekleme: Continuous Archiving ve WAL dosyalari kullanilarak sistemi gecmisteki tam bir saniyeye dondurebilme (PITR) kapasitesi saglanmistir.
+* Olceklenebilirlik: Sistem uzerindeki yuku dengelemek icin PgBouncer ile baglanti havuzlama (Connection Pooling) ve okuma kopyalari (Read Replicas) mimarisi devreye alinmistir.
 
 ## Melih Ahmet Kocaman
 GÖREVİN BURAYA YAPIŞTIRILACAK.
