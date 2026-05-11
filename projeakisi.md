@@ -134,7 +134,41 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Abdullah Gümüş
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akilli Sehir Yonetim Sistemi - Veritabani Mimari Tasarimi
+
+Bu proje, yuksek hacimli sensor verisi, cografi konum verisi ve standart kullanici/yonetim verisi barindiran Akilli Sehir Yonetim Sistemi icin gelistirilmis kapsamli bir veritabani mimarisini icermektedir.
+
+## Veri Modeli ve Teknolojiler
+
+Saniyede binlerce kayit atan sensor verilerinde tikanmalari onlemek amaciyla sistemde Hibrit Veri Modeli (Iliskisel + Zaman Serisi + Cografi) kullanilmistir.
+* Veritabani yonetim sistemi olarak PostgreSQL tercih edilmis ve Table Partitioning (Tablo Bolumleme) kullanilmistir.
+* Cografi verilerin islenmesi icin PostGIS uzantisi sisteme entegre edilmistir.
+* Esnek veri yapilari (metrikler) icin JSONB veri tipi kullanilmistir.
+
+## Veritabani Tablolari ve Iliskiler
+
+Sistem butunlugunu saglamak adina temel mimari dort ana tablo uzerinden sekillendirilmistir:
+* Kullanicilar (users): Sistemi yonetecek yetkililer ve vatandaslarin bilgilerini barindirir.
+* Sensorler (sensors): Sehrin farkli noktalarindaki donanimlarin PostGIS koordinatlari ile tanimlandigi tablodur.
+* Sensor Okumalari (sensor_readings): Surekli akan verilerin depolandigi ana zaman serisi tablosudur. Bu tablo ile sensorler arasinda 1:N (Bire Cok) iliski bulunmaktadir.
+* Olaylar (incidents): Sistem tarafindan tespit edilen veya vatandaslarca bildirilen anormalliklerin tutuldugu tablodur. Kullanicilar ile olaylar arasinda 1:N (Bire Cok) iliski kurulmustur.
+
+## Performans Optimizasyonu ve Indeksleme
+
+Buyuk veri konseptine uygun olarak yazma performansini en ust seviyede tutmak icin spesifik indeksleme yontemleri kullanilmistir:
+* BRIN Indeksi: Zaman serileri (sensor_readings) icin tercih edilmis olup, gecmis verilere yonelik toplu taramalarin cok daha hizli calismasini saglar.
+* GiST Indeksi: Cografi sinirlari filtrelemek ve 2 boyutlu uzaysal sorgular yapabilmek icin konum verilerinde (location) kullanilmistir.
+* GIN Indeksi: Esnek JSON belgelerinin icine girerek anahtar-deger ikililerini indekslemek icin tercih edilmistir.
+* B-Tree Indeksi: Dogrudan eslesme aranan foreign key ve benzersiz e-posta gibi alanlarda kullanilmistir.
+
+## Guvenlik ve Yedekleme Stratejisi
+
+Kritik sehir ve kullanici verilerinin gizliligini ve erisilebilirligini guvence altina almak icin su adimlar atilmistir:
+* Erisim Yonetimi: Rol Bazli Erisim Kontrolu (RBAC) ve Satir Bazli Guvenlik (RLS) politikalari uygulanmistir.
+* Sifreleme: Veritabani izole bir agda (VPC) barindirilmis, TLS/SSL ve AES-256 sifrelemeleri kullanilmistir.
+* Izleme ve Loglama: PostgreSQL uzerinde pgaudit eklentisi aktif edilerek log verileri Guvenlik Operasyon Merkezi'ne (SOC) yonlendirilmistir.
+* Yedekleme: Continuous Archiving ve WAL dosyalari kullanilarak sistemi gecmisteki tam bir saniyeye dondurebilme (PITR) kapasitesi saglanmistir.
+* Olceklenebilirlik: Sistem uzerindeki yuku dengelemek icin PgBouncer ile baglanti havuzlama (Connection Pooling) ve okuma kopyalari (Read Replicas) mimarisi devreye alinmistir.
 
 ## Melih Ahmet Kocaman
 # Akıllı Şehir Vatandaş Mobil Uygulaması — Gereksinim Analizi ve Tasarım Belgesi
@@ -600,7 +634,34 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Abdullah Gümüş
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akilli Sehir Yonetim Sistemi - API Entegrasyon ve Iletisim Semasi
+
+Belediye yonetim panelinin arka uc sistemleriyle kesintisiz ve guvenli iletisim kurabilmesi icin modern bir RESTful API mimarisi kurgulanmistir. Arka uc catisi olarak asenkron yapisi ve yerlesik Swagger destegi nedeniyle FastAPI tercih edilmistir.
+
+## Uc Nokta (Endpoint) Tasarimlari ve Veri Akisi
+
+API uc noktalari sistemin temel modullerine gore versiyonlandirilarak tasarlanmistir. Tum veri alisverisi JSON formatinda yapilacaktir.
+* Kimlik Dogrulama (Auth): Belediye yetkililerinin sisteme guvenli girisi icin JWT uretilir.
+* Sensor Verileri: Yonetim panelindeki haritalari ve grafikleri besleyen gercek zamanli ve gecmis sensor okumalarini getirir.
+* Yapay Zeka Ongoruleri: TensorFlow modelini tetikleyerek trafik yogunlugu tahmini ve sinyalizasyon optimizasyonu onerisi sunar.
+* Acil Durum Yonetimi: Bekleyen olaylari listeler ve durum guncellemelerini saglar.
+
+## API Guvenlik Stratejisi
+
+* JWT Yetkilendirmesi: Basarili giristen sonra alinan token ile her istekte rol kontrolu yapilir.
+* CORS: API, yalnizca resmi yonetim paneli domain'lerinden gelen istekleri kabul eder.
+* Hiz Sinirlandirma: Saldirilari onlemek icin IP basina yapilabilecek maksimum API cagrisi sinirlandirilir.
+
+## Performans Optimizasyonu
+
+* Veri Onbellekleme: Sik sorgulanan gecmis veriler icin Redis onbelleklemesi kullanilir.
+* Sayfalandirma: Liste donduren tum GET istekleri sayfalalandirilir.
+* Asenkron Islemler: Uzun suren TensorFlow hesaplamalari asenkron olarak calistirilir.
+
+## Standart Hata Yonetimi ve Dokumantasyon
+
+* Hata Yonetimi: Tum hatalar HTTP durum kodlariyla JSON formatinda dondurulur.
+* Swagger UI: Gelistirici ekiplerin senkronizasyonu icin interaktif Swagger paneli sunulur.
 
 ## Melih Ahmet Kocaman
 GÖREVİN BURAYA YAPIŞTIRILACAK.
