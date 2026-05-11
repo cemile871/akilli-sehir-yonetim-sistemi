@@ -67,7 +67,41 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Abdullah Gümüş
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akıllı Şehir Yönetim Sistemi - Veritabanı Mimari Tasarımı
+
+[cite_start]Bu proje, yüksek hacimli sensör verisi, coğrafi konum verisi ve standart kullanıcı/yönetim verisi barındıran Akıllı Şehir Yönetim Sistemi için geliştirilmiş kapsamlı bir veritabanı mimarisini içermektedir[cite: 1, 2]. 
+
+## Veri Modeli ve Teknolojiler
+
+[cite_start]Saniyede binlerce kayıt atan sensör verilerinde tıkanmaları önlemek amacıyla sistemde Hibrit Veri Modeli (İlişkisel + Zaman Serisi + Coğrafi) kullanılmıştır[cite: 2, 3].
+* [cite_start]Veritabanı yönetim sistemi olarak PostgreSQL tercih edilmiş ve Table Partitioning (Tablo Bölümleme) kullanılmıştır[cite: 4].
+* [cite_start]Coğrafi verilerin işlenmesi için PostGIS uzantısı sisteme entegre edilmiştir[cite: 4].
+* [cite_start]Esnek veri yapıları (metrikler) için JSONB veri tipi kullanılmıştır[cite: 4].
+
+## Veritabanı Tabloları ve İlişkiler
+
+Sistem bütünlüğünü sağlamak adına temel mimari dört ana tablo üzerinden şekillendirilmiştir:
+* [cite_start]Kullanıcılar (users): Sistemi yönetecek yetkililer ve vatandaşların bilgilerini barındırır[cite: 8, 9].
+* [cite_start]Sensörler (sensors): Şehrin farklı noktalarındaki donanımların PostGIS koordinatları ile tanımlandığı tablodur[cite: 11, 12, 13].
+* [cite_start]Sensör Okumaları (sensor_readings): Sürekli akan verilerin depolandığı ana zaman serisi tablosudur[cite: 14, 15]. [cite_start]Bu tablo ile sensörler arasında 1:N (Bire Çok) ilişki bulunmaktadır[cite: 22].
+* [cite_start]Olaylar (incidents): Sistem tarafından tespit edilen veya vatandaşlarca bildirilen anormalliklerin tutulduğu tablodur[cite: 17, 18]. [cite_start]Kullanıcılar ile olaylar arasında 1:N (Bire Çok) ilişki kurulmuştur[cite: 26].
+
+## Performans Optimizasyonu ve İndeksleme
+
+[cite_start]Büyük veri konseptine uygun olarak yazma performansını en üst seviyede tutmak için spesifik indeksleme yöntemleri kullanılmıştır[cite: 30]:
+* [cite_start]BRIN İndeksi: Zaman serileri (sensor_readings) için tercih edilmiş olup, geçmiş verilere yönelik toplu taramaların çok daha hızlı çalışmasını sağlar[cite: 32, 33, 36].
+* [cite_start]GiST İndeksi: Coğrafi sınırları filtrelemek ve 2 boyutlu uzaysal sorgular yapabilmek için konum verilerinde (location) kullanılmıştır[cite: 37, 39, 40].
+* [cite_start]GIN İndeksi: Esnek JSON belgelerinin içine girerek anahtar-değer ikililerini indekslemek için tercih edilmiştir[cite: 41, 43].
+* [cite_start]B-Tree İndeksi: Doğrudan eşleşme aranan foreign key ve benzersiz e-posta gibi alanlarda kullanılmıştır[cite: 45, 47].
+
+## Güvenlik ve Yedekleme Stratejisi
+
+[cite_start]Kritik şehir ve kullanıcı verilerinin gizliliğini ve erişilebilirliğini güvence altına almak için şu adımlar atılmıştır[cite: 49]:
+* [cite_start]Erişim Yönetimi: Rol Bazlı Erişim Kontrolü (RBAC) ve Satır Bazlı Güvenlik (RLS) politikaları uygulanmıştır[cite: 51, 57].
+* [cite_start]Şifreleme: Veritabanı izole bir ağda (VPC) barındırılmış, TLS/SSL ve AES-256 şifrelemeleri kullanılmıştır[cite: 54, 55, 56].
+* [cite_start]İzleme ve Loglama: PostgreSQL üzerinde pgaudit eklentisi aktif edilerek log verileri Güvenlik Operasyon Merkezi'ne (SOC) yönlendirilmiştir[cite: 59, 60].
+* [cite_start]Yedekleme: Continuous Archiving ve WAL dosyaları kullanılarak sistemi geçmişteki tam bir saniyeye döndürebilme (PITR) kapasitesi sağlanmıştır[cite: 64, 65].
+* [cite_start]Ölçeklenebilirlik: Sistem üzerindeki yükü dengelemek için PgBouncer ile bağlantı havuzlama (Connection Pooling) ve okuma kopyaları (Read Replicas) mimarisi devreye alınmıştır[cite: 69, 71, 73].
 
 ## Melih Ahmet Kocaman
 GÖREVİN BURAYA YAPIŞTIRILACAK.
