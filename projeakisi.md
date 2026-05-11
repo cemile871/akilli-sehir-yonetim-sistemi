@@ -10,7 +10,8 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Cemile Akay
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+Proje için GitHub üzerinden bir repository oluşturuldu. Proje klasör yapısı hazırlandı. Ekip üyeleri repositorye eklenerek projeye erişimleri sağlandı. Böylece ekip üyeleri ortak geliştirme ortamında çalışabilecek hale getirildi.
 
 ## Efecan Önal
 GÖREVİN BURAYA YAPIŞTIRILACAK.
