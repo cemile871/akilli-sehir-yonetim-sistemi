@@ -19,7 +19,7 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## 📦 5 Ana Modül
 1. [cite_start]**Veri Toplama ve Analiz:** Çevresel faktörlerin ve trafik verilerinin Python ile simülasyonu, anormallik tespiti[cite: 14, 15, 16].
-2. [cite_start]**Trafik Optimizasyonu (DQN):** TensorFlow kullanılarak eğitilmiş yapay zeka ile trafik ışığı yönetimi ve acil araçlar için "yeşil dalga" kurgusu[cite: 17, 18, 19].
+2. [cite_start]**Trafik Optimizasyonu (DQN):** TensorFlow kullanılarak eğitilmiş yapay zeka ile trafik ışığı yönetimi ve acil araçlar için "yeşil dalga"kurgusu[cite: 17, 18, 19].
 3. [cite_start]**Enerji Yönetimi Paneli:** Sokak aydınlatmaları ve kamu binalarında tüketim izleme ile otomatik tasarruf modlarının yönetimi[cite: 20, 21].
 4. [cite_start]**Vatandaş Mobil Uygulaması:** Trafik durumu, enerji kesintileri ve şehir duyuruları için anlık bildirim sistemi[cite: 23, 24, 25].
 5. [cite_start]**Belediye Yönetim Paneli:** Şehrin tüm anlık verilerinin tek bir merkezden izlenip kontrol edilmesi[cite: 26, 27, 28].
