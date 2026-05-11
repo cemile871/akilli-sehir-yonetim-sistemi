@@ -123,7 +123,8 @@ Seçilen teknoloji yığını ile **simüle veriye dayalı** Akıllı Şehir ver
 5.  **Vatandaş Uygulaması:** Native Android (Kotlin) *(FCM ile anlık bildirim alır)*
 
 ## Cemile Akay
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+Proje için GitHub üzerinden bir repository oluşturuldu. Proje klasör yapısı hazırlandı. Ekip üyeleri repositorye eklenerek projeye erişimleri sağlandı. Böylece ekip üyeleri ortak geliştirme ortamında çalışabilecek hale getirildi.
 
 ## Efecan Önal
 # 🏙️ Akıllı Şehir Yönetim Sistemi - Proje Özeti
@@ -645,7 +646,6 @@ Bu belge ile uygulamanın **ne yapacağı, kimin için olduğu, nasıl davranaca
 4. MVP özellik listesinden başlanarak iteratif sprint planı çıkarılacak.
 
 ## Cemile Akay
-GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Efecan Önal
 GÖREVİN BURAYA YAPIŞTIRILACAK.
