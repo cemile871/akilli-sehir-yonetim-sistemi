@@ -185,7 +185,34 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Abdullah Gümüş
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akilli Sehir Yonetim Sistemi - API Entegrasyon ve Iletisim Semasi
+
+Belediye yonetim panelinin arka uc sistemleriyle kesintisiz ve guvenli iletisim kurabilmesi icin modern bir RESTful API mimarisi kurgulanmistir. Arka uc catisi olarak asenkron yapisi ve yerlesik Swagger destegi nedeniyle FastAPI tercih edilmistir.
+
+## Uc Nokta (Endpoint) Tasarimlari ve Veri Akisi
+
+API uc noktalari sistemin temel modullerine gore versiyonlandirilarak tasarlanmistir. Tum veri alisverisi JSON formatinda yapilacaktir.
+* Kimlik Dogrulama (Auth): Belediye yetkililerinin sisteme guvenli girisi icin JWT uretilir.
+* Sensor Verileri: Yonetim panelindeki haritalari ve grafikleri besleyen gercek zamanli ve gecmis sensor okumalarini getirir.
+* Yapay Zeka Ongoruleri: TensorFlow modelini tetikleyerek trafik yogunlugu tahmini ve sinyalizasyon optimizasyonu onerisi sunar.
+* Acil Durum Yonetimi: Bekleyen olaylari listeler ve durum guncellemelerini saglar.
+
+## API Guvenlik Stratejisi
+
+* JWT Yetkilendirmesi: Basarili giristen sonra alinan token ile her istekte rol kontrolu yapilir.
+* CORS: API, yalnizca resmi yonetim paneli domain'lerinden gelen istekleri kabul eder.
+* Hiz Sinirlandirma: Saldirilari onlemek icin IP basina yapilabilecek maksimum API cagrisi sinirlandirilir.
+
+## Performans Optimizasyonu
+
+* Veri Onbellekleme: Sik sorgulanan gecmis veriler icin Redis onbelleklemesi kullanilir.
+* Sayfalandirma: Liste donduren tum GET istekleri sayfalalandirilir.
+* Asenkron Islemler: Uzun suren TensorFlow hesaplamalari asenkron olarak calistirilir.
+
+## Standart Hata Yonetimi ve Dokumantasyon
+
+* Hata Yonetimi: Tum hatalar HTTP durum kodlariyla JSON formatinda dondurulur.
+* Swagger UI: Gelistirici ekiplerin senkronizasyonu icin interaktif Swagger paneli sunulur.
 
 ## Melih Ahmet Kocaman
 GÖREVİN BURAYA YAPIŞTIRILACAK.
