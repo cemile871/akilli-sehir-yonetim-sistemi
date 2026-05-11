@@ -4,7 +4,7 @@
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Abdullah Gümüş
-## Akıllı Şehir Yönetim Sistemi - Gereksinimler
+
 ---
 
 ## 1. Projenin Amacı ve Kapsamı
