@@ -192,7 +192,180 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Cemile Akay
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+# 🗄️ Veri Toplama Modülü – Veritabanı Şema Tasarımı
+
+## 📌 Proje Bağlamı
+
+Bu veritabanı tasarımı, Python simülatörü ve MQTT üzerinden gelen sensör verilerinin PostgreSQL’de saklanmasını sağlar. Sistem, gerçek zamanlı veri işleme ve DQN algoritması için optimize edilmiştir.
+
+---
+
+## 🎯 Amaç
+
+* Sensör verilerini merkezi olarak saklamak
+* Gerçek zamanlı sorgulamayı desteklemek
+* TensorFlow analizleri için veri sağlamak
+* Yüksek performans ve ölçeklenebilirlik sağlamak
+
+---
+
+## 🧱 Veritabanı Teknolojisi
+
+PostgreSQL
+
+---
+
+## 📊 Tablolar
+
+### 1. sensors
+
+Sensör bilgileri
+
+| Alan     | Tip       |
+| -------- | --------- |
+| id       | SERIAL PK |
+| type     | VARCHAR   |
+| location | VARCHAR   |
+| active   | BOOLEAN   |
+
+---
+
+### 2. traffic_data (DQN için kritik)
+
+| Alan          | Tip       |
+| ------------- | --------- |
+| id            | SERIAL PK |
+| sensor_id     | INT (FK)  |
+| vehicle_count | INT       |
+| avg_speed     | FLOAT     |
+| road_status   | VARCHAR   |
+| timestamp     | TIMESTAMP |
+
+---
+
+### 3. environmental_data
+
+| Alan      | Tip       |
+| --------- | --------- |
+| id        | SERIAL PK |
+| sensor_id | INT (FK)  |
+| pm25      | FLOAT     |
+| co2       | FLOAT     |
+| no2       | FLOAT     |
+| noise     | FLOAT     |
+| timestamp | TIMESTAMP |
+
+---
+
+### 4. energy_data
+
+| Alan        | Tip       |
+| ----------- | --------- |
+| id          | SERIAL PK |
+| sensor_id   | INT (FK)  |
+| consumption | FLOAT     |
+| timestamp   | TIMESTAMP |
+
+---
+
+### 5. emergency_data (KRİTİK MOD)
+
+| Alan         | Tip       |
+| ------------ | --------- |
+| id           | SERIAL PK |
+| vehicle_type | VARCHAR   |
+| location     | VARCHAR   |
+| status       | VARCHAR   |
+| timestamp    | TIMESTAMP |
+
+---
+
+## 🔗 Tablo İlişkileri
+
+* sensors.id → tüm veri tablolarına bağlanır
+* Her veri kaydı bir sensöre aittir
+* traffic_data → DQN algoritmasının ana veri kaynağıdır
+
+---
+
+## ⚡ İndeksleme Stratejisi
+
+* timestamp üzerine index (real-time sorgular)
+* sensor_id üzerine index
+* traffic_data için:
+  (sensor_id, timestamp) composite index
+
+---
+
+## 📈 Performans Optimizasyonu
+
+* Zaman bazlı partitioning
+* Batch insert (MQTT → DB)
+* Gereksiz veri tekrarının önlenmesi
+
+---
+
+## 🔄 Sistem Entegrasyonu
+
+MQTT
+→ FastAPI
+→ PostgreSQL
+→ TensorFlow
+→ Sonuç → Veritabanı
+
+---
+
+## 📦 Ölçeklenebilirlik
+
+* Yatay ölçeklenebilir yapı
+* Büyük veri için partitioned tables
+* Cache sistemi (Redis önerilir)
+
+---
+
+## 🔐 Güvenlik
+
+* Rol bazlı erişim (RBAC)
+* Veritabanı yetkilendirme
+* Yedekleme (backup)
+* Loglama sistemi
+
+---
+
+## 🧾 Örnek SQL
+
+CREATE TABLE sensors (
+id SERIAL PRIMARY KEY,
+type VARCHAR(50),
+location VARCHAR(100),
+active BOOLEAN
+);
+
+CREATE TABLE traffic_data (
+id SERIAL PRIMARY KEY,
+sensor_id INT REFERENCES sensors(id),
+vehicle_count INT,
+avg_speed FLOAT,
+road_status VARCHAR(20),
+timestamp TIMESTAMP
+);
+
+---
+
+## 🎯 Beklenen Sistem Katkısı
+
+* Hızlı veri erişimi
+* Gerçek zamanlı analiz desteği
+* DQN algoritmasının doğru çalışması
+* Sistem performansının artırılması
+
+---
+
+## 📌 Sonuç
+
+Bu veritabanı tasarımı, Akıllı Şehir Yönetim Sistemi’nin veri altyapısını oluşturur. Doğru indeksleme ve yapı sayesinde sistem, yüksek veri yükü altında bile hızlı ve stabil çalışabilir.
+
 
 ## Efecan Önal
 GÖREVİN BURAYA YAPIŞTIRILACAK.
