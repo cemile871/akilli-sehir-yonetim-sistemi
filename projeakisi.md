@@ -53,7 +53,74 @@ Akıllı şehir uygulamalarında kullanılan teknolojiler araştırıldı.
 
 
 ## Melih Ahmet Kocaman
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akıllı Şehir Yönetim Sistemi: Teknoloji Değerlendirme Raporu
+
+**Proje Hedefi:** Şehirdeki trafik akışını optimize eden, enerji tüketimini izleyen ve acil durum müdahale sürelerini kısaltan; **simüle edilmiş sensör verilerini** analiz ederek yapay zeka ile karar alan bir sistem geliştirmek.
+
+> **Önemli Not:** Bu projede gerçek fiziksel sensörümüz bulunmamaktadır. Tüm sensör verileri (trafik yoğunluğu, hava kalitesi — PM2.5/CO2/NO2, gürültü, enerji tüketimi vb.) Python ile **rastgele (random) üretilerek simüle edilecektir.** Yazılan her kod, ileride gerçek donanıma bağlanmaya hazır şekilde tasarlanacaktır.
+
+---
+
+## 1. Arka Plan (Backend) ve Ana Programlama Dili
+Simüle edilen sensör verilerinin üretilmesi, işlenmesi, algoritmaların çalıştırılması ve yapay zeka modelleriyle entegrasyon için bir arka plan diline ihtiyaç vardır.
+
+| Teknoloji | Avantajlar | Dezavantajlar | Karar & Değerlendirme |
+| :--- | :--- | :--- | :--- |
+| **Python** *(Seçilen)* | Veri bilimi ve yapay zeka (TensorFlow) ile kusursuz entegrasyon. Random veri üretimi için `random`, `numpy.random`, `Faker` gibi zengin kütüphane desteği. | Diğer dillere göre işlem hızı (execution time) daha yavaş olabilir. | **Kesinlikle Uygun.** Hem sensör simülatörünü yazmak hem de DQN modelini eğitip çalıştırmak için en mantıklı seçimdir. API katmanı için **FastAPI** kullanılacaktır. |
+| **Go (Golang)** | İnanılmaz hızlı, eşzamanlı (concurrent) işlemlerde çok başarılı. | Makine öğrenmesi ekosistemi zayıf. | Veriler simüle edileceği için milyonlarca eşzamanlı bağlantı gereksinimi yok. Bu projede gerek yoktur. |
+| **Node.js** | G/Ç (I/O) işlemlerinde başarılı, asenkron yapısıyla hızlı. | Yoğun CPU ve matematiksel işlemler (AI) için uygun değil. | Python varken ve AI odaklı bir proje iken birincil dil olması önerilmez. |
+
+## 2. Yapay Zeka ve Makine Öğrenmesi
+Trafik ışığı sürelerini optimize etme, anormal enerji tüketimi tespiti, acil araç için yeşil dalga gibi "akıllı" özellikler için.
+
+| Teknoloji | Avantajlar | Dezavantajlar | Karar & Değerlendirme |
+| :--- | :--- | :--- | :--- |
+| **TensorFlow + DQN** *(Seçilen)* | Üretime alma konusunda çok güçlü. **Derin Q-Ağı (DQN)** ile trafik ışığı sürelerini pekiştirmeli öğrenme yoluyla optimize eder. Eğitim sonrası milisaniye düzeyinde karar alır. | Öğrenme eğrisi PyTorch'a göre biraz daha diktir. DQN eğitimi için yeterli miktarda simüle veri gerekir. | **İdeal Seçim.** Sistem başlangıçta kural tabanlı çalışacak, yeterli simüle veri toplandıktan sonra DQN devreye girecek (hibrit yaklaşım). Bu, soğuk başlangıç sorununu çözer. |
+| **PyTorch** | Araştırma ve model geliştirme sürecinde daha esnek ve Pythonic. | Üretim/dağıtım TensorFlow kadar olgun değil. | Alternatif olarak değerlendirilebilir ancak canlıya alma kolaylığı için TensorFlow bir adım önde. |
+| **Diğer Alternatifler** *(Karşılaştırıldı)* | Kural Tabanlı, Genetik Algoritma, Bulanık Mantık, basit Q-Learning. | Kural tabanlı öğrenemez; genetik algoritma çok yavaş; bulanık mantık kısıtlı; Q-Learning karmaşık durumlarda yetersiz. | Karşılaştırma sonucu **DQN** seçildi. Kural tabanlı yaklaşım yalnızca yedek plan ve soğuk başlangıç için kullanılacak. |
+
+## 3. Veritabanı ve Veri Depolama
+Projede hem ilişkisel verilere (kullanıcılar, cihaz bilgileri, alınan kararlar) hem de simülatörden üretilen sensör okumalarına ihtiyaç vardır.
+
+| Teknoloji | Avantajlar | Dezavantajlar | Karar & Değerlendirme |
+| :--- | :--- | :--- | :--- |
+| **PostgreSQL** *(Seçilen)* | Çok güvenilir, ACID uyumlu, coğrafi veriler için (PostGIS) mükemmel destek sunar. Simüle veri hacmi PostgreSQL ile rahatlıkla yönetilebilir. | Milyarlarca satırlık gerçek sensör verisinde tek başına hantal kalabilir (bu proje için sorun değil). | **Mükemmel Seçim.** Şehir haritalandırması için **PostGIS** eklentisi kullanılacaktır. İleride gerçek sensörlere geçildiğinde **TimescaleDB** eklentisi eklenebilir; şimdilik gerek yoktur. |
+| **MongoDB** | Esnek şema yapısı, verileri JSON formatında hızlı yazma. | Kompleks sorgular ve ilişkisel verilerde zorluk yaratır. | Bu projede PostgreSQL varken gerek yoktur. |
+
+## 4. Frontend (Belediye Yönetim Paneli)
+Belediye yetkililerinin şehir durumunu haritalar, grafikler ve alarm panelleri üzerinden izleyeceği dashboard ekranları için.
+
+| Teknoloji | Avantajlar | Dezavantajlar | Karar & Değerlendirme |
+| :--- | :--- | :--- | :--- |
+| **React** *(Seçilen)* | Bileşen tabanlı mimari, devasa ekosistem. Harita ve veri görselleştirme kütüphaneleri (Deck.gl, React-Leaflet, Recharts) çok güçlü. | Sadece bir UI kütüphanesidir; state yönetimi vb. için ek araçlar gerektirir. | **En İyi Seçim.** Trafik yoğunluk haritası, enerji tüketim grafikleri ve çevresel sensör panelleri için biçilmiş kaftandır. |
+| **Angular** | Tam teşekküllü bir framework, büyük kurumsal projelerde katı ve düzenli bir yapı sunar. | Öğrenmesi zor, geliştirme süreci React'e göre daha yavaştır. | React halihazırda seçilmişken değiştirmeye gerek yok. |
+
+## 5. Mobil Uygulama (Vatandaş Uygulaması)
+Vatandaşların trafik durumunu harita üzerinde görebildiği, planlı enerji kesintilerini ve belediye duyurularını takip edebildiği uygulama için.
+
+| Teknoloji | Avantajlar | Dezavantajlar | Karar & Değerlendirme |
+| :--- | :--- | :--- | :--- |
+| **Native Android (Kotlin)** *(Seçilen)* | Android platformunda yüksek performans; Google Maps SDK ve push bildirim (FCM) desteği yerel düzeyde mükemmel çalışır. | Yalnızca Android; iOS için ayrı geliştirme gerekir. | **Uygun Seçim.** Anlık bildirim ve harita performansı kritik olduğundan Native Android tercih edildi. |
+| **Flutter / React Native** | Tek kod tabanı ile hem iOS hem Android için geliştirme. | Anlık bildirim ve harita performansında native'in gerisinde kalır. | İleride iOS desteği gerekirse yeniden değerlendirilebilir. |
+
+## 6. İletişim Protokolü (Modüller Arası)
+Simülatör → Backend → Panel/Mobil veri akışı için bir iletişim katmanına ihtiyaç vardır.
+
+* **MQTT (örn. Eclipse Mosquitto):** Python simülatörünün ürettiği "sensör" verilerini FastAPI'ye iletmek için kullanılacaktır. Bu sayede ileride gerçek IoT donanımına geçildiğinde aynı protokol kullanılabilir; kod gelecekteki donanım entegrasyonuna **hazır** kalır.
+* **WebSocket:** React paneline ve mobil uygulamaya anlık bildirim göndermek, değişen verileri canlı olarak yansıtmak için kullanılacaktır.
+
+> **Not:** Bu projede Apache Kafka gibi yüksek hacimli veri akış sistemlerine gerek yoktur, çünkü veriler gerçek sensörlerden değil Python simülatöründen (random) üretilmektedir. İleride gerçek şehir ölçekli sensörlere geçilirse Kafka yeniden değerlendirilebilir.
+
+---
+
+## 7. Önerilen Sistem Mimarisi Özeti
+Seçilen teknoloji yığını ile **simüle veriye dayalı** Akıllı Şehir veri akışı:
+
+1.  **Veri Üretimi (Simülasyon):** Python sensör simülatörü *(random / numpy.random)* `->` MQTT
+2.  **Arka Plan & Yapay Zeka:** Python (FastAPI) + TensorFlow / **DQN** *(MQTT'den okur, kural tabanlı + DQN ile karar alır)*
+3.  **Veritabanı:** PostgreSQL *(PostGIS eklentisi ile; haritalama için)*
+4.  **Belediye Paneli:** React *(WebSocket ile anlık güncellenir)*
+5.  **Vatandaş Uygulaması:** Native Android (Kotlin) *(FCM ile anlık bildirim alır)*
 
 ## Cemile Akay
 GÖREVİN BURAYA YAPIŞTIRILACAK.
