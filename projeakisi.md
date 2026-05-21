@@ -4,7 +4,6 @@
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Abdullah Gümüş
-## Abdullah Gümüş
 
 ## Akıllı Şehir Yönetim Sistemi - Gereksinimler
 ---
