@@ -85,20 +85,6 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Efecan Önal
-## 🚦 React ile Trafik Optimizasyon ve Simülasyon Modülü (Yeni Özellik)
-
-Bu güncelleme ile projeye, belediye görevlilerinin trafik akışını yapay zeka/algoritmik temellerde test edebileceği **React tabanlı bir simülasyon arayüzü** eklenmiştir.
-
-### 🌟 Eklenen Temel Özellikler:
-* **Dinamik Parametre Kontrolü:** Kullanıcılar UI üzerinden "Araç Yoğunluğu Ağırlığı" ve "Maksimum Bekleme Eşiği" gibi algoritma parametrelerini Range (Slider) inputlar ile hassas şekilde ayarlayabilir.
-* **Senaryo Simülasyonu:** Trafik kazası, yol çalışması veya normal akış gibi farklı kriz senaryoları seçilerek algoritmanın bu durumlara nasıl tepki vereceği test edilebilir.
-* **Harita Üzerinde Görselleştirme:** Seçilen senaryolar ve olay yerleri (örn: kaza noktası) harita arayüzü üzerinde dinamik olarak konumlandırılır ve görselleştirilir.
-* **A/B Karşılaştırma Çıktıları:** Simülasyon çalıştırıldıktan sonra sistem; *Trafik Akış Verimi (%), Ortalama Bekleme Süresi (sn) ve CO2 Azaltım Oranını* hesaplayarak yöneticilere anında geri bildirim sunar.
-
-### 💻 Teknolojik Altyapı:
-* **React.js (Hooks):** Durum yönetimi için `useState` kullanılarak interaktif bir bileşen (`TrafficOptimizationPanel`) oluşturuldu.
-* **Responsive Layout:** Tailwind CSS / Modern CSS yaklaşımları ile ekran boyutundan bağımsız esnek bir ızgara (grid) sistemi kurgulandı.
-* **Gelecek Entegrasyona Hazır:** Algoritma fonksiyonu (`runSimulation`), gerçek bir Backend/Python API'sine kolayca bağlanabilecek yapıda asenkron mimariye uygun tasarlanmıştır.
 
 # Hafta 4
 
