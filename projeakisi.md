@@ -13,6 +13,7 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Efecan Önal
+
 # 🏙️ Akıllı Şehir Yönetim Sistemi - Proje Özeti
 
 [cite_start]**Proje Amacı:** Şehir yaşamını daha verimli, güvenli ve sürdürülebilir kılmak[cite: 4]. [cite_start]Trafik akışını optimize etmek, enerji tüketimini izlemek, çevresel verileri analiz etmek ve acil durum müdahale sürelerini kısaltmayı hedefler[cite: 5].
