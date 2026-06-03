@@ -272,7 +272,36 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 # Hafta 5
 
 ## Nisanur Eltekin
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+Belediye yetkilileri için React ile kapsamlı bir yönetim paneli geliştirildi. Panel; trafik yönetimi, enerji izleme, çevre analizi, acil durum takibi ve raporlama modüllerini tek arayüzde birleştirmektedir.
+
+**Trafik Yönetimi:**
+DQN algoritması parametreleri (yoğunluk ağırlığı, bekleme süresi, acil araç önceliği, yoğun saat faktörü, min/max yeşil süre, kuyruk eşiği) kaydırarak ayarlanabilmektedir. Normal ve yoğun saat bekleme süreleri kavşak bazlı karşılaştırmalı olarak sunulmaktadır.
+
+**Işık Kontrol Merkezi:**
+Her kavşak için kırmızı ve yeşil ışık süreleri slider ile manuel olarak ayarlanabilmektedir. Kuyruk uzunluğu izlenmekte, eşik aşıldığında sistem otomatik olarak yeşil süreyi uzatmaktadır. Otomatik ve manuel mod arasında geçiş yapılabilmektedir.
+
+**Senaryo Simülatörü:**
+Normal trafik, yoğun saat, kaza, yol çalışması, acil araç ve kötü hava olmak üzere 6 senaryo simüle edilmektedir. Her senaryo için algoritma tepkisi, bekleme süresi ve iyileşme oranı anlık görüntülenmektedir. Tüm senaryolar karşılaştırmalı tablo ve grafikle sunulmaktadır.
+
+**Enerji Yönetimi:**
+5 Elazığ kavşağı için aydınlatma açma/kapama kontrolü, saatlik tüketim trendi, kaynak bazlı dağılım, anomali tespiti ve tasarruf önerileri panelde yer almaktadır. Toplam potansiyel günlük tasarruf 165 kWh olarak hesaplanmıştır.
+
+**Çevre İzleme:**
+AQI, gürültü, PM2.5 bar grafikleri ve CO2-nem korelasyon grafiği (çift eksenli) oluşturuldu. Tüm kavşakların çevresel durum özet tablosu eklendi.
+
+**Acil Durum ve Yeşil Dalga:**
+Ambulans konumu, hızı ve tahmini varış süresi anlık izlenmektedir. Güzergahtaki tüm kavşaklar sırayla yeşile alınmakta, karşı yönden gelen trafik durdurulmaktadır. Müdahale süresi 3.5 dakikaya düşürüldü (hedef: &lt;6 dk ✓).
+
+**Vatandaş Bildirimleri:**
+Vatandaşların mobil uygulamadan gönderdiği doğal afet fotoğrafları, etkinlik bildirimleri ve sorun raporları panelde listelenmektedir. Afet bildirimi onaylanınca trafik otomatik yeniden düzenlenmektedir. Etkinlik onaylanınca yakın vatandaşlara push bildirimi gönderilmektedir.
+
+**Raporlama:**
+Zaman aralığı, kavşak ve modül seçilerek özel rapor oluşturulabilmektedir. Raporlar PDF ve CSV formatlarında indirilebilmektedir. KPI radar grafiği ile tüm modüllerin performans özeti sunulmaktadır.
+
+**Dosyalar:**
+- `NE_H5_web_belediye_yonetici_paneli.html` — Tam belediye yönetici paneli
+- `belediye-panel/` — React kaynak kodu (Vite + Recharts)
 
 ## Abdullah Gümüş
 GÖREVİN BURAYA YAPIŞTIRILACAK.
