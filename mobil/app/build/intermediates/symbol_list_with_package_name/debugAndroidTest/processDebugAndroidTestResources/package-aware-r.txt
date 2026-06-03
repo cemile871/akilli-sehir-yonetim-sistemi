@@ -1,3 +1,0 @@
-com.akillisehirapp.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
