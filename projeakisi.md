@@ -318,7 +318,18 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 # Hafta 6
 
 ## Nisanur Eltekin
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+Proje kapanış sunumu için iki ayrı interaktif HTML sunum materyali hazırlandı.
+
+**Yönetici Özeti Sunumu (NE_H6_hoca_sunumu.html):**
+8 slaytlık kapsamlı sunum; projenin amacı ve Elazığ'ın gerçek sorunları, ekip tanıtımı ve haftalık sprint planı, geliştirilen modüller ve canlı demo bilgisi, sistem nasıl çalışıyor, teknoloji seçim gerekçeleri, elde edilen sonuçlar ve başarısızlıkların dürüst analizi, öğrendiklerimiz ve zorluklar, 3 fazlı gelecek yol haritası bölümlerini kapsamaktadır.
+
+**Teknik Kapanış Sunumu (NE_H6_sunum_belediye_paneli.html):**
+6 slaytlık teknik sunum; KPI özeti, yönetici özeti, ekip, teknoloji yığını ve sistem mimarisi, performans metrikleri ve gelecek potansiyeli içermektedir.
+
+**Dosyalar:**
+- `NE_H6_hoca_sunumu.html` — Hoca sunumu (8 slayt)
+- `NE_H6_sunum_belediye_paneli.html` — Teknik kapanış sunumu (6 slayt)
 
 ## Abdullah Gümüş
 GÖREVİN BURAYA YAPIŞTIRILACAK.
