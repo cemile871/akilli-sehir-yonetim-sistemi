@@ -37,7 +37,7 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 •	PostgreSQL veritabanına güvenli şekilde kaydetmek
 ________________________________________
 📊 Toplanan Veri Türleri
-🚦 Trafik Verileri (Kritik)
+🚦 Trafik Verileri 
 •	Araç sayısı
 •	Kuyruk uzunluğu
 •	Doluluk oranı
