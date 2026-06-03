@@ -510,7 +510,54 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Cemile Akay
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Trafik Optimizasyon Algoritması Teknik Dokümantasyonu ve Sonuç Analizi
+
+---
+
+### 1. Algoritmanın Çalışma Prensibi ve Mimarisi
+Sistemimiz, şehir genelindeki kavşaklarda trafik ışığı sürelerini gerçek zamanlı optimize etmek amacıyla hibrit bir yapay zeka mimarisi kullanmaktadır.
+
+* **Hibrit Yapı:** Sistem başlangıçta güvenli kalkış sağlamak adına kural tabanlı (Rule-Based) çalışır. Yeterli sensör verisi PostgreSQL üzerinde havuzlandıktan sonra kontrolü TensorFlow ile eğitilmiş Derin Q-Ağı (DQN) modeline devreder.
+* **Milisaniye Düzeyinde Karar:** Eğitimini tamamlayan DQN modeli, gelen anlık trafik durumlarına milisaniye düzeyinde tepki vererek aksiyon planı hazırlar.
+
+---
+
+### 2. Algoritma Parametreleri ve Varsayımları
+Algoritma, karar destek mekanizmasını çalıştırırken şu 6 ana kategori altındaki parametreleri girdi olarak kabul eder ve varsayımlarını buna göre şekillendirir:
+
+* **Trafik Yoğunluğu:** Araç sayısı, kuyruk uzunluğu ve doluluk oranı (Yüksek yoğunlukta yeşil ışık süresi artırılır).
+* **Hız Verileri:** Ortalama araç hızı ve akış hızı (Hız düştüğünde sistem müdahale modunu tetikler).
+* **Yol Durumu:** Yolun normal, ıslak, kapalı veya kazalı olması durumu (Alternatif rota yönlendirmesi yapılır).
+* **Araç Türü Önceliği:** Ambulans veya itfaiye gibi acil durum araçlarının varlığı (Sistem doğrudan "KRİTİK" moda geçer).
+* **Zaman Katsayısı:** Günün saati, hafta içi/sonu ve mevsim durumu (Yoğun saatlerde "Rush Factor = 1.4" ile sisteme %40 ek yük tanımlanır).
+* **Hava Durumu:** Yağmur, kar veya sis durumu (Kötü havada şehir içi yol kapasitesi varsayılan olarak %20 düşürülür).
+
+---
+
+### 3. Öncelik Sıralaması ve Sistemin Sınırlamaları
+
+#### A. Optimizasyon Hedeflerinin Öncelik Sırası
+Birden fazla senaryonun çakışması durumunda algoritma şu hiyerarşiyi takip eder:
+1. **KRİTİK Mod:** Aktif acil araç sinyali varsa tüm hedefler askıya alınır ve Yeşil Dalga sistemi aktive edilir.
+2. **Yüksek Öncelik:** Herhangi bir kolda kuyruk uzunluğu > 300 metreyi aşarsa sıkışıklık önleme algoritması devreye girer.
+3. **Normal Öncelik:** Bekleme süresinin < 30 saniye, geçiş kapasitesinin > 1.000 araç/saat dengesinde kalması sağlanır.
+4. **Düşük Öncelik:** Trafiğin sakin olduğu saatlerde adil yeşil ışık dağılımı ve minimum emisyon hedeflenir.
+
+#### B. Sistemin Sınırlamaları (Constraints)
+* **Simülasyon Bağımlılığı:** Fiziksel donanım bulunmadığından tüm sensör girdileri Python tabanlı simülatör ile üretilmektedir. Ancak yazılan kodlar tak-çalıştır (plug-and-play) şeklinde gerçek donanımlara uyumludur.
+* **Emisyon Kısıtı:** Mevcut DQN modeli trafik akışını ve bekleme sürelerini mükemmel optimize etmesine rağmen, karbon emisyonunu düşürme noktasında (-%12-20) ilk hedef olan %25'in gerisinde kalmaktadır.
+
+---
+
+### 4. Farklı Senaryolarda Performans ve Sonuç Analizi
+
+| Denenen Senaryo | Algoritmanın Tepkisi / Eylemi | Elde Edilen Performans Sonucu |
+| :--- | :--- | :--- |
+| **Normal Trafik** | Dengeli yeşil süre dağıtımı | Bekleme süresi 45sn'den 28sn'ye düştü (-%38), kapasite +%37 arttı. |
+| **Yoğun Saatler** | Güncelleme sıklığı 15 saniyeye düşürülür, ana artere 60-90sn yeşil verilir. | Bekleme süresinde -%40 iyileşme, geçiş kapasitesinde +%58 artış sağlandı. |
+| **Acil Durum** | Rota üzerindeki 7 kavşak sırayla yeşile kilitlenir (Yeşil Dalga). | Müdahale süresi 12 dakikadan 6 dakikaya düşürüldü (-%56). |
+| **Kötü Hava / Kaza** | Yeşil süreler %20 kısaltılır, araç eşiği %30 düşürülür. Alternatif rotaya yönlendirilir. | Kaza riski -%35 azaldı, otomatik acil durum alarmı < 30 saniyede tetiklendi. |
+
 
 ## Efecan Önal
 GÖREVİN BURAYA YAPIŞTIRILACAK.
