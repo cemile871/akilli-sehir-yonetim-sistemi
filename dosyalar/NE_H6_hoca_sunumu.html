@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akıllı Şehir Yönetim Sistemi — Hoca Sunumu</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FAFAF8;--bg2:#F5F4F0;--bg3:#EEECEA;
+  --dark:#111018;--dark2:#2D2B38;--dark3:#4A4759;
+  --blue:#2563EB;--blue-l:#EFF6FF;--blue-m:#BFDBFE;
+  --green:#059669;--green-l:#ECFDF5;
+  --amber:#D97706;--amber-l:#FFFBEB;
+  --red:#DC2626;--red-l:#FEF2F2;
+  --purple:#7C3AED;--purple-l:#F5F3FF;
+  --border:#E5E3DE;--border2:#D4D1CB;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--dark);overflow-x:hidden}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:.875rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(250,250,248,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:10px}
+.nav-pill{background:var(--dark);color:#fff;font-size:10px;font-weight:600;letter-spacing:1px;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.nav-dots{display:flex;gap:6px;align-items:center}
+.ndot{width:7px;height:7px;border-radius:50%;background:var(--border2);cursor:pointer;border:none;transition:all 0.3s}
+.ndot.active{background:var(--blue);transform:scale(1.4)}
+.nav-info{font-size:11px;color:var(--dark3);font-weight:500}
+
+/* SLIDES */
+.slide{min-height:100vh;padding:5.5rem 2rem 4rem;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.slide-inner{max-width:1080px;width:100%;margin:0 auto}
+
+/* SLIDE TAG */
+.stag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:1.25rem}
+.stag-line{width:28px;height:2px;background:var(--blue);border-radius:1px}
+.slide-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.25rem);font-weight:800;line-height:1.1;letter-spacing:-0.5px;margin-bottom:1rem;color:var(--dark)}
+.slide-sub{font-size:15px;color:var(--dark3);line-height:1.7;font-weight:400;max-width:650px}
+
+/* KAPAK */
+.kapak-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:4rem;align-items:center;min-height:80vh}
+.kapak-badge{display:inline-flex;align-items:center;gap:8px;background:var(--blue-l);border:1px solid var(--blue-m);color:var(--blue);font-size:11px;font-weight:700;padding:6px 14px;border-radius:30px;margin-bottom:2rem;letter-spacing:0.5px}
+.kapak-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 1.5s infinite}
+.kapak-title{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5.5vw,4rem);font-weight:800;line-height:1.05;letter-spacing:-1px;margin-bottom:1.5rem;color:var(--dark)}
+.kapak-title em{font-style:normal;color:var(--blue)}
+.kapak-desc{font-size:15px;color:var(--dark3);line-height:1.75;margin-bottom:2rem;font-weight:400}
+.kapak-meta{display:flex;gap:1.5rem;flex-wrap:wrap}
+.kapak-meta-item{padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;font-size:12px}
+.kapak-meta-item strong{display:block;font-size:13px;font-weight:700;color:var(--dark);margin-bottom:2px}
+.kapak-meta-item span{color:var(--dark3)}
+.kapak-visual{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kv-card{background:var(--dark);color:#fff;border-radius:14px;padding:1.5rem;position:relative;overflow:hidden}
+.kv-card::after{content:'';position:absolute;bottom:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.kv-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;line-height:1;margin-bottom:6px}
+.kv-label{font-size:11px;color:rgba(255,255,255,0.5);font-weight:500}
+.kv-card.b .kv-num{color:#60A5FA}
+.kv-card.g .kv-num{color:#34D399}
+.kv-card.a .kv-num{color:#FCD34D}
+.kv-card.p .kv-num{color:#C4B5FD}
+
+/* NEDEN */
+.neden-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:2rem}
+.neden-card{padding:1.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:16px;transition:all 0.3s;position:relative;overflow:hidden}
+.neden-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 8px 24px rgba(37,99,235,0.08)}
+.neden-icon{font-size:32px;margin-bottom:1rem}
+.neden-title{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:8px}
+.neden-desc{font-size:12px;color:var(--dark3);line-height:1.65}
+.neden-stat{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-l);padding:3px 10px;border-radius:20px}
+.problem-box{background:var(--dark);color:#fff;border-radius:16px;padding:2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center}
+.problem-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:1rem}
+.problem-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.problem-list li{font-size:13px;color:rgba(255,255,255,0.75);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.problem-list li::before{content:'→';color:#60A5FA;flex-shrink:0}
+.solution-list{display:flex;flex-direction:column;gap:8px}
+.sol-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,0.06);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.85)}
+
+/* EKİP */
+.ekip-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:2rem}
+.ekip-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.25rem;text-align:center;transition:all 0.3s}
+.ekip-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 6px 20px rgba(37,99,235,0.08)}
+.ekip-av{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#fff;margin:0 auto 12px}
+.ekip-name{font-size:12px;font-weight:700;color:var(--dark);margin-bottom:3px}
+.ekip-role{font-size:10px;color:var(--dark3);font-weight:500;margin-bottom:8px}
+.ekip-gorevler{display:flex;flex-direction:column;gap:4px}
+.ekip-gorev-item{font-size:10px;color:var(--blue);background:var(--blue-l);padding:2px 8px;border-radius:4px;font-weight:600}
+.sprint-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.sprint-title{font-size:12px;font-weight:700;color:var(--dark3);text-transform:uppercase;letter-spacing:1px;margin-bottom:1rem}
+.sprint-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.sprint-row:last-child{border-bottom:none}
+.sprint-hafta{font-weight:700;color:var(--dark);min-width:60px}
+.sprint-konu{color:var(--dark3);flex:1}
+.sprint-durum{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--green-l);color:var(--green)}
+
+/* NELER YAPTIK */
+.yaptiklarimiz-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.yapti-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:all 0.3s}
+.yapti-card:hover{border-color:var(--blue)}
+.yapti-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+.yapti-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.yapti-title{font-size:13px;font-weight:700;color:var(--dark)}
+.yapti-sub{font-size:11px;color:var(--dark3)}
+.yapti-items{list-style:none;display:flex;flex-direction:column;gap:6px}
+.yapti-items li{font-size:12px;color:var(--dark3);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+.yapti-items li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.demo-box{background:var(--dark);border-radius:14px;padding:1.5rem;display:flex;align-items:center;gap:1rem;margin-top:16px}
+.demo-icon{font-size:28px;flex-shrink:0}
+.demo-text{font-size:12px;color:rgba(255,255,255,0.75);line-height:1.5}
+.demo-text strong{color:#fff;display:block;margin-bottom:3px;font-size:13px}
+
+/* NASIL ÇALIŞIYOR */
+.nasil-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.flow-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.flow-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dark3);margin-bottom:1.25rem}
+.flow-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+.flow-step:last-child{margin-bottom:0}
+.flow-num{width:28px;height:28px;border-radius:8px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.flow-content{}
+.flow-label{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:3px}
+.flow-desc{font-size:11px;color:var(--dark3);line-height:1.5}
+.flow-arrow{text-align:center;color:var(--border2);font-size:14px;margin:4px 0 4px 40px}
+.tech-simple{display:flex;flex-direction:column;gap:10px}
+.ts-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;transition:all 0.2s}
+.ts-item:hover{border-color:var(--blue)}
+.ts-emoji{font-size:20px;flex-shrink:0}
+.ts-name{font-size:13px;font-weight:600;color:var(--dark)}
+.ts-desc{font-size:11px;color:var(--dark3)}
+.ts-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+
+/* SONUÇLAR */
+.sonuc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:1.5rem}
+.sonuc-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;text-align:center;transition:all 0.3s;position:relative;overflow:hidden}
+.sonuc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sonuc-card.g::before{background:var(--green)}
+.sonuc-card.b::before{background:var(--blue)}
+.sonuc-card.a::before{background:var(--amber)}
+.sonuc-card.r::before{background:var(--red)}
+.sonuc-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:800;line-height:1;margin-bottom:6px}
+.sonuc-card.g .sonuc-num{color:var(--green)}
+.sonuc-card.b .sonuc-num{color:var(--blue)}
+.sonuc-card.a .sonuc-num{color:var(--amber)}
+.sonuc-card.r .sonuc-num{color:var(--red)}
+.sonuc-label{font-size:12px;color:var(--dark3);line-height:1.4}
+.sonuc-hedef{font-size:10px;font-weight:700;margin-top:8px;padding:2px 8px;border-radius:4px;display:inline-block}
+.sonuc-card.g .sonuc-hedef{background:var(--green-l);color:var(--green)}
+.sonuc-card.b .sonuc-hedef{background:var(--blue-l);color:var(--blue)}
+.sonuc-card.a .sonuc-hedef{background:var(--amber-l);color:var(--amber)}
+.honest-box{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.honest-card{padding:1.25rem;border-radius:12px}
+.honest-card.good{background:var(--green-l);border:1px solid #A7F3D0}
+.honest-card.bad{background:var(--amber-l);border:1px solid #FDE68A}
+.honest-title{font-size:12px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.honest-card.good .honest-title{color:var(--green)}
+.honest-card.bad .honest-title{color:var(--amber)}
+.honest-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.honest-list li{font-size:11px;line-height:1.5;display:flex;align-items:flex-start;gap:6px}
+.honest-card.good .honest-list li{color:#065F46}
+.honest-card.bad .honest-list li{color:#92400E}
+
+/* ÖĞRENDIK */
+.ogren-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:2rem}
+.ogren-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:all 0.3s}
+.ogren-card:hover{border-color:var(--purple);transform:translateY(-2px)}
+.ogren-icon{font-size:24px;margin-bottom:10px}
+.ogren-title{font-size:12px;font-weight:700;color:var(--dark);margin-bottom:6px}
+.ogren-desc{font-size:11px;color:var(--dark3);line-height:1.55}
+.zorluk-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.zorluk-card{padding:1.25rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;border-left:3px solid var(--amber)}
+.zorluk-title{font-size:12px;font-weight:700;color:var(--dark);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.zorluk-desc{font-size:11px;color:var(--dark3);line-height:1.55;margin-bottom:6px}
+.zorluk-cozum{font-size:11px;font-weight:600;color:var(--green)}
+
+/* GELECEK */
+.gelecek-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:2rem}
+.g-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:all 0.3s}
+.g-card:hover{border-color:var(--blue);transform:translateY(-3px)}
+.g-faz{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:4px;display:inline-block;margin-bottom:12px}
+.g-faz.f1{background:var(--blue-l);color:var(--blue)}
+.g-faz.f2{background:var(--green-l);color:var(--green)}
+.g-faz.f3{background:var(--purple-l);color:var(--purple)}
+.g-title{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:10px}
+.g-items{list-style:none;display:flex;flex-direction:column;gap:6px}
+.g-items li{font-size:11px;color:var(--dark3);line-height:1.45;display:flex;align-items:flex-start;gap:6px}
+.g-items li::before{content:'→';color:var(--blue);flex-shrink:0}
+.kapanis{text-align:center;background:var(--dark);color:#fff;border-radius:18px;padding:3rem 2rem}
+.kapanis-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.5rem);font-weight:800;margin-bottom:1rem}
+.kapanis-desc{font-size:14px;color:rgba(255,255,255,0.65);max-width:550px;margin:0 auto 2rem;line-height:1.7}
+.kapanis-stats{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+.kstat{text-align:center}
+.kstat-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:#60A5FA}
+.kstat-label{font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px}
+
+/* NAV */
+.slide-nav{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;background:rgba(250,250,248,0.95);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:50px;padding:.625rem 1rem;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+.snav{padding:7px 18px;border-radius:40px;border:1px solid var(--border);background:none;color:var(--dark3);cursor:pointer;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;transition:all 0.2s}
+.snav:hover{background:var(--bg2);color:var(--dark)}
+.snav.primary{background:var(--dark);border-color:var(--dark);color:#fff}
+.scounter{font-size:11px;color:var(--dark3);font-weight:600;padding:0 8px}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+@media(max-width:768px){
+  .kapak-grid,.nasil-grid{grid-template-columns:1fr}
+  .neden-grid,.ekip-grid,.sonuc-grid,.gelecek-grid,.ogren-grid{grid-template-columns:1fr 1fr}
+  .yaptiklarimiz-grid,.honest-box,.zorluk-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">
+    Akıllı Şehir Projesi
+    <span class="nav-pill">Bayt Sihirbazları</span>
+  </div>
+  <div class="nav-dots" id="navDots"></div>
+  <div class="nav-info">Elazığ · 2025–2026</div>
+</nav>
+
+<!-- SLIDE 1: KAPAK -->
+<div class="slide" id="slide-0">
+  <div class="slide-inner">
+    <div class="kapak-grid">
+      <div>
+        <div class="kapak-badge">🎓 Proje Kapanış Sunumu</div>
+        <h1 class="kapak-title">Elazığ'ı <em>Akıllı</em><br>Şehre Dönüştürüyoruz</h1>
+        <p class="kapak-desc">Trafik sıkışıklığını azaltan, enerji israfını önleyen ve acil araçların daha hızlı ulaşmasını sağlayan yapay zeka destekli bir şehir yönetim sistemi geliştirdik.</p>
+        <div class="kapak-meta">
+          <div class="kapak-meta-item"><strong>Grup</strong><span>Bayt Sihirbazları</span></div>
+          <div class="kapak-meta-item"><strong>Dönem</strong><span>2025–2026</span></div>
+          <div class="kapak-meta-item"><strong>Kapsam</strong><span>5 Elazığ Kavşağı</span></div>
+          <div class="kapak-meta-item"><strong>Süre</strong><span>6 Haftalık Sprint</span></div>
+        </div>
+      </div>
+      <div class="kapak-visual">
+        <div class="kv-card b"><div class="kv-num">28 sn</div><div class="kv-label">Ortalama bekleme süresi<br>(hedef: &lt;30 sn ✓)</div></div>
+        <div class="kv-card g"><div class="kv-num">-%20</div><div class="kv-label">Enerji tasarrufu<br>(hedef karşılandı ✓)</div></div>
+        <div class="kv-card a"><div class="kv-num">3.5 dk</div><div class="kv-label">Acil müdahale süresi<br>(hedef: &lt;6 dk ✓)</div></div>
+        <div class="kv-card p"><div class="kv-num">6/8</div><div class="kv-label">KPI hedefi<br>karşılandı</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: NEDEN BU PROJE -->
+<div class="slide" id="slide-1">
+  <div class="slide-inner">
+    <div class="stag"><span class="stag-line"></span>Neden Bu Proje?</div>
+    <h2 class="slide-title">Elazığ'ın Gerçek<br>Sorunlarını Çözüyoruz</h2>
+    <p class="slide-sub" style="margin-bottom:2rem">Soyut bir akademik proje değil — Elazığ'daki gerçek kavşakları, gerçek trafik sorunlarını ve gerçek ihtiyaçları temel aldık.</p>
+    <div class="neden-grid">
+      <div class="neden-card">
+        <div class="neden-icon">🚦</div>
+        <div class="neden-title">Trafik Sıkışıklığı</div>
+        <div class="neden-desc">Çarşı ve İzzet Paşa kavşaklarında yoğun saatlerde araçlar dakikalarca bekliyor. Sabit süreli trafik ışıkları talebi karşılamıyor.</div>
+        <div class="neden-stat">Çözüm: Yapay zeka destekli dinamik ışık</div>
+      </div>
+      <div class="neden-card">
+        <div class="neden-icon">🚑</div>
+        <div class="neden-title">Acil Araç Gecikmesi</div>
+        <div class="neden-desc">Ambulanslar ve itfaiye araçları trafik nedeniyle gecikiyor. Her saniye hayat kurtarabilecek süreyi kaybediyorlar.</div>
+        <div class="neden-stat">Çözüm: Otomatik yeşil dalga sistemi</div>
+      </div>
+      <div class="neden-card">
+        <div class="neden-icon">💡</div>
+        <div class="neden-title">Enerji İsrafı</div>
+        <div class="neden-desc">Sokak aydınlatmaları ve kamu binaları gece boyu ve mesai dışında gereksiz enerji tüketiyor. Belediye bütçesine yük bindiriyor.</div>
+        <div class="neden-stat">Çözüm: Akıllı enerji izleme paneli</div>
+      </div>
+    </div>
+    <div class="problem-box">
+      <div>
+        <div class="problem-title">Mevcut Durum</div>
+        <ul class="problem-list">
+          <li>Sabit süreli trafik ışıkları talebi göre ayarlanamıyor</li>
+          <li>Belediye yetkililerinin şehri tek ekrandan izleyecek bir paneli yok</li>
+          <li>Çevresel veriler (hava kalitesi, gürültü) toplanmıyor</li>
+          <li>Vatandaşlar trafik ve kesinti bilgilerine anlık ulaşamıyor</li>
+        </ul>
+      </div>
+      <div>
+        <div class="problem-title">Bizim Çözümümüz</div>
+        <div class="solution-list">
+          <div class="sol-item">✅ DQN yapay zeka ile dinamik trafik optimizasyonu</div>
+          <div class="sol-item">✅ React tabanlı belediye yönetici paneli</div>
+          <div class="sol-item">✅ Python sensör simülatörü ile çevre izleme</div>
+          <div class="sol-item">✅ Vatandaş mobil uygulaması (Android)</div>
+          <div class="sol-item">✅ Anlık acil durum yeşil dalga sistemi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: EKİP -->
+<div class="slide" id="slide-2">
+  <div class="slide-inner">
+    <div class="stag"><span class="stag-line"></span>Ekip Tanıtımı</div>
+    <h2 class="slide-title">Kim Ne Yaptı?</h2>
+    <p class="slide-sub" style="margin-bottom:2rem">Her üye kendi uzmanlık alanında görev üstlendi. Gerçek bir yazılım ekibi gibi çalıştık.</p>
+    <div class="ekip-grid">
+      <div class="ekip-card">
+        <div class="ekip-av" style="background:linear-gradient(135deg,#2563EB,#06B6D4)">NE</div>
+        <div class="ekip-name">Nisanur Eltekin</div>
+        <div class="ekip-role">📋 Proje Yöneticisi</div>
+        <div class="ekip-gorevler">
+          <div class="ekip-gorev-item">Trafik Algoritması</div>
+          <div class="ekip-gorev-item">Enerji Paneli Mockup</div>
+          <div class="ekip-gorev-item">Çevre Analizi</div>
+          <div class="ekip-gorev-item">React Belediye Paneli</div>
+          <div class="ekip-gorev-item">PR Merge Yetkisi</div>
+        </div>
+      </div>
+      <div class="ekip-card">
+        <div class="ekip-av" style="background:linear-gradient(135deg,#7C3AED,#EC4899)">AG</div>
+        <div class="ekip-name">Abdullah Gümüş</div>
+        <div class="ekip-role">🗄️ Backend & Veritabanı</div>
+        <div class="ekip-gorevler">
+          <div class="ekip-gorev-item">PostgreSQL Şeması</div>
+          <div class="ekip-gorev-item">API Entegrasyon</div>
+          <div class="ekip-gorev-item">Gereksinim Analizi</div>
+          <div class="ekip-gorev-item">Veri Toplama Modülü</div>
+        </div>
+      </div>
+      <div class="ekip-card">
+        <div class="ekip-av" style="background:linear-gradient(135deg,#059669,#10B981)">MAK</div>
+        <div class="ekip-name">Melih Ahmet Kocaman</div>
+        <div class="ekip-role">📱 Teknoloji & Mobil</div>
+        <div class="ekip-gorevler">
+          <div class="ekip-gorev-item">Teknoloji Karşılaştırma</div>
+          <div class="ekip-gorev-item">Mobil Uygulama</div>
+          <div class="ekip-gorev-item">Enerji Optimizasyonu</div>
+          <div class="ekip-gorev-item">DQN Seçim Gerekçesi</div>
+        </div>
+      </div>
+      <div class="ekip-card">
+        <div class="ekip-av" style="background:linear-gradient(135deg,#D97706,#EF4444)">CA</div>
+        <div class="ekip-name">Cemile Akay</div>
+        <div class="ekip-role">🏗️ Altyapı & UI</div>
+        <div class="ekip-gorevler">
+          <div class="ekip-gorev-item">GitHub Kurulumu</div>
+          <div class="ekip-gorev-item">Veritabanı Şeması</div>
+          <div class="ekip-gorev-item">Veri Toplama Analizi</div>
+          <div class="ekip-gorev-item">Akıllı Ulaşım UI</div>
+        </div>
+      </div>
+      <div class="ekip-card">
+        <div class="ekip-av" style="background:linear-gradient(135deg,#DC2626,#F97316)">EÖ</div>
+        <div class="ekip-name">Efecan Önal</div>
+        <div class="ekip-role">🔐 Güvenlik & Panel</div>
+        <div class="ekip-gorevler">
+          <div class="ekip-gorev-item">Proje Kapsamı</div>
+          <div class="ekip-gorev-item">Güvenlik Testleri</div>
+          <div class="ekip-gorev-item">Enerji Paneli</div>
+          <div class="ekip-gorev-item">Trafik Arayüzü</div>
+        </div>
+      </div>
+    </div>
+    <div class="sprint-box">
+      <div class="sprint-title">Haftalık Sprint Planı</div>
+      <div class="sprint-row"><span class="sprint-hafta">Hafta 1</span><span class="sprint-konu">Proje analizi, GitHub kurulumu, teknoloji araştırması, geliştirme ortamı</span><span class="sprint-durum">✓ Tamamlandı</span></div>
+      <div class="sprint-row"><span class="sprint-hafta">Hafta 2</span><span class="sprint-konu">Algoritma tasarımı, veritabanı şeması, mobil gereksinimler, UI mockup</span><span class="sprint-durum">✓ Tamamlandı</span></div>
+      <div class="sprint-row"><span class="sprint-hafta">Hafta 3</span><span class="sprint-konu">Veri toplama modülü, sensör simülatörü, enerji paneli, güvenlik testleri</span><span class="sprint-durum">✓ Tamamlandı</span></div>
+      <div class="sprint-row"><span class="sprint-hafta">Hafta 4</span><span class="sprint-konu">Çevre veri analizi, görselleştirme, sistem entegrasyonu</span><span class="sprint-durum">✓ Tamamlandı</span></div>
+      <div class="sprint-row"><span class="sprint-hafta">Hafta 5</span><span class="sprint-konu">React belediye paneli, mobil bildirimler, algoritma test ve doğrulama</span><span class="sprint-durum">✓ Tamamlandı</span></div>
+      <div class="sprint-row"><span class="sprint-hafta">Hafta 6</span><span class="sprint-konu">Kullanıcı testleri, dokümantasyon, proje kapanış sunumu</span><span class="sprint-durum">✓ Tamamlandı</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: NELER YAPTIK -->
+<div class="slide" id="slide-3">
+  <div class="slide-inner">
+    <div class="stag"><span class="stag-line"></span>Projede Neler Yaptık?</div>
+    <h2 class="slide-title">Geliştirdiğimiz<br>Modüller</h2>
+    <div class="yaptiklarimiz-grid">
+      <div class="yapti-card">
+        <div class="yapti-header">
+          <div class="yapti-icon" style="background:#EFF6FF">🚦</div>
+          <div><div class="yapti-title">Trafik Optimizasyon Algoritması</div><div class="yapti-sub">Python + TensorFlow DQN</div></div>
+        </div>
+        <ul class="yapti-items">
+          <li>6 parametre ile karar alan DQN modeli tasarlandı</li>
+          <li>Normal, yoğun saat, kaza, yol çalışması, acil araç ve kötü hava senaryoları simüle edildi</li>
+          <li>Acil araç için tüm güzergahı yeşile alan yeşil dalga sistemi kuruldu</li>
+          <li>5 farklı yapay zeka tekniği karşılaştırıldı — DQN seçildi</li>
+        </ul>
+      </div>
+      <div class="yapti-card">
+        <div class="yapti-header">
+          <div class="yapti-icon" style="background:#ECFDF5">⚡</div>
+          <div><div class="yapti-title">Enerji Yönetimi Paneli</div><div class="yapti-sub">HTML + Chart.js mockup</div></div>
+        </div>
+        <ul class="yapti-items">
+          <li>5 Elazığ kavşağı için ayrı aydınlatma kontrol paneli</li>
+          <li>Anomali tespiti — Çarşı ve Üniversite anormal tüketim uyarısı</li>
+          <li>Saatlik trend, kaynak dağılımı ve acil durum izleme</li>
+          <li>Zaman dilimi ve kaynak bazlı interaktif filtreler</li>
+        </ul>
+      </div>
+      <div class="yapti-card">
+        <div class="yapti-header">
+          <div class="yapti-icon" style="background:#F5F3FF">🌿</div>
+          <div><div class="yapti-title">Çevresel Sensör Analizi</div><div class="yapti-sub">Python sensör simülatörü</div></div>
+        </div>
+        <ul class="yapti-items">
+          <li>PM2.5, CO2, NO2, O3, gürültü, sıcaklık, nem verileri toplandı</li>
+          <li>Çarşı (AQI:72.1) ve İzzet Paşa (AQI:68.4) kötü sınıfında</li>
+          <li>Palu Yolu (AQI:38.2) en temiz kavşak olarak belirlendi</li>
+          <li>AQI, PM2.5, gürültü ve CO2-nem korelasyon grafikleri oluşturuldu</li>
+        </ul>
+      </div>
+      <div class="yapti-card">
+        <div class="yapti-header">
+          <div class="yapti-icon" style="background:#FFF7ED">⚛️</div>
+          <div><div class="yapti-title">React Belediye Yönetici Paneli</div><div class="yapti-sub">React + Recharts + Vite</div></div>
+        </div>
+        <ul class="yapti-items">
+          <li>7 sekmeli tam belediye yönetici arayüzü geliştirildi</li>
+          <li>Trafik, Enerji, Çevre, Acil Durum, Senaryo, Raporlar modülleri</li>
+          <li>PDF ve CSV dışa aktarma özelliği</li>
+          <li>Zaman ve kavşak bazlı özel rapor oluşturma</li>
+        </ul>
+      </div>
+    </div>
+    <div class="demo-box">
+      <div class="demo-icon">🖥️</div>
+      <div class="demo-text">
+        <strong>Canlı Demo Hazır</strong>
+        Tüm modüller tarayıcıda çalışmaktadır. Trafik simülasyonu terminalde, belediye paneli React ile, enerji ve çevre panelleri HTML dashboard olarak sunulmaktadır.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: NASIL ÇALIŞIYOR -->
+<div class="slide" id="slide-4">
+  <div class="slide-inner">
+    <div class="stag"><span class="stag-line"></span>Teknik Detaylar</div>
+    <h2 class="slide-title">Sistem Nasıl<br>Çalışıyor?</h2>
+    <div class="nasil-grid">
+      <div class="flow-box">
+        <div class="flow-title">Veri Akışı — Adım Adım</div>
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <div class="flow-label">🔬 Python Sensör Simülatörü</div>
+            <div class="flow-desc">Elazığ'daki 5 kavşak için trafik yoğunluğu, hava kalitesi, gürültü ve enerji verileri her 5 saniyede üretilir. Gerçek sensör olmadığından simüle ediyoruz — ama gerçek donanıma geçiş sadece bir yapılandırma değişikliği.</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓ MQTT Protokolü ile iletim</div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <div class="flow-label">⚡ FastAPI Backend + DQN</div>
+            <div class="flow-desc">Gelen veriler işlenir. TensorFlow ile eğitilmiş DQN modeli trafik ışığı sürelerine karar verir. Acil araç algılanırsa tüm sistem KRİTİK moda geçer.</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓ WebSocket ile anlık iletim</div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <div class="flow-label">🗄️ PostgreSQL Veritabanı</div>
+            <div class="flow-desc">Tüm sensör okumaları, kararlar ve olaylar PostgreSQL'e kaydedilir. PostGIS eklentisi ile şehir haritası üzerinde coğrafi sorgular yapılabilir.</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓ API katmanı</div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <div class="flow-label">🖥️ React Panel + Android Uygulama</div>
+            <div class="flow-desc">Belediye yetkilisi React panelden şehri yönetir. Vatandaş Android uygulamasından trafik durumunu, kesintileri ve acil uyarıları takip eder.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-simple">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dark3);margin-bottom:12px">Neden Bu Teknolojiler?</div>
+        <div class="ts-item">
+          <div class="ts-emoji">🐍</div>
+          <div><div class="ts-name">Python</div><div class="ts-desc">Yapay zeka ve veri analizi için en güçlü ekosistem</div></div>
+          <div class="ts-badge" style="background:var(--blue-l);color:var(--blue)">Zorunlu</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-emoji">🤖</div>
+          <div><div class="ts-name">TensorFlow + DQN</div><div class="ts-desc">5 teknik karşılaştırıldı — gerçek zamanlı karar için en uygun</div></div>
+          <div class="ts-badge" style="background:var(--green-l);color:var(--green)">Araştırıldı</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-emoji">⚛️</div>
+          <div><div class="ts-name">React + Recharts</div><div class="ts-desc">Bileşen bazlı yapı, büyük paneller için ideal</div></div>
+          <div class="ts-badge" style="background:var(--blue-l);color:var(--blue)">Görev</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-emoji">🗄️</div>
+          <div><div class="ts-name">PostgreSQL + PostGIS</div><div class="ts-desc">Hem ilişkisel hem coğrafi veri desteği</div></div>
+          <div class="ts-badge" style="background:var(--green-l);color:var(--green)">Seçildi</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-emoji">📡</div>
+          <div><div class="ts-name">MQTT Protokolü</div><div class="ts-desc">IoT donanımıyla uyumlu — gerçek sensöre hazır</div></div>
+          <div class="ts-badge" style="background:var(--amber-l);color:var(--amber)">Kritik</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-emoji">📱</div>
+          <div><div class="ts-name">Native Android</div><div class="ts-desc">Türkiye'de Android payı %75+ — tek platformda maksimum erişim</div></div>
+          <div class="ts-badge" style="background:var(--green-l);color:var(--green)">Seçildi</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:10px;padding:12px 14px;margin-top:4px;font-size:11px;color:var(--dark3);line-height:1.6">
+          <strong style="color:var(--dark)">Git İş Akışı:</strong> Her üye kendi branch'inde çalıştı. PR zorunluluğu ve merge yetkisi yöneticideydi. Scrum AI asistanı haftalık performansı analiz etti.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: SONUÇLAR -->
+<div class="slide" id="slide-5">
+  <div class="slide-inner">
+    <div class="stag"><span class="stag-line"></span>Elde Edilen Sonuçlar</div>
+    <h2 class="slide-title">Ne Başardık,<br>Ne Başaramadık?</h2>
+    <div class="sonuc-grid">
+      <div class="sonuc-card g"><div class="sonuc-num">-%38</div><div class="sonuc-label">Normal trafik bekleme süresi azalması</div><div class="sonuc-hedef">✓ Hedef karşılandı</div></div>
+      <div class="sonuc-card g"><div class="sonuc-num">-%56</div><div class="sonuc-label">Acil araç müdahale süresi iyileşmesi</div><div class="sonuc-hedef">✓ Hedef karşılandı</div></div>
+      <div class="sonuc-card g"><div class="sonuc-num">-%20</div><div class="sonuc-label">Enerji tüketiminde tasarruf</div><div class="sonuc-hedef">✓ Hedef karşılandı</div></div>
+      <div class="sonuc-card b"><div class="sonuc-num">1.100</div><div class="sonuc-label">Geçiş kapasitesi (araç/saat)</div><div class="sonuc-hedef">✓ Hedef &gt;1.000</div></div>
+      <div class="sonuc-card a"><div class="sonuc-num">52.4</div><div class="sonuc-label">Ortalama AQI değeri</div><div class="sonuc-hedef">⚠ Hedef &lt;30</div></div>
+      <div class="sonuc-card g"><div class="sonuc-num">%99.9</div><div class="sonuc-label">Sistem uptime</div><div class="sonuc-hedef">✓ Hedef karşılandı</div></div>
+    </div>
+    <div class="honest-box">
+      <div class="honest-card good">
+        <div class="honest-title">✅ Başarılar</div>
+        <ul class="honest-list">
+          <li>✓ 8 KPI hedefinin 6'sı tam karşılandı</li>
+          <li>✓ Tüm modüller çalışır durumda teslim edildi</li>
+          <li>✓ React, Python, PostgreSQL entegrasyonu başarıyla tamamlandı</li>
+          <li>✓ Elazığ'a özel 5 gerçek kavşak modellendi</li>
+          <li>✓ Profesyonel Git iş akışı uygulandı</li>
+        </ul>
+      </div>
+      <div class="honest-card bad">
+        <div class="honest-title">⚠ Geliştirme Alanları</div>
+        <ul class="honest-list">
+          <li>→ AQI hedefi karşılanamadı — şehir merkezi yoğunluğu nedeniyle</li>
+          <li>→ Gerçek fiziksel sensör bulunmadı — simülasyonla gidildi</li>
+          <li>→ DQN yeterli veri olmadan tam olarak eğitilemedi — hibrit yaklaşım benimsendi</li>
+          <li>→ iOS desteği Faz 2'ye ertelendi</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: ÖĞRENDİKLERİMİZ -->
+<div class="slide" id="slide-6">
+  <div class="slide-inner">
+    <div class="stag"><span class="stag-line"></span>Öğrendiklerimiz</div>
+    <h2 class="slide-title">Bu Proje Bize<br>Ne Kattı?</h2>
+    <div class="ogren-grid">
+      <div class="ogren-card">
+        <div class="ogren-icon">🤖</div>
+        <div class="ogren-title">Yapay Zeka Pratiği</div>
+        <div class="ogren-desc">TensorFlow ile DQN modeli, pekiştirmeli öğrenme konseptleri ve gerçek dünya problemine yapay zeka uygulamayı öğrendik.</div>
+      </div>
+      <div class="ogren-card">
+        <div class="ogren-icon">⚛️</div>
+        <div class="ogren-title">Modern Web Geliştirme</div>
+        <div class="ogren-desc">React component mimarisi, state yönetimi, Recharts ile veri görselleştirme ve Vite build aracını pratikte kullandık.</div>
+      </div>
+      <div class="ogren-card">
+        <div class="ogren-icon">👥</div>
+        <div class="ogren-title">Ekip Çalışması</div>
+        <div class="ogren-desc">Git branch stratejisi, PR süreci, merge çakışmalarını çözme ve Scrum metodolojisi ile profesyonel yazılım geliştirmeyi deneyimledik.</div>
+      </div>
+      <div class="ogren-card">
+        <div class="ogren-icon">🏗️</div>
+        <div class="ogren-title">Sistem Mimarisi</div>
+        <div class="ogren-desc">MQTT, WebSocket, REST API, PostgreSQL ve modüler yazılım tasarımı gibi gerçek dünya teknolojilerini bir arada kullandık.</div>
+      </div>
+    </div>
+    <div class="zorluk-grid">
+      <div class="zorluk-card">
+        <div class="zorluk-title">⚡ Zorluk: Git Çakışmaları</div>
+        <div class="zorluk-desc">Branch'ler arası merge çakışmaları ve izinsiz PR merge sorunları yaşandı.</div>
+        <div class="zorluk-cozum">→ Çözüm: Branch koruma kuralı + merge yetkisi tek kişide toplandı</div>
+      </div>
+      <div class="zorluk-card">
+        <div class="zorluk-title">🔬 Zorluk: Gerçek Sensör Yokluğu</div>
+        <div class="zorluk-desc">Fiziksel IoT donanımı olmadan sistemi geliştirmek zorunda kaldık.</div>
+        <div class="zorluk-cozum">→ Çözüm: Gerçek donanıma hazır Python simülatörü geliştirildi</div>
+      </div>
+      <div class="zorluk-card">
+        <div class="zorluk-title">🤖 Zorluk: DQN Soğuk Başlangıç</div>
+        <div class="zorluk-desc">DQN eğitimi için yeterli veri birikimine kadar sistem çalışamıyordu.</div>
+        <div class="zorluk-cozum">→ Çözüm: Kural tabanlı + DQN hibrit yaklaşım benimsendi</div>
+      </div>
+      <div class="zorluk-card">
+        <div class="zorluk-title">📊 Zorluk: AQI Hedefi</div>
+        <div class="zorluk-desc">Şehir merkezi kavşaklarında hava kalitesi hedefi karşılanamadı.</div>
+        <div class="zorluk-cozum">→ Çözüm: Dürüstçe raporlandı, iyileştirme Faz 2'ye alındı</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: GELECEK -->
+<div class="slide" id="slide-7">
+  <div class="slide-inner">
+    <div class="stag"><span class="stag-line"></span>Gelecek Potansiyeli</div>
+    <h2 class="slide-title">Sistemi Nereye<br>Taşıyacağız?</h2>
+    <div class="gelecek-grid">
+      <div class="g-card">
+        <div class="g-faz f1">Faz 1 — Kısa Vadeli</div>
+        <div class="g-title">Gerçek Donanıma Geçiş</div>
+        <ul class="g-items">
+          <li>Elazığ kavşaklarına fiziksel IoT sensör kurulumu</li>
+          <li>Simüle veriden gerçek veriye geçiş — kod değişmez, sadece bağlantı</li>
+          <li>DQN modelinin gerçek veri ile yeniden eğitimi</li>
+          <li>Belediye ile resmi işbirliği protokolü</li>
+        </ul>
+      </div>
+      <div class="g-card">
+        <div class="g-faz f2">Faz 2 — Orta Vadeli</div>
+        <div class="g-title">Şehir Geneline Yayılım</div>
+        <ul class="g-items">
+          <li>5 kavşaktan tüm Elazığ trafiğine genişleme</li>
+          <li>iOS uygulaması geliştirme (Kotlin Multiplatform)</li>
+          <li>Vatandaş olay bildirimi aktifleştirme</li>
+          <li>TimescaleDB ile büyük veri yönetimi</li>
+        </ul>
+      </div>
+      <div class="g-card">
+        <div class="g-faz f3">Faz 3 — Uzun Vadeli</div>
+        <div class="g-title">Ulusal Ölçek</div>
+        <ul class="g-items">
+          <li>Diğer Türk şehirlerine replikasyon</li>
+          <li>Belediye ERP sistemleri entegrasyonu</li>
+          <li>Tahmine dayalı bakım algoritmaları</li>
+          <li>Ulusal akıllı şehir veri havuzuna katkı</li>
+        </ul>
+      </div>
+    </div>
+    <div class="kapanis">
+      <div class="kapanis-title">Elazığ'ı Geleceğe Taşımaya Hazırız 🏙️</div>
+      <div class="kapanis-desc">Bu proje sadece bir ödev değil — Elazığ'ın dijital dönüşümünün gerçek bir prototipi. Gerçek sensör entegrasyonu ile sistem yarın canlıya alınmaya hazır.</div>
+      <div class="kapanis-stats">
+        <div class="kstat"><div class="kstat-num">5</div><div class="kstat-label">Ekip üyesi</div></div>
+        <div class="kstat"><div class="kstat-num">6</div><div class="kstat-label">Haftalık sprint</div></div>
+        <div class="kstat"><div class="kstat-num">5</div><div class="kstat-label">Elazığ kavşağı</div></div>
+        <div class="kstat"><div class="kstat-num">21</div><div class="kstat-label">Performans metriği</div></div>
+        <div class="kstat"><div class="kstat-num">6/8</div><div class="kstat-label">KPI karşılandı</div></div>
+        <div class="kstat"><div class="kstat-num">30+</div><div class="kstat-label">Tamamlanan görev</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide-nav">
+  <button class="snav" onclick="prevSlide()">← Önceki</button>
+  <span class="scounter" id="sc">1 / 8</span>
+  <button class="snav primary" onclick="nextSlide()">Sonraki →</button>
+</div>
+
+<script>
+let cur = 0
+const tot = 8
+const slides = document.querySelectorAll('.slide')
+
+function initDots() {
+  const c = document.getElementById('navDots')
+  for (let i = 0; i < tot; i++) {
+    const d = document.createElement('button')
+    d.className = `ndot ${i === 0 ? 'active' : ''}`
+    d.onclick = () => goTo(i)
+    c.appendChild(d)
+  }
+}
+
+function updateNav() {
+  document.getElementById('sc').textContent = `${cur + 1} / ${tot}`
+  document.querySelectorAll('.ndot').forEach((d, i) => d.classList.toggle('active', i === cur))
+  document.querySelector('.snav:first-child').style.opacity = cur === 0 ? '0.35' : '1'
+  document.querySelector('.snav.primary').textContent = cur === tot - 1 ? '🎉 Teşekkürler' : 'Sonraki →'
+}
+
+function goTo(i) {
+  cur = Math.max(0, Math.min(tot - 1, i))
+  slides[cur].scrollIntoView({ behavior: 'smooth' })
+  updateNav()
+}
+
+function nextSlide() { if (cur < tot - 1) goTo(cur + 1) }
+function prevSlide() { if (cur > 0) goTo(cur - 1) }
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowDown'].includes(e.key)) nextSlide()
+  if (['ArrowLeft','ArrowUp'].includes(e.key)) prevSlide()
+})
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const i = Array.from(slides).indexOf(e.target)
+      if (i !== -1) { cur = i; updateNav() }
+    }
+  })
+}, { threshold: 0.5 })
+
+slides.forEach(s => obs.observe(s))
+initDots()
+updateNav()
+</script>
+</body>
+</html>
