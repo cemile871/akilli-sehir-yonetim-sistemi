@@ -1846,7 +1846,48 @@ Toplam birim test kapsamı: **%85.8** (proje hedefi: > %80) ✅
 4. Hafta 5'te geliştirilecek mobil uygulama bildirim modülü, bu optimizasyon sonuçlarından enerji uyarısı verilerini tüketecek.
 
 ## Cemile Akay
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akıllı Ulaşım Modülü Kullanıcı Arayüzü Geliştirme Raporu
+
+---
+
+### 1. Görev Tanımı ve Kapsamı
+Hafta 3'te mimari tasarımları ve veri altyapısı kurgulanan **Akıllı Ulaşım Modülü** için belediye yönetim panelini ve vatandaş geri bildirim mekanizmalarını içeren kullanıcı arayüzü (UI) geliştirilmiştir. Geliştirme sürecinde "Flat Design" felsefesine sadık kalınmış, sistem hızı ve kullanıcı deneyimi (UX) ön planda tutulmuştur.
+
+---
+
+### 2. Bot Kullanıcılardan Gelen Geri Bildirimler (UX Veri Analizi)
+Arayüz tasarlanmadan önce, sistem tarafından simüle edilen bot kullanıcı test gruplarından (Vatandaş Mobil Uygulaması ve Belediye Kontrol Odası botları) aşağıdaki kritik geri bildirimler toplanmıştır:
+
+* **Geri Bildirim 1 (Vatandaş Botu):** "Haritada sadece trafik yoğunluğunu görmek yeterli değil. Ambulans veya itfaiye geçtiğinde yolun neden kapatıldığını veya ne kadar süre kapalı kalacağını anlık olarak bilmek istiyoruz."
+* **Geri Bildirim 2 (Belediye Operatör Botu):** "Yapay zeka (DQN) ışık sürelerini değiştiriyor ancak arka planda sistemin işlem gecikmesini göremiyoruz. Bir yoğunluk anında sistemin stabil kalıp kalmadığını (milisaniye cinsinden) ekranda anlık izlemeliyiz."
+* **Geri Bildirim 3 (Saha Ekibi Botu):** "Kötü hava koşullarında (yağmur, kar) sistemin algoritmik olarak kapasiteyi düşürdüğünü panelden teyit edemiyoruz. Hava durumunun simülasyona etkisini gösteren bir indikatör şart."
+
+---
+
+### 3. Geri Bildirimlere Göre Arayüze Eklenen Yeni Özellikler
+
+Bot kullanıcılardan alınan geri bildirimler doğrultusunda Hafta 4 arayüz mimarisine şu dinamik bileşenler entegre edilmiştir:
+
+#### A. Canlı Sistem Performans ve Algoritma Göstergeleri (Topbar)
+* **DQN Algoritma Modu:** TensorFlow tabanlı Derin Q-Ağı modelinin aktiflik durumunu (`DQN: Aktif (Hibrit)`) gösteren canlı durum rozeti eklendi.
+* **Sistem Gecikme Sayacı (Latency):** Sistem başlangıç hedeflerinde yer alan milisaniye düzeyinde karar mekanizmasını doğrulamak için `Gecikme: 320 ms` indikatörü eklendi.
+* **Hava Durumu Katsayı Entegrasyonu:** Yağmurlu ve karlı havalarda sistem kapasitesinin otomatik olarak düşürüldüğünü (`Yağmurlu - Kapasite -%20`) gösteren dinamik katsayı alanı eklendi.
+
+#### B. Geliştirilmiş Canlı Harita ve "Yeşil Dalga" Rota Belirteci
+* **Acil Durum Önceliği:** Üst barda aktif bir acil durum (`🚑 1 aktif acil durum`) tetiklendiğinde, Leaflet.js haritası üzerinde ambulans/itfaiye güzergahı kırmızı kesikli çizgilerle (`dashArray`) **Yeşil Dalga Rotası** olarak görselleştirildi.
+* **Kavşak Pop-up Geliştirmesi:** Haritadaki kavşaklara tıklandığında sadece enerji tüketimi değil, o anki anlık araç sayısı ve metre cinsinden kuyruk uzunluğu verileri de eklendi.
+
+#### C. Çok Boyutlu Bölge Karşılaştırma Grafiği
+* **Kuyruk Analizi:** Chart.js grafiği güncellenerek, seçilen iki farklı kavşağın (Örn: Çarşı Kavşağı vs Üniversite Kavşağı) sadece enerji yükleri değil, trafik sıkışıklığını doğrudan gösteren **Ortalama Kuyruk Uzunlukları (Metre)** yan yana kıyaslanabilir hale getirildi.
+
+---
+
+### 4. Teknik Teknoloji Yığını ve Erişilebilirlik (a11y)
+* **Frontend:** React mimarisine uygun temiz HTML5 ve modern CSS3 Grid/Flexbox yapısı.
+* **Grafik ve Harita:** Chart.js (v4.4.1) ve Leaflet.js (v1.9.4) kütüphaneleriyle asenkron veri görselleştirme.
+* **Erişilebilirlik:** Ekran okuyucular ve bot analiz araçları için form elemanlarına eksiksiz `aria-label` tanımlamaları eklenmiştir.
+* **Veri Köprüsü:** Buton aksiyonları ve anomali yönetim tablosu, PostgreSQL veritabanına log üretecek tetikleyicilerle (`onclick` yapılarıyla) simüle edilmiştir.
+
 
 ## Efecan Önal
 GÖREVİN BURAYA YAPIŞTIRILACAK.
