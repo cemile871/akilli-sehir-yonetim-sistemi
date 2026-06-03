@@ -65,7 +65,20 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Efecan Önal
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+⚡ Elazığ Akıllı Şehir - Enerji Yönetimi Paneli
+Bu proje, belediye yöneticilerinin şehirdeki enerji tüketimini izlemesi, anormallikleri tespit etmesi ve verimliliği artırmak için hızlı aksiyon alabilmesi amacıyla tasarlanmış web tabanlı bir UI/UX çalışmasıdır.
+
+🚀 Proje Kapsamında Neler Yapıldı?
+Kullanıcı Deneyimi (UX) Araştırması: Belediye yöneticilerinin ihtiyaçları analiz edilerek, kilit verileri (anormallikler, acil durumlar) ön plana çıkaran bir bilgi hiyerarşisi kurgulandı.
+Görselleştirme ve Harita Entegrasyonu: Leaflet.js Kullanılarak kavşaklardaki anlık tüketim durumları interaktif haritaya taşındı. Chart.js ile farklı bölgelerin tüketim kalemlerini kıyaslayan analiz grafikleri eklendi.
+Aksiyon Odaklı Arayüz (Actionable UI): Yöneticilerin sadece veriyi izlemesi değil, anında müdahale edebilmesi için (örn. "Tasarruf Modunu Aç", "Ekip Yönlendir") eylem butonları sisteme dahil edildi.
+Erişilebilirlik (a11y) İyileştirmeleri: Tüm arayüz semantik HTML5 etiketleri (<header>, <main>, <section>) ve ekran okuyucular için aria-label nitelikleri ile erişilebilirlik standartlarına uygun hale getirildi.
+Duyarlı Tasarım (Duyarlı Tasarım): CSS Grid ve Flexbox kullanılarak farklı ekran boyutlarında sorunsuz çalışan, modern ve temiz bir arayüz kodlandı.
+🛠️ Teknolojiler
+HTML5, CSS3, Vanilla JS
+Chart.js
+Leaflet.js
+Tabler İkonları
 
 # Hafta 3
 
