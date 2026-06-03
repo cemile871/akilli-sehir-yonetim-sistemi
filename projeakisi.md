@@ -27,6 +27,7 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Cemile Akay
+
 🔬 Veri Toplama ve Analiz Modülü – Gereksinim Analizi
 🎯 Modülün Amacı
 •	Şehirdeki tüm kritik verileri toplamak
@@ -111,6 +112,7 @@ ________________________________________
 •	Enerji tasarrufu sağlanması
 •	Çevresel izleme
 •	Acil durumlara hızlı müdahale
+
 
 
 
