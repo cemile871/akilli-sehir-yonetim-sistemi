@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Çevresel Sensör Analiz Raporu — Elazığ Akıllı Şehir</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f8f9fa;color:#1a1a2e;padding:1.5rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:12px;background:#fff;padding:1rem 1.5rem;border-radius:12px;border:1px solid #e0e0e0}
+.topbar-title{font-size:18px;font-weight:600;color:#1a1a2e}
+.topbar-sub{font-size:13px;color:#666}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters select{font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid #ddd;background:#fff;color:#1a1a2e;cursor:pointer}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:1.5rem}
+.mc{background:#f1f3f5;border-radius:8px;padding:1rem}
+.mc-label{font-size:12px;color:#666;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.mc-val{font-size:22px;font-weight:600;color:#1a1a2e}
+.mc-sub{font-size:11px;margin-top:3px}
+.good{color:#3B6D11}.warn{color:#854F0B}.bad{color:#A32D2D}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.cc{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1rem 1.25rem}
+.cc.full{grid-column:1/-1}
+.cc-title{font-size:14px;font-weight:600;color:#1a1a2e;margin-bottom:4px}
+.cc-sub{font-size:12px;color:#666;margin-bottom:1rem}
+.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:#666}
+.leg span{display:flex;align-items:center;gap:4px}
+.ld{width:10px;height:10px;border-radius:2px}
+.aqi-bar{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.aqi-name{font-size:12px;color:#1a1a2e;min-width:130px}
+.aqi-wrap{flex:1;height:7px;background:#e0e0e0;border-radius:3px}
+.aqi-fill{height:7px;border-radius:3px}
+.aqi-val{font-size:11px;color:#666;min-width:36px;text-align:right}
+.rapor-tablo{width:100%;border-collapse:collapse;font-size:13px}
+.rapor-tablo th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:#666;border-bottom:1px solid #e0e0e0}
+.rapor-tablo td{padding:8px 10px;border-bottom:1px solid #f0f0f0;color:#1a1a2e}
+.rapor-tablo tr:last-child td{border-bottom:none}
+.rapor-tablo tr:hover td{background:#f8f9fa}
+.badge-g{background:#EAF3DE;color:#3B6D11;font-size:11px;padding:2px 8px;border-radius:6px}
+.badge-w{background:#FAEEDA;color:#854F0B;font-size:11px;padding:2px 8px;border-radius:6px}
+.badge-r{background:#FCEBEB;color:#A32D2D;font-size:11px;padding:2px 8px;border-radius:6px}
+@media(max-width:600px){.charts-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title">🌿 Çevresel Sensör Analiz Raporu</div>
+    <div class="topbar-sub">Elazığ Akıllı Şehir — Hafta 4 | Hava kalitesi, gürültü ve çevresel metrikler</div>
+  </div>
+  <div class="filters">
+    <select id="kavsakSel">
+      <option value="all">Tüm kavşaklar</option>
+      <option value="0">Çarşı Kavşağı</option>
+      <option value="1">Tofaş Kavşağı</option>
+      <option value="2">İzzet Paşa Kavşağı</option>
+      <option value="3">Palu Yolu Kavşağı</option>
+      <option value="4">Üniversite Kavşağı</option>
+    </select>
+    <select id="metrikSel">
+      <option value="aqi">AQI</option>
+      <option value="pm25">PM2.5</option>
+      <option value="noise">Gürültü</option>
+      <option value="co2">CO2</option>
+    </select>
+  </div>
+</div>
+
+<div class="metric-grid">
+  <div class="mc">
+    <div class="mc-label">💨 Ort. AQI</div>
+    <div class="mc-val" id="avgAqi">52.4</div>
+    <div class="mc-sub warn">Orta seviye</div>
+  </div>
+  <div class="mc">
+    <div class="mc-label">☁️ Ort. PM2.5</div>
+    <div class="mc-val">18.3 <span style="font-size:13px">µg/m³</span></div>
+    <div class="mc-sub good">Kabul edilebilir</div>
+  </div>
+  <div class="mc">
+    <div class="mc-label">🔊 Ort. Gürültü</div>
+    <div class="mc-val">63.7 <span style="font-size:13px">dB</span></div>
+    <div class="mc-sub warn">Orta seviye</div>
+  </div>
+  <div class="mc">
+    <div class="mc-label">🌡️ Ort. Sıcaklık</div>
+    <div class="mc-val">24.1 <span style="font-size:13px">°C</span></div>
+    <div class="mc-sub good">Normal</div>
+  </div>
+  <div class="mc">
+    <div class="mc-label">💧 Ort. Nem</div>
+    <div class="mc-val">58.2 <span style="font-size:13px">%</span></div>
+    <div class="mc-sub good">Normal</div>
+  </div>
+</div>
+
+<div class="charts-grid">
+  <div class="cc full">
+    <div class="cc-title">Kavşak bazlı AQI karşılaştırması</div>
+    <div class="cc-sub">Her kavşağın ortalama hava kalitesi indeksi (0-100, düşük = iyi)</div>
+    <div class="aqi-bar"><span class="aqi-name">Çarşı Kavşağı</span><div class="aqi-wrap"><div class="aqi-fill" style="width:72%;background:#D85A30"></div></div><span class="aqi-val">72.1</span></div>
+    <div class="aqi-bar"><span class="aqi-name">Tofaş Kavşağı</span><div class="aqi-wrap"><div class="aqi-fill" style="width:45%;background:#EF9F27"></div></div><span class="aqi-val">45.3</span></div>
+    <div class="aqi-bar"><span class="aqi-name">İzzet Paşa Kavşağı</span><div class="aqi-wrap"><div class="aqi-fill" style="width:68%;background:#D85A30"></div></div><span class="aqi-val">68.4</span></div>
+    <div class="aqi-bar"><span class="aqi-name">Palu Yolu Kavşağı</span><div class="aqi-wrap"><div class="aqi-fill" style="width:38%;background:#639922"></div></div><span class="aqi-val">38.2</span></div>
+    <div class="aqi-bar"><span class="aqi-name">Üniversite Kavşağı</span><div class="aqi-wrap"><div class="aqi-fill" style="width:42%;background:#EF9F27"></div></div><span class="aqi-val">42.0</span></div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-title">Hava kalitesi trendi</div>
+    <div class="cc-sub">Saatlik AQI değişimi</div>
+    <div class="leg">
+      <span><span class="ld" style="background:#378ADD"></span>Çarşı</span>
+      <span><span class="ld" style="background:#1D9E75"></span>Tofaş</span>
+      <span><span class="ld" style="background:#D85A30"></span>İzzet Paşa</span>
+    </div>
+    <div style="position:relative;width:100%;height:200px">
+      <canvas id="aqiChart"></canvas>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-title">Gürültü seviyesi dağılımı</div>
+    <div class="cc-sub">Kavşak bazlı ortalama gürültü (dB)</div>
+    <div style="position:relative;width:100%;height:200px">
+      <canvas id="noiseChart"></canvas>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-title">PM2.5 partikül madde dağılımı</div>
+    <div class="cc-sub">Kavşak bazlı PM2.5 yoğunluğu (µg/m³)</div>
+    <div class="leg">
+      <span><span class="ld" style="background:#639922"></span>Güvenli (&lt;12)</span>
+      <span><span class="ld" style="background:#EF9F27"></span>Orta (12-35)</span>
+      <span><span class="ld" style="background:#D85A30"></span>Yüksek (&gt;35)</span>
+    </div>
+    <div style="position:relative;width:100%;height:200px">
+      <canvas id="pm25Chart"></canvas>
+    </div>
+  </div>
+
+  <div class="cc full">
+    <div class="cc-title">CO2 ve nem korelasyonu</div>
+    <div class="cc-sub">Saatlik CO2 (ppm) ve nem (%) değişimi — Çarşı Kavşağı</div>
+    <div class="leg">
+      <span><span class="ld" style="background:#378ADD"></span>CO2 (ppm)</span>
+      <span><span class="ld" style="background:#1D9E75"></span>Nem (%)</span>
+    </div>
+    <div style="position:relative;width:100%;height:200px">
+      <canvas id="co2Chart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="cc" style="margin-bottom:1.5rem">
+  <div class="cc-title">📋 Özet analiz raporu</div>
+  <div class="cc-sub">Hafta 3 sensör verilerinden üretilen çevresel durum değerlendirmesi</div>
+  <table class="rapor-tablo">
+    <thead><tr><th>Kavşak</th><th>AQI</th><th>PM2.5 (µg/m³)</th><th>Gürültü (dB)</th><th>CO2 (ppm)</th><th>Sıcaklık (°C)</th><th>Genel Durum</th></tr></thead>
+    <tbody>
+      <tr><td>Çarşı Kavşağı</td><td>72.1</td><td>28.4</td><td>74.2</td><td>512</td><td>26.3</td><td><span class="badge-r">Kötü</span></td></tr>
+      <tr><td>Tofaş Kavşağı</td><td>45.3</td><td>14.1</td><td>58.3</td><td>428</td><td>23.8</td><td><span class="badge-w">Orta</span></td></tr>
+      <tr><td>İzzet Paşa Kavşağı</td><td>68.4</td><td>25.2</td><td>71.5</td><td>489</td><td>25.1</td><td><span class="badge-r">Kötü</span></td></tr>
+      <tr><td>Palu Yolu Kavşağı</td><td>38.2</td><td>9.3</td><td>52.1</td><td>398</td><td>22.9</td><td><span class="badge-g">İyi</span></td></tr>
+      <tr><td>Üniversite Kavşağı</td><td>42.0</td><td>15.8</td><td>63.4</td><td>415</td><td>23.5</td><td><span class="badge-w">Orta</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const hours=['00','02','04','06','08','10','12','14','16','18','20','22'];
+new Chart(document.getElementById('aqiChart'),{type:'line',data:{labels:hours,datasets:[
+  {label:'Çarşı',data:[55,52,50,48,52,60,75,78,72,68,62,58],borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.06)',tension:0.4,fill:true,borderWidth:2,pointRadius:0},
+  {label:'Tofaş',data:[38,35,33,30,35,42,50,52,48,44,40,37],borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.06)',tension:0.4,fill:true,borderWidth:2,pointRadius:0,borderDash:[5,3]},
+  {label:'İzzet Paşa',data:[50,48,45,43,48,58,70,74,68,64,58,54],borderColor:'#D85A30',backgroundColor:'rgba(216,90,48,0.04)',tension:0.4,fill:true,borderWidth:2,pointRadius:0,borderDash:[2,4]}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11}}},y:{grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11}},min:20,max:90}}}});
+
+new Chart(document.getElementById('noiseChart'),{type:'bar',data:{labels:['Çarşı','Tofaş','İzzet Paşa','Palu Yolu','Üniversite'],datasets:[{data:[74.2,58.3,71.5,52.1,63.4],backgroundColor:['#D85A30','#639922','#D85A30','#639922','#EF9F27'],borderWidth:0,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11}},min:40,max:90}}}});
+
+new Chart(document.getElementById('pm25Chart'),{type:'bar',data:{labels:['Çarşı','Tofaş','İzzet Paşa','Palu Yolu','Üniversite'],datasets:[{data:[28.4,14.1,25.2,9.3,15.8],backgroundColor:['#EF9F27','#EF9F27','#EF9F27','#639922','#EF9F27'],borderWidth:0,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11}},min:0,max:40}}}});
+
+new Chart(document.getElementById('co2Chart'),{type:'line',data:{labels:hours,datasets:[
+  {label:'CO2',data:[480,465,450,440,445,480,515,520,512,498,485,472],borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.06)',tension:0.4,fill:true,borderWidth:2,pointRadius:0,yAxisID:'y'},
+  {label:'Nem',data:[55,57,60,62,61,58,54,52,53,56,58,60],borderColor:'#1D9E75',backgroundColor:'transparent',tension:0.4,fill:false,borderWidth:2,pointRadius:0,borderDash:[5,3],yAxisID:'y2'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11}}},y:{grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11}},position:'left',title:{display:true,text:'CO2 ppm',font:{size:11}}},y2:{grid:{display:false},ticks:{font:{size:11}},position:'right',title:{display:true,text:'Nem %',font:{size:11}},min:40,max:80}}}});
+</script>
+</body>
+</html>
