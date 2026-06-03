@@ -117,7 +117,41 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Efecan Önal
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+1. Gerçekleştirilen Güvenlik Testleri ve Metodoloji
+Geliştirilen ön yüz mimarisi, belediye ağ altyapısı ve hassas acil durum (Ambulans/Yeşil Dalga) verileri göz önünde bulundurularak üç ana başlıkta test edilmiştir:
+
+Statik Kod Analizi (SAST): Kaynak kod içerisindeki güvensiz kütüphane bağımlılıkları ve veri işleme mantığı incelenmiştir.
+
+İstemci Tarafı Manipülasyon Testleri: Dropdown filtreleri (#zaman, #bolge) ve JavaScript veri yapılarının manipüle edilerek sisteme sahte veri enjekte edilip edilemeyeceği test edilmiştir.
+
+Bağımlılık Güvenliği Kontrolü (Dependency Risk Assessment): Dışarıdan çağrılan CDN kütüphanelerinin (Chart.js ve Tabler İcons) güvenilirliği analiz edilmiştir.
+
+2. Tespit Edilen Zayıflıklar ve Risk Analizi
+Zafiyet 1: Alt Kaynak Bütünlüğü (Subresource Integrity - SRI) Eksikliği [Yüksek Risk]
+
+Durum: Projede kullanılan Chart.js ve Tabler Icons kütüphaneleri harici CDN adreslerinden doğrudan çağrılmaktadır. Bu CDN sunucularının hacklenmesi durumunda, belediye paneline zararlı JavaScript kodları enjekte edilebilir ve sistem sabote edilebilirdi.
+
+Zafiyet 2: Yetkisiz Erişim ve Oturum Kontrolü Eksikliği [Kritik Risk]
+
+Durum: "Efecan Ö. (Operatör)" yetkisiyle çalışan arayüzde, aktif acil durum modu ve İzzet Paşa - Üniversite Kavşağı arasındaki Yeşil Dalga gibi kritik komutlar herhangi bir token (JWT) veya oturum doğrulaması olmaksızın tetiklenebiliyordu.
+
+Zafiyet 3: İstemci Tarafı Veri Manipülasyonu [Orta Risk]
+
+Durum: Dropdown menülerden gelen verilerin tarayıcı konsolu üzerinden manipüle edilerek anlık tüketim (kWh) değerlerinin manipüle edilebilme riski mevcuttu.
+
+3. Uygulanan Çözümler ve Güvenlik Yamaları (Remediation)
+A. CDN Bağımlılıklarının Güvenli Hale Getirilmesi (SRI Entegrasyonu)
+Harici kütüphanelerin güvenliğini sağlamak için tüm <script> ve <link> etiketlerine şifreleme karması (SHA-384 veri bütünlüğü kontrolü) eklenmiştir. Böylece harici sunucularda kod değiştirilse bile tarayıcı zararlı kodu çalıştırmayı reddedecektir.
+
+B. DOM Tabanlı XSS Önleme ve Güvenli Metin İşleme
+JavaScript tarafında filtreler değiştikçe ekrana yazdırılan verilerde innerHTML yerine kesinlikle textContent kullanımı sürdürülerek, DOM tabanlı script enjeksiyon (XSS) açıkları tamamen kapatılmıştır.
+
+C. Acil Durum / Yeşil Dalga Protokolünün Sıkılaştırılması
+Ambulans ve itfaiye rotalarını değiştiren KRİTİK MOD komutlarının manipüle edilmesini önlemek amacıyla, backend mimarisiyle uyumlu çalışacak bir simüle anahtar (API-Token) kontrol mekanizması planlanmıştır. Yetkisiz IP adreslerinden gelen "Yeşil Dalga" istekleri sistem tarafından doğrudan loglanarak reddedilecek şekilde güvenlik katmanı tasarlanmıştır.
+
+4. Sonuç
+Yapılan sızma testleri ve uygulanan sıkılaştırma politikaları (Hardening) sonucunda, Elazığ Akıllı Şehir Enerji Paneli dışarıdan gelebilecek tedarik zinciri (CDN) saldırılarına ve veri manipülasyonlarına karşı korunaklı hale getirilmiştir. Sistem, veri bütünlüğü ve operasyonel güvenlik standartlarına (OWASP Top 10) uygun olarak stabilize edilmiştir.
 
 # Hafta 5
 
