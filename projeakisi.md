@@ -992,7 +992,68 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 # Hafta 4
 
 ## Nisanur Eltekin
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+Hafta 4 görevi kapsamında, Hafta 3'te geliştirilen `sensor_data_collector.py` modülü aracılığıyla Elazığ'daki 5 kavşaktan toplanan çevresel sensör verileri kapsamlı bir şekilde analiz edildi. Hava kalitesi, gürültü seviyesi, partikül madde yoğunluğu, karbondioksit ve nem gibi kritik çevresel metrikler görselleştirilerek anlamlı raporlar oluşturuldu. Tüm çıktılar interaktif bir web dashboard'u olarak geliştirildi.
+
+---
+
+**Veri Kaynağı ve Hazırlık**
+
+Hafta 3'te geliştirilen sensör simülatörü Elazığ'ın 5 gerçek kavşağını kapsamaktadır: Çarşı Kavşağı, Tofaş Kavşağı, İzzet Paşa Kavşağı, Palu Yolu Kavşağı ve Üniversite Kavşağı. Her kavşak için ayrı bir sensör ID'si tanımlanmış olup (SNS-001'den SNS-005'e) gerçekçi veri üretimi için şehir merkezindeki kavşaklara yüksek kirlilik faktörü, yoğun saatlerde (07:00-09:00 ve 17:00-19:00) ise ek yük faktörü uygulanmaktadır.
+
+Simülatör çalıştırılarak her 5 saniyede bir veri toplanmış ve `sensor_data.json` dosyasına kaydedilmiştir. Toplanan veriler şu metrikleri içermektedir: PM2.5 (partikül madde), PM10 (kaba partikül), CO2 (karbondioksit), NO2 (azot dioksit), O3 (ozon), sıcaklık (°C), nem (%) ve gürültü seviyesi (dB). Her okuma için ayrıca 0-100 arası Hava Kalitesi İndeksi (AQI) hesaplanmış, gürültü seviyeleri Düşük / Orta / Yüksek / Tehlikeli olarak etiketlenmiş ve geçersiz sensör okumaları doğrulama katmanı tarafından otomatik olarak filtrelenmiştir.
+
+---
+
+**Görselleştirmeler**
+
+Dashboard'da beş farklı grafik türü kullanılarak veriler farklı boyutlarda görselleştirildi.
+
+**1. Kavşak Bazlı AQI Karşılaştırması (Yatay Bar Grafik)**
+Her kavşağın ortalama Hava Kalitesi İndeksi yatay bar grafiğiyle karşılaştırmalı olarak sunuldu. Renkler anlam taşımaktadır: kırmızı kötü (AQI > 60), sarı orta (30-60 arası), yeşil ise iyi (< 30) seviyeyi temsil etmektedir. Bu grafik sayesinde hangi kavşağa öncelikli çevre müdahalesi yapılması gerektiği tek bakışta anlaşılabilmektedir.
+
+**2. Saatlik Hava Kalitesi Trendi (Çizgi Grafik)**
+Çarşı, Tofaş ve İzzet Paşa kavşaklarının 24 saatlik AQI değişimi çizgi grafiğiyle gösterildi. Her kaynak için farklı çizgi stili kullanılarak okunabilirlik artırıldı. Sabah ve akşam yoğun saatlerinde kirlilik değerlerinin belirgin biçimde yükseldiği, gece saatlerinde ise düştüğü grafikte açıkça izlenebilmektedir.
+
+**3. Gürültü Seviyesi Dağılımı (Bar Grafik)**
+5 kavşağın ortalama gürültü seviyeleri bar grafiğiyle karşılaştırıldı. Renk kodlaması uygulandı: kırmızı rahatsız edici (> 70 dB), yeşil kabul edilebilir (< 65 dB) seviyeyi göstermektedir. Referans çizgileri ile WHO gürültü standartları görsel olarak işaretlendi.
+
+**4. PM2.5 Partikül Madde Dağılımı (Bar Grafik)**
+Kavşak bazlı PM2.5 yoğunlukları görselleştirildi. Güvenli (< 12 µg/m³), orta (12-35 µg/m³) ve yüksek (> 35 µg/m³) seviyeleri renk kodlu olarak ayrıştırıldı. Bu grafik, hava kalitesini doğrudan etkileyen partikül madde kirliliğinin hangi kavşaklarda yoğunlaştığını ortaya koymaktadır.
+
+**5. CO2 ve Nem Korelasyonu (Çift Eksenli Çizgi Grafik)**
+Çarşı Kavşağı için 24 saatlik CO2 (ppm) ve nem (%) değişimi çift eksenli çizgi grafiğiyle analiz edildi. Sol eksen CO2 değerlerini, sağ eksen ise nem yüzdesini göstermektedir. Gün içinde CO2'nin sabah saatlerinde düştüğü, öğle ve akşam yoğun saatlerinde ise yükseldiği gözlemlendi. Nem ile CO2 arasında ters korelasyon olduğu tespit edildi.
+
+---
+
+**İnteraktif Özellikler**
+
+Dashboard iki filtre içermektedir. Kavşak filtresi ile 5 Elazığ kavşağından herhangi biri seçildiğinde ortalama AQI değeri otomatik güncellenmektedir. Metrik filtresi ile AQI, PM2.5, gürültü ve CO2 arasında geçiş yapılabilmektedir.
+
+---
+
+**Analiz Sonuçları ve Değerlendirme**
+
+Elde edilen veriler incelendiğinde şehir merkezine yakın kavşaklarda kirlilik değerlerinin belirgin biçimde daha yüksek olduğu doğrulandı.
+
+Çarşı Kavşağı tüm metriklerde en kötü değerleri sergiledi: AQI 72.1 (kötü), gürültü 74.2 dB, PM2.5 28.4 µg/m³, CO2 512 ppm. Genel durum değerlendirmesi: Kötü.
+
+İzzet Paşa Kavşağı da yüksek kirlilik değerleri gösterdi: AQI 68.4, gürültü 71.5 dB, PM2.5 25.2 µg/m³. Genel durum: Kötü.
+
+Tofaş ve Üniversite kavşakları orta seviyede kaldı. AQI değerleri sırasıyla 45.3 ve 42.0 olarak ölçüldü.
+
+Palu Yolu Kavşağı tüm metriklerde en iyi performansı sergiledi: AQI 38.2, gürültü 52.1 dB, PM2.5 yalnızca 9.3 µg/m³ ile güvenli sınırın altında kaldı. Genel durum: İyi.
+
+---
+
+**Özet Rapor**
+
+Tüm kavşakların AQI, PM2.5, gürültü, CO2 ve sıcaklık verilerini bir arada gösteren genel durum değerlendirme tablosu oluşturuldu. Her kavşak İyi, Orta ve Kötü olarak sınıflandırıldı. Bu rapor belediye yetkililerinin hangi bölgelere öncelikli çevre müdahalesi yapması gerektiğini göstermekte olup ilerleyen haftalarda geliştirilecek enerji yönetimi ve trafik optimizasyon modülleri için de temel referans belgesi işlevi görmektedir.
+
+---
+
+**Dosyalar**
+- `NE_H4_web_cevresensoranalizi.html` — İnteraktif çevresel sensör analiz dashboard'u
 
 ## Abdullah Gümüş
 GÖREVİN BURAYA YAPIŞTIRILACAK.
