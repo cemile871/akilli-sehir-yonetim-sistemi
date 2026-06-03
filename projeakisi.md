@@ -2066,7 +2066,16 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 
 ## Efecan Önal
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+Bu çalışma kapsamında React tabanlı Enerji Yönetim Paneli geliştirilerek kullanıcı arayüzü ve kullanıcı deneyimi iyileştirilmiştir. Enerji tüketim verilerinin daha anlaşılır şekilde sunulabilmesi amacıyla modern dashboard bileşenleri, dinamik metrik kartları ve etkileşimli grafikler sisteme entegre edilmiştir.
+
+Chart.js kullanılarak gerçek zamanlı enerji tüketim verileri görselleştirilmiş, kullanıcıların bölge ve kaynak bazlı filtreleme yapabilmesi sağlanmıştır. Ayrıca özelleştirilebilir raporlama özelliği geliştirilerek filtrelenmiş verilerin CSV formatında dışa aktarılması mümkün hale getirilmiştir.
+
+Büyük veri kümeleriyle çalışırken sistem performansını artırmak amacıyla React Hook yapıları (useMemo, useCallback ve useRef) kullanılarak gereksiz yeniden hesaplamalar engellenmiş ve veri işleme süreçleri optimize edilmiştir. Filtreleme ve metrik hesaplamaları yalnızca gerekli durumlarda çalışacak şekilde düzenlenmiştir.
+
+Makine öğrenmesi entegrasyonu kapsamında enerji tüketim trendlerini analiz eden ve gelecekteki yük değişimlerini tahmin eden LSTM tabanlı öngörü modeli için arayüz desteği geliştirilmiştir. Panel üzerinde gerçek zamanlı veriler ile yapay zekâ tarafından oluşturulan tahmin sonuçları birlikte gösterilerek karar destek mekanizması oluşturulmuştur.
+
+Gerçekleştirilen geliştirmeler sonucunda sistem; daha hızlı, ölçeklenebilir, kullanıcı dostu ve veri odaklı bir enerji yönetim paneli haline getirilmiştir.
 
 # Hafta 6
 
