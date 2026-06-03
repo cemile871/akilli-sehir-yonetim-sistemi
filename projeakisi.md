@@ -95,7 +95,12 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Efecan Önal
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+Bu hafta, Akıllı Şehir Yönetim Sistemi'nin kullanıcı deneyimi (UX) araştırmaları yapılarak operatör arayüzleri (UI) geliştirilmiş ve modüller **Single Page Application (SPA)** mimarisiyle tek sayfada entegre edilmiştir.
+
+* **⚡ Enerji Yönetim Paneli:** HTML, CSS (Glassmorphism & Dark Mode) ve Vanilla JS kullanılarak geliştirildi. **Chart.js** ile Elazığ bölgesel enerji tüketimi görselleştirildi ve donanım kontrol şalterleri arayüze bağlandı.
+* **🚦 Trafik Optimizasyon Modülü:** **React.js** tabanlı interaktif bir simülasyon paneli kodlandı. Yöneticilerin AI algoritma parametrelerini (ambulans önceliği, bekleme eşiği) ayarlayabilmesi ve kriz senaryolarını harita üzerinde test edebilmesi sağlandı.
+* **🧪 Test ve Entegrasyon:** Arayüzün "3 Tık Kuralı"na ve erişilebilirlik standartlarına (yüksek zıtlık) uygunluğu test edilerek sistem yayına hazır hale getirildi.
 
 # Hafta 4
 
