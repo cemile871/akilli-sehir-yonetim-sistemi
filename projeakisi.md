@@ -67,7 +67,32 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 # Hafta 2
 
 ## Nisanur Eltekin
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+
+Trafik akışını optimize edecek bir algoritma için detaylı tasarım belgesi oluşturuldu. Belge; algoritmanın parametrelerini, optimizasyon hedeflerini, senaryo simülasyonlarını, teknik seçim gerekçesini ve performans metriklerini kapsamaktadır.
+
+**1. Algoritma Tasarım Belgesi**
+Sistem tanımı, bileşenler ve mimari belgelendi. Veri toplama, veri işleme, karar verme ve kullanıcı arayüzü olmak üzere dört katmanlı modüler bir yapı tasarlandı. Gerçek sensör verisi yerine Kaggle veri setleri ve Python simülatörü kullanılmaktadır.
+
+**2. Algoritma Parametreleri**
+Algoritma karar verirken şu parametreleri kullanmaktadır: trafik yoğunluğu ve kuyruk uzunluğu, ortalama araç hızı, yol durumu (normal/ıslak/kapalı/kaza), araç türü (ambulans/toplu taşıma/normal araç), günün saati ve hava koşulları. Yoğun saatlerde (07:00-09:00 ve 17:00-19:00) yük faktörü +%40, yağmur veya kar durumunda kapasite -%20 olarak otomatik ayarlanmaktadır.
+
+**3. Optimizasyon Hedefleri**
+Hedefler öncelik sırasına göre belirlendi. En yüksek öncelik acil araç yeşil dalga aktivasyonudur; bu durum tetiklendiğinde tüm diğer hedefler askıya alınır. Bunu sırasıyla seyahat süresini -%30 azaltma, kuyruk uzunluğunu 100 metrenin altında tutma, geçiş kapasitesini 1.000 araç/saatin üzerine çıkarma ve emisyon azaltma hedefleri izlemektedir.
+
+**4. Senaryo Simülasyonları**
+Dört farklı senaryo simüle edildi ve algoritmanın her koşulda hedef değerleri karşıladığı görüldü:
+- Normal trafik: Bekleme süresi -%38, geçiş kapasitesi +%37
+- Yoğun saat: Bekleme süresi -%40, geçiş kapasitesi +%58
+- Acil durum (Yeşil Dalga): Ambulans müdahale süresi -%56, 7 kavşak sırayla yeşile alındı
+- Kötü hava / kaza: Kaza riski -%35, otomatik alarm 30 saniyede tetiklendi
+
+Bu senaryolar Python ile geliştirilen `trafik_simulasyon.py` modülü ile canlı olarak gösterilmektedir. Modül Elazığ'daki 5 kavşağı (Çarşı, Tofaş, İzzet Paşa, Palu Yolu, Üniversite Kavşağı) gerçek zamanlı simüle eder. A tuşu ile acil araç yeşil dalga, Y ile yoğun saat, K ile kaza, H ile hava değişimi tetiklenebilmektedir.
+
+**5. Optimizasyon Tekniği Seçimi**
+Kural tabanlı sistem, genetik algoritma, bulanık mantık, Q-Learning ve DQN olmak üzere beş teknik araştırıldı ve karşılaştırıldı. TensorFlow uyumluluğu, milisaniye düzeyinde gerçek zamanlı karar kapasitesi, şehrin trafik örüntülerini zamanla öğrenebilmesi ve ölçeklenebilirliği nedeniyle **DQN (Derin Q-Ağı)** seçildi. Sistem başlangıçta kural tabanlı çalışır, yeterli veri toplandıktan sonra DQN devreye girer.
+
+**6. Performans Metrikleri**
+Algoritmanın başarısını ölçmek için 4 kategoride toplam 21 metrik belirlendi. Trafik performansı (bekleme süresi < 30 sn, kuyruk < 150 m, kapasite > 1.000 araç/saat), sistem performansı (gecikme < 500 ms, model doğruluğu > %85, uptime > %99.9), acil durum metrikleri (yeşil dalga tepki < 1 sn, müdahale süresi < 6 dk) ve sosyal etki metrikleri (CO2 -%25, kaza -%30, sürücü memnuniyeti > 4.0/5.0) olarak sınıflandırıldı. 8 KPI hedefinin 6'sı simülasyonda tam olarak karşılandı.
 
 ## Abdullah Gümüş
 GÖREVİN BURAYA YAPIŞTIRILACAK.
