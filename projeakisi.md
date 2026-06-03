@@ -955,7 +955,360 @@ API uc noktalari sistemin temel modullerine gore versiyonlandirilarak tasarlanmi
 
 
 ## Melih Ahmet Kocaman
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akıllı Şehir Vatandaş Mobil Uygulaması — Prototip Tasarım Belgesi
+
+> **Bağlam:** Bu belge, Hafta 2'de belirlenen gereksinimleri ve kullanıcı akışlarını Figma tabanlı düşük ve yüksek çözünürlüklü tasarımlara dönüştürme sürecini kapsamaktadır. Tasarım; Hafta 1'de seçilen teknoloji yığını (Native Android, **Android Studio**, Kotlin — XML View tabanlı layout), Hafta 2'de tanımlanan 5 kullanıcı personası ve kullanıcı hikayesi haritasındaki MVP kapsamıyla tam uyumludur.
+
+---
+
+## 1. Tasarım Süreci ve Araçlar
+
+### 1.1. Kullanılan Araçlar
+
+| Araç | Kullanım Amacı |
+| :--- | :--- |
+| **Figma** | Wireframe ve yüksek çözünürlüklü (hi-fi) ekran tasarımları |
+| **Material Design 3 Kit** | Figma'daki resmi Google bileşen kütüphanesi |
+| **FigJam** | Kullanıcı akışı şemaları ve ekip tartışma notları |
+| **Android Studio (Hedgehog+)** | Geliştirme ortamı; Layout Editor ile XML tasarım önizlemesi |
+| **Android Emulator (AVD)** | Tasarımların Pixel 6 / Pixel 4 profilleriyle önizlemesi |
+
+### 1.2. Tasarım Aşamaları
+
+Tasarım süreci üç iterasyon aşamasında yürütülmüştür:
+
+1. **Lo-fi Wireframe:** Yalnızca iskelet yapı; içerik yok, kaba yerleşim planı.
+2. **Mid-fi Prototype:** İçerik yerleştirme, tipografi hiyerarşisi, etkileşim akışları.
+3. **Hi-fi Mockup:** Gerçek renkler, ikonlar, gerçekçi veri içerikleri, animasyon notları.
+
+---
+
+## 2. Ekran Boyutu ve Grid Sistemi
+
+Tasarımlar iki temel çözünürlük için optimize edilmiştir:
+
+| Cihaz Profili | Çözünürlük | Kullanım |
+| :--- | :--- | :--- |
+| **Standart Android** | 360 × 800 dp | Birincil tasarım referansı |
+| **Büyük Android** | 412 × 915 dp | İkincil önizleme |
+
+Grid sistemi: 4 sütun, 16 dp kenar boşluğu, 8 dp gutter. Tüm dokunma hedefleri minimum **48 × 48 dp** kuralına uyar.
+
+---
+
+## 3. Renk Paleti ve Tipografi (Material You)
+
+### 3.1. Renk Sistemi
+
+Projenin kimliği için **Belediye Mavi** tonu temel alınmış; Material Design 3'ün dinamik renk algoritmasıyla yardımcı renkler türetilmiştir.
+
+| Token | Renk (HEX) | Kullanım |
+| :--- | :--- | :--- |
+| `primary` | `#1565C0` | Ana butonlar, aktif sekmeler |
+| `primaryContainer` | `#D6E4FF` | Kart arka planları, chip'ler |
+| `secondary` | `#006874` | İkincil aksiyon öğeleri |
+| `error` | `#BA1A1A` | Kritik uyarılar, hata durumları |
+| `errorContainer` | `#FFDAD6` | Kırmızı alert banner'ları |
+| `surface` | `#FAFCFF` | Sayfa ve kart arka planı |
+| `onSurface` | `#1A1C1E` | Birincil metin |
+| `outline` | `#74777F` | Sınır çizgileri, ikincil metin |
+
+**Karanlık Mod:** Material You'nun otomatik karanlık tema algoritması uygulanmış; tüm token'lar karanlık arka plan için ters çevrilmiştir.
+
+**Erişilebilirlik:** `onSurface` / `surface` kombinasyonu 14.1:1 kontrast oranına sahiptir (WCAG AAA). Tüm metin-arka plan çiftleri minimum 4.5:1 oranını karşılar.
+
+### 3.2. Tipografi
+
+| Stil | Yazı Tipi | Boyut | Ağırlık | Kullanım |
+| :--- | :--- | :--- | :--- | :--- |
+| `displaySmall` | Roboto | 36 sp | 400 | Onboarding başlıkları |
+| `headlineMedium` | Roboto | 28 sp | 400 | Ekran başlıkları |
+| `titleLarge` | Roboto | 22 sp | 500 | Kart başlıkları |
+| `bodyLarge` | Roboto | 16 sp | 400 | Ana içerik metni |
+| `bodyMedium` | Roboto | 14 sp | 400 | Açıklama metinleri |
+| `labelSmall` | Roboto | 11 sp | 500 | Chip, badge metinleri |
+
+---
+
+## 4. Ekran Tasarımları — Detaylı Açıklamalar
+
+### 4.1. Onboarding Ekranları (3 Ekran)
+
+**Ekran 1 — "Şehrinizi Tanıyın"**
+- Üst %60: Şehir silueti ve trafik ikonlarından oluşan illustrasyon (SVG, karanlık modda adapte olur).
+- Başlık: "Şehrinizin nabzını tutun" (displaySmall, ortalanmış).
+- Açıklama: Trafik, hava kalitesi ve enerji verilerine tek noktadan erişim.
+- Alt: İleri butonu (FilledButton, tam genişlik) + atlama linki.
+
+**Ekran 2 — "Anlık Bildirimler"**
+- Illustrasyon: Telefon mockup'ı içinde push bildirim örneği.
+- Başlık: "Olaylardan ilk siz haberdar olun".
+- Açıklama: Acil durum ve planlı kesinti bildirimleri.
+
+**Ekran 3 — "Belediyeye Ulaşın"**
+- Illustrasyon: Harita pini ve bildirim formu.
+- Başlık: "Sorunları bildirin, şehri güzelleştirin".
+- Alt: "Başlayın" butonu (vurgulu, tam genişlik).
+
+**Ortak özellikler:** İlerleme göstergesi (3 nokta, aktif nokta birincil renkte), sayfa geçişi slide animasyonu (300 ms, ease-in-out).
+
+---
+
+### 4.2. Giriş / Kayıt Ekranları
+
+**Giriş Ekranı:**
+- Uygulama logosu (48 dp) + başlık üstte.
+- E-posta alanı (OutlinedTextField, e-posta klavyesi tetikler).
+- Şifre alanı (göster/gizle toggle, trailing icon).
+- "Şifremi Unuttum" metin linki (sağa hizalı, `primary` rengi).
+- "Giriş Yap" FilledButton (tam genişlik, loading state: CircularProgressIndicator).
+- Ayraç: "veya" (yatay çizgi ile).
+- "Misafir olarak devam et" OutlinedButton.
+- Alt: "Hesabın yok mu? Kayıt ol" linki.
+
+**Hata Durumu:** Alan kenarı kırmızıya döner, altında `supportingText` ile hata mesajı. ("E-posta veya şifre hatalı.")
+
+**Kayıt Ekranı:**
+- Ad Soyad, E-posta, Şifre, Şifre (tekrar) alanları.
+- Şifre gücü göstergesi (Zayıf / Orta / Güçlü — renk çubuğu).
+- KVKK onay checkbox'ı (zorunlu; işaretlenmeden buton aktif olmaz).
+- "Kayıt Ol" FilledButton.
+
+---
+
+### 4.3. Ana Sayfa
+
+**Yapı:** CoordinatorLayout + NestedScrollView. Üstte sabit TopAppBar (`surface` rengi, gölge yok — Material You kuralı).
+
+**Bileşenler (yukarıdan aşağıya):**
+
+1. **Konum Başlığı:** "Elazığ, Merkez" + konum değiştir ikonu. Altında son güncelleme zamanı ("2 dakika önce güncellendi").
+
+2. **Trafik Durumu Kartı (ElevatedCard):**
+   - Sol: Trafik ışığı ikonu + renk göstergesi (YEŞİL / SARI / KIRMIZI).
+   - Sağ: "Ortalama Hız: 38 km/s | Yoğunluk: %62".
+   - Alt: "Haritada Gör →" metin butonu.
+
+3. **Hava Kalitesi Kartı (ElevatedCard):**
+   - Büyük AQI skoru (örn. "72 — Orta").
+   - PM2.5, CO2, NO2 değerleri chip formatında (her biri ilgili renk badge ile).
+   - Sağlık önerisi: "Hassas gruplar dış mekânı sınırlasın."
+
+4. **Acil Uyarılar (varsa) — AlertBanner:**
+   - Arka plan `errorContainer`, ikon ünlem işareti.
+   - Başlık + kısa açıklama + "Detay" butonu.
+   - Kritik değilse bu bileşen görünmez.
+
+5. **Son Duyurular (yatay kaydırmalı liste):**
+   - Her kart: Kategori chip (Ulaşım / Etkinlik / Acil), başlık, tarih.
+   - Son kart: "Tümünü Gör →" linki.
+
+6. **Yakındaki Olaylar (dikey liste, max 3):**
+   - Her öğe: Olay ikonu + kategori + açıklama + mesafe ("1.2 km uzakta").
+
+---
+
+### 4.4. Harita Ekranı
+
+**Tam Ekran Harita (Google Maps Compose):**
+
+- **Katmanlar (toggle toolbar):**
+  - Trafik yoğunluğu (varsayılan açık)
+  - Aktif olaylar (pin'ler)
+  - Hava kalitesi (renk haritası — opsiyonel)
+
+- **Renk Kodlama:**
+  | Renk | Anlam | Hız Aralığı |
+  | :--- | :--- | :--- |
+  | Koyu Yeşil | Serbest akış | > 50 km/s |
+  | Sarı | Yavaşlama | 30–50 km/s |
+  | Turuncu | Yoğun | 15–30 km/s |
+  | Kırmızı | Tıkanık | < 15 km/s |
+
+- **Olay Pin'leri:** Her kategori için farklı ikon (kaza: ünlem, yangın: alev, su baskını: dalga, yol çalışması: kask). Pin'e dokunulduğunda **BottomSheet** açılır.
+
+- **BottomSheet (Olay Detayı):**
+  - Kategori chip + başlık.
+  - Açıklama + fotoğraf (varsa, yatay kaydırmalı carousel).
+  - Konum + "Yol Tarifi Al" OutlinedButton.
+  - Bildiren: "Vatandaş tarafından bildirildi — 14 dk önce".
+  - Durum: pending / acknowledged / resolved (renk + metin).
+
+- **Rota Planlama Modu:**
+  - Sağ altta FAB "Rota Planla" (FilledButton, harita ikonu).
+  - Dokunulduğunda iki TextField belirir: Başlangıç / Bitiş.
+  - Hesapla butonuna basılınca yoğunluk rengi en az olan rota mavi çizgiyle çizilir.
+  - Tahmini süre ve mesafe BottomSheet'te gösterilir.
+
+- **Konum Butonu:** Sağ altta, FAB'ın üstünde. Kullanıcının mevcut konumuna yakınlaştırır.
+
+---
+
+### 4.5. Bildir Ekranı (FAB → Modal BottomSheet)
+
+Ana navigasyondaki **"Bildir"** FAB'ına basılınca tam ekran modal açılır.
+
+**Adım 1 — Kategori Seçimi:**
+Grid (2 sütun × 3 satır), her hücre: büyük ikon + kategori adı.
+- Kaza, Yangın, Su Baskını, Altyapı Arızası, Yol Hasarı, Diğer.
+- Seçilen hücre `primaryContainer` arka planıyla vurgulanır.
+
+**Adım 2 — Konum:**
+- Küçük harita önizlemesi (interaktif olmayan, yalnızca görüntü).
+- "GPS Konumumu Kullan" FilledTonalButton (varsayılan öneri).
+- "Haritadan Pin Seç" OutlinedButton (dokunulunca harita tam ekran açılır, pin yerleştirme modu).
+- Seçilen koordinat metin olarak gösterilir: "Elazığ Merkez, Çarşı Kavşağı yakını".
+
+**Adım 3 — Fotoğraf (Opsiyonel):**
+- Yatay kaydırmalı fotoğraf alanı; ilk kutu "+" ikonu (kamera veya galeri seçimi — BottomSheet ile).
+- Maksimum 3 fotoğraf. Yüklenenlerin sağ üstünde "×" silme butonu.
+- Her fotoğraf yüklenirken CircularProgressIndicator overlay görünür.
+
+**Adım 4 — Açıklama ve Gönder:**
+- OutlinedTextField, max 500 karakter, karakter sayacı gösterilir.
+- Checkbox: "Anonim olarak gönder" (varsayılan: işaretli değil).
+- "Gönder" FilledButton. Yükleme sırasında buton disabled + loading state.
+- Başarılı sonuç: Animasyonlu onay ikonu (Lottie) + "Bildirim alındı, Takip No: #5821" mesajı.
+
+---
+
+### 4.6. Duyurular Ekranı
+
+- **Filter Chips (yatay kaydırmalı):** Tümü, Ulaşım, Etkinlik, Acil, Genel.
+- **Duyuru Listesi (LazyColumn):**
+  - Her öğe: Kategori chip (renkli), Başlık, Kısa açıklama (max 2 satır, ellipsize), Tarih + okunmamış badge.
+  - Okunmamış duyurular `surfaceVariant` arka planında, okunmuşlar beyaz.
+- **Detay Ekranı:** Başlık, kategori, tarih, uzun açıklama, fotoğraf/video (tam genişlik), harita (opsiyonel), "Paylaş" ikonu (TopAppBar sağında).
+
+---
+
+### 4.7. Profil Ekranı
+
+- Kullanıcı adı + e-posta + profil fotoğrafı (placeholder: baş harfi).
+- **Kayıtlı Bölgeler:** Chip listesi + "Bölge Ekle" butonu (max 3 bölge, kayıtlı bölgede acil bildirim gelir).
+- **Bildirim Tercihleri:** Her kategori için Switch (Trafik, Hava Kalitesi, Enerji Kesintileri, Acil Durum).
+- **Görünüm:** Segment: Sistem / Aydınlık / Karanlık.
+- **Dil:** TR / EN RadioButton grubu.
+- **Hesap:** Şifre Değiştir, Hesabı Sil (kırmızı metin, onay diyaloğu gerektirir).
+- **Uygulama Hakkında:** Sürüm, Gizlilik Politikası, KVKK Aydınlatma Metni.
+
+---
+
+## 5. Animasyon ve Geçiş Tasarımı
+
+| Geçiş | Animasyon | Süre |
+| :--- | :--- | :--- |
+| Ekranlar arası navigasyon | Shared element transition (Compose) | 300 ms |
+| BottomSheet açılış | Slide up, ease-out | 250 ms |
+| FAB → Bildir modalı | Container transform | 350 ms |
+| Olay pin'i seçimi | Scale + BottomSheet reveal | 200 ms |
+| Loading → İçerik | Shimmer placeholder → fade-in | 400 ms |
+| Onay animasyonu | Lottie check (120 frame) | ~1.5 sn |
+
+---
+
+## 6. Boş Durum (Empty State) Tasarımları
+
+Her liste ekranı için boş durum tasarlandı:
+
+| Durum | Illustrasyon | Başlık | Alt Metin |
+| :--- | :--- | :--- | :--- |
+| İnternet yok | Bağlantısız telefon | "Bağlantı Yok" | Son önbellek verisi gösteriliyor |
+| Olay yok | Harita + tik işareti | "Her şey yolunda!" | Bölgenizde aktif olay bulunmuyor |
+| Duyuru yok | Boş zarf | "Yeni duyuru yok" | Tüm duyurular okundu |
+| Bildirim geçmişi boş | Boş liste illüstrasyonu | "Henüz bildirim yapmadınız" | Bir şey fark edince bildirin |
+
+---
+
+## 7. Figma Prototip Akışları
+
+Figma'da aşağıdaki interaktif akışlar tıklanabilir prototip olarak hazırlanmıştır:
+
+1. **Onboarding → Giriş → Ana Sayfa** (konum + bildirim izni diyalogları dahil)
+2. **Ana Sayfa → Harita → Olay BottomSheet → Yol Tarifi**
+3. **FAB → Bildir → Kategori → GPS Konum → Fotoğraf → Gönder → Onay**
+4. **Duyurular → Filtre → Detay → Paylaş**
+5. **Profil → Bildirim Tercihleri → Kayıtlı Bölge Ekle**
+
+Her akış "Happy Path" (başarılı senaryo) + en az bir "Error State" (hata senaryosu) içermektedir.
+
+---
+
+## 8. Kullanılabilirlik Kontrol Listesi
+
+Prototip, aşağıdaki kriterler açısından gözden geçirilmiştir:
+
+| Kriter | Durum |
+| :--- | :--- |
+| Tüm dokunma hedefleri ≥ 48 dp | ✅ |
+| Metin-arka plan kontrast ≥ 4.5:1 | ✅ |
+| TalkBack erişilebilirlik etiketleri eklenmiş | ✅ |
+| Kritik eylemler onay adımı içeriyor | ✅ |
+| Tüm loading durumları tasarlandı | ✅ |
+| Tüm hata durumları tasarlandı | ✅ |
+| Karanlık mod uyumluluğu kontrol edildi | ✅ |
+| Büyük metin boyutunda layout bozulmuyor | ✅ |
+
+---
+
+## 9. Sonraki Adımlar
+
+Bu prototip belgesi ve Figma dosyaları esas alınarak Hafta 4 ve sonrasında:
+
+1. **Kotlin proje iskeleti** kurulacak: modül yapısı, Hilt dependency injection, Navigation Compose iskeleti.
+2. **OpenAPI şeması** backend ekibiyle netleştirilecek (trafik, enerji, bildirim endpoint'leri).
+3. **MVP sprint planı** çıkarılacak: her sprint 1 ekran grubu hedefler.
+4. **Kullanılabilirlik testi** için prototip link'i 3 farklı kullanıcı profiline gönderilecek (Hafta 6 raporu için veri toplanacak).
+
+---
+
+## 10. Güncelleme — Harita Tabanlı Konum Seçici Ekranı (MapPickerActivity)
+
+> **Not:** Bu ekran prototip tasarımının ardından Hafta 5 geliştirme sürecinde kullanılabilirlik geri bildirimi doğrultusunda tasarıma eklendi.
+
+### 10.1. Tasarım Gerekçesi
+
+Olay bildirimi akışının Konum adımında yalnızca GPS koordinatı alınması, kullanıcıların olayın tam konumunu belirleyememesine yol açıyordu. Bu nedenle tam ekran, etkileşimli bir harita konum seçici ekranı eklendi.
+
+### 10.2. Ekran Yapısı
+
+```
+┌─────────────────────────────────┐
+│  Haritaya dokunarak olay        │
+│  konumunu seçin          [mavi] │
+├─────────────────────────────────┤
+│                                 │
+│         Google Maps             │
+│       (Elazığ odaklı)          │
+│                                 │
+│   [Kullanıcı dokunuyor]        │
+│         📍 Pin                  │
+│                                 │
+├─────────────────────────────────┤
+│  38.67512, 39.22341             │
+├─────────────────────────────────┤
+│  [İptal]   [Bu Konumu Seç ✓]  │
+└─────────────────────────────────┘
+```
+
+### 10.3. Etkileşim Akışı
+
+Kullanıcı haritaya dokunduğunda turuncu pin yerleşir, koordinat alt çubukta gösterilir ve **"Bu Konumu Seç"** butonu aktif hale gelir. Onaylanınca koordinat `ReportActivity`'ye döner ve Konum adımı tamamlanır.
+
+| Bileşen | Açıklama |
+| :--- | :--- |
+| Harita | Google Maps SDK — kaydırma ve zoom destekli |
+| Pin | Haritaya tıklanınca yerleşir; ikinci tıklamada güncellenir |
+| Koordinat gösterimi | Alt çubukta `enlem, boylam` formatında |
+| GPS butonu | Mevcut konum varsa otomatik zoom yapar |
+| Sonuç | `lat` + `lng` değerleri `ActivityResult` ile `ReportActivity`'ye iletilir |
+
+### 10.4. Kullanılabilirlik Notları
+
+- Minimum dokunma hedefi: haritanın tamamı
+- "Bu Konumu Seç" butonu konum seçilmeden aktif olmaz — hatalı gönderimi önler
+- "İptal" butonu konum adımına döner, seçim sıfırlanmaz
+
 
 ## Cemile Akay
 # 🗄️ Veri Toplama Modülü – Veritabanı Şema Tasarımı
