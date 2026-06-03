@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary -->
+    <color name="primary">#1565C0</color>
+    <color name="primary_dark">#003c8f</color>
+    <color name="primary_container">#D6E4FF</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_primary_container">#001A41</color>
+
+    <!-- Secondary -->
+    <color name="secondary">#006874</color>
+    <color name="secondary_container">#97F0FF</color>
+    <color name="on_secondary">#FFFFFF</color>
+
+    <!-- Surface -->
+    <color name="surface">#FAFCFF</color>
+    <color name="surface_variant">#E1E2EC</color>
+    <color name="on_surface">#1A1C1E</color>
+    <color name="on_surface_variant">#44474F</color>
+    <color name="outline">#74777F</color>
+
+    <!-- Error -->
+    <color name="error">#BA1A1A</color>
+    <color name="error_container">#FFDAD6</color>
+    <color name="on_error">#FFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="traffic_green">#2E7D32</color>
+    <color name="traffic_yellow">#F9A825</color>
+    <color name="traffic_orange">#E65100</color>
+    <color name="traffic_red">#C62828</color>
+
+    <!-- AQI Colors -->
+    <color name="aqi_good">#2E7D32</color>
+    <color name="aqi_moderate">#F9A825</color>
+    <color name="aqi_unhealthy">#E65100</color>
+    <color name="aqi_hazardous">#C62828</color>
+
+    <!-- Night mode surfaces -->
+    <color name="surface_dark">#1A1C1E</color>
+    <color name="on_surface_dark">#E3E2E6</color>
+
+    <!-- White / Black -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+</resources>
