@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enerji Yönetimi Paneli — Elazığ Akıllı Şehir</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f8f9fa;color:#1a1a2e;padding:1.5rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:12px;background:#fff;padding:1rem 1.5rem;border-radius:12px;border:1px solid #e0e0e0}
+.topbar-title{font-size:18px;font-weight:600;color:#1a1a2e}
+.topbar-sub{font-size:13px;color:#666}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filters select{font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid #ddd;background:#fff;color:#1a1a2e;cursor:pointer}
+.badge-uyari{background:#FAEEDA;color:#854F0B;font-size:12px;padding:3px 10px;border-radius:8px;font-weight:500}
+.badge-acil{background:#FCEBEB;color:#A32D2D;font-size:12px;padding:3px 10px;border-radius:8px;font-weight:500}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem}
+.metric-card{background:#f1f3f5;border-radius:8px;padding:1rem}
+.metric-label{font-size:12px;color:#666;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.metric-val{font-size:24px;font-weight:600;color:#1a1a2e}
+.metric-change{font-size:12px;margin-top:4px}
+.change-up{color:#A32D2D}
+.change-down{color:#3B6D11}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.chart-card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1rem 1.25rem}
+.chart-card.full{grid-column:1/-1}
+.chart-title{font-size:14px;font-weight:600;color:#1a1a2e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#666;margin-bottom:1rem}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:#666}
+.legend span{display:flex;align-items:center;gap:4px}
+.legend-dot{width:10px;height:10px;border-radius:2px}
+.tablo{width:100%;border-collapse:collapse;font-size:13px}
+.tablo th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:#666;border-bottom:1px solid #e0e0e0}
+.tablo td{padding:8px 10px;border-bottom:1px solid #f0f0f0;color:#1a1a2e}
+.tablo tr:last-child td{border-bottom:none}
+.tablo tr:hover td{background:#f8f9fa}
+.s-yuksek{background:#FCEBEB;color:#A32D2D;font-size:11px;padding:2px 8px;border-radius:6px}
+.s-orta{background:#FAEEDA;color:#854F0B;font-size:11px;padding:2px 8px;border-radius:6px}
+.s-normal{background:#EAF3DE;color:#3B6D11;font-size:11px;padding:2px 8px;border-radius:6px}
+.s-acil{background:#FCEBEB;color:#A32D2D;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600}
+.bolge-item{display:flex;align-items:center;padding:8px 10px;background:#f8f9fa;border-radius:8px;margin-bottom:6px}
+.bolge-name{font-size:13px;color:#1a1a2e;min-width:130px}
+.bolge-bar-wrap{flex:1;margin:0 10px;height:6px;background:#e0e0e0;border-radius:3px}
+.bolge-bar{height:6px;border-radius:3px;background:#378ADD}
+.bolge-val{font-size:12px;color:#666;min-width:60px;text-align:right}
+.acil-banner{background:#FCEBEB;border:1px solid #F7C1C1;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:12px}
+.acil-banner-text{font-size:13px;color:#A32D2D;font-weight:600}
+.acil-banner-sub{font-size:12px;color:#791F1F;margin-top:2px}
+@media(max-width:600px){.charts-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:12px">
+    <i class="ti ti-bolt" style="font-size:22px;color:#185FA5"></i>
+    <div>
+      <div class="topbar-title">Enerji Yönetimi Paneli</div>
+      <div class="topbar-sub">Elazığ Akıllı Şehir Sistemi — Belediye Yönetim Arayüzü</div>
+    </div>
+  </div>
+  <div class="filters">
+    <select id="zaman">
+      <option>Son 24 saat</option>
+      <option>Son 7 gün</option>
+      <option>Son 30 gün</option>
+      <option>Bu yıl</option>
+    </select>
+    <select id="bolge">
+      <option>Tüm kavşaklar</option>
+      <option>Çarşı Kavşağı</option>
+      <option>Tofaş Kavşağı</option>
+      <option>İzzet Paşa Kavşağı</option>
+      <option>Palu Yolu Kavşağı</option>
+      <option>Üniversite Kavşağı</option>
+    </select>
+    <select id="kaynak">
+      <option>Tüm kaynaklar</option>
+      <option>Sokak aydınlatma</option>
+      <option>Kamu binaları</option>
+      <option>Trafik sistemleri</option>
+    </select>
+    <span class="badge-uyari">⚠ 2 anomali</span>
+    <span class="badge-acil">🚑 1 acil</span>
+  </div>
+</div>
+
+<div class="acil-banner">
+  <div style="font-size:24px">🚑</div>
+  <div>
+    <div class="acil-banner-text">Aktif acil durum — Yeşil dalga aktif</div>
+    <div class="acil-banner-sub">Ambulans: İzzet Paşa Kavşağı → Üniversite Kavşağı — Müdahale süresi: 3.5 dk (hedef: &lt;6 dk) — Sistem KRİTİK modda</div>
+  </div>
+</div>
+
+<div class="metric-grid">
+  <div class="metric-card">
+    <div class="metric-label">⚡ Toplam tüketim</div>
+    <div class="metric-val" id="m1">4.820 kWh</div>
+    <div class="metric-change change-up">↑ +%8 geçen haftaya göre</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">💡 Sokak aydınlatma</div>
+    <div class="metric-val" id="m2">2.140 kWh</div>
+    <div class="metric-change change-down">↓ -%20 optimizasyon</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">🏢 Kamu binaları</div>
+    <div class="metric-val" id="m3">1.960 kWh</div>
+    <div class="metric-change change-up">↑ +%4 artış</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">🌿 Tasarruf</div>
+    <div class="metric-val" id="m4">680 kWh</div>
+    <div class="metric-change change-down">↓ -%20 maliyet düşüşü</div>
+  </div>
+</div>
+
+<div class="charts-grid">
+  <div class="chart-card full">
+    <div class="chart-title">Saatlik enerji tüketimi trendi</div>
+    <div class="chart-sub">Son 24 saatte kaynak bazlı dağılım (kWh)</div>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#378ADD"></span>Sokak aydınlatma</span>
+      <span><span class="legend-dot" style="background:#1D9E75"></span>Kamu binaları</span>
+      <span><span class="legend-dot" style="background:#D85A30"></span>Trafik sistemleri</span>
+    </div>
+    <div style="position:relative;width:100%;height:220px">
+      <canvas id="trendChart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Kaynak bazlı dağılım</div>
+    <div class="chart-sub">Toplam tüketim içindeki pay (%)</div>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#378ADD"></span>Aydınlatma 44%</span>
+      <span><span class="legend-dot" style="background:#1D9E75"></span>Binalar 41%</span>
+      <span><span class="legend-dot" style="background:#D85A30"></span>Trafik 15%</span>
+    </div>
+    <div style="position:relative;width:100%;height:200px">
+      <canvas id="pieChart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Elazığ kavşak bazlı tüketim</div>
+    <div class="chart-sub">Günlük ortalama (kWh)</div>
+    <div style="margin-top:8px">
+      <div class="bolge-item"><span class="bolge-name">Çarşı Kavşağı</span><div class="bolge-bar-wrap"><div class="bolge-bar" style="width:90%"></div></div><span class="bolge-val">1.320 kWh</span></div>
+      <div class="bolge-item"><span class="bolge-name">İzzet Paşa Kavşağı</span><div class="bolge-bar-wrap"><div class="bolge-bar" style="width:75%"></div></div><span class="bolge-val">1.100 kWh</span></div>
+      <div class="bolge-item"><span class="bolge-name">Üniversite Kavşağı</span><div class="bolge-bar-wrap"><div class="bolge-bar" style="width:60%"></div></div><span class="bolge-val">880 kWh</span></div>
+      <div class="bolge-item"><span class="bolge-name">Tofaş Kavşağı</span><div class="bolge-bar-wrap"><div class="bolge-bar" style="width:45%"></div></div><span class="bolge-val">660 kWh</span></div>
+      <div class="bolge-item"><span class="bolge-name">Palu Yolu Kavşağı</span><div class="bolge-bar-wrap"><div class="bolge-bar" style="width:30%"></div></div><span class="bolge-val">440 kWh</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="chart-card" style="margin-bottom:1.5rem">
+  <div class="chart-title">🚑 Acil durum izleme</div>
+  <div class="chart-sub">Aktif ve son 24 saatteki acil araç hareketleri — KPI hedefi: müdahale &lt; 6 dakika</div>
+  <table class="tablo">
+    <thead><tr><th>Araç tipi</th><th>Konum</th><th>Güzergah</th><th>Yeşil dalga</th><th>Müdahale süresi</th><th>Durum</th></tr></thead>
+    <tbody>
+      <tr><td>Ambulans</td><td>İzzet Paşa Kavşağı</td><td>İzzet Paşa → Üniversite</td><td><span class="s-acil">Aktif</span></td><td>3.5 dk</td><td><span class="s-acil">KRİTİK MOD</span></td></tr>
+      <tr><td>İtfaiye</td><td>Tofaş Kavşağı</td><td>Tofaş → Çarşı</td><td><span class="s-normal">Tamamlandı</span></td><td>4.2 dk</td><td><span class="s-normal">Tamamlandı</span></td></tr>
+      <tr><td>Ambulans</td><td>Palu Yolu</td><td>Palu → İzzet Paşa</td><td><span class="s-normal">Tamamlandı</span></td><td>5.1 dk</td><td><span class="s-normal">Tamamlandı</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="chart-card">
+  <div class="chart-title">⚠ Anomali tespiti ve optimizasyon fırsatları</div>
+  <div class="chart-sub">Sistem tarafından otomatik tespit edilen anormal tüketim noktaları</div>
+  <table class="tablo">
+    <thead><tr><th>Kavşak</th><th>Kaynak</th><th>Tespit edilen durum</th><th>Beklenen</th><th>Gerçekleşen</th><th>Durum</th><th>Öneri</th></tr></thead>
+    <tbody>
+      <tr><td>Çarşı Kavşağı</td><td>Sokak aydınlatma</td><td>Gündüz aşırı tüketim</td><td>120 kWh</td><td>210 kWh</td><td><span class="s-yuksek">Yüksek</span></td><td>Sensör arızası kontrol et</td></tr>
+      <tr><td>Üniversite Kavşağı</td><td>Kamu binası</td><td>Mesai dışı tüketim</td><td>40 kWh</td><td>95 kWh</td><td><span class="s-orta">Orta</span></td><td>Tasarruf moduna geç</td></tr>
+      <tr><td>Tofaş Kavşağı</td><td>Trafik sistemi</td><td>Normal aralıkta</td><td>80 kWh</td><td>76 kWh</td><td><span class="s-normal">Normal</span></td><td>—</td></tr>
+      <tr><td>Palu Yolu Kavşağı</td><td>Sokak aydınlatma</td><td>Optimizasyon fırsatı</td><td>90 kWh</td><td>88 kWh</td><td><span class="s-normal">Normal</span></td><td>Akıllı kararma aktif et</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const hours=['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
+const aydinlatma=[180,175,170,165,160,155,90,85,80,78,75,78,82,85,80,82,88,160,175,180,182,180,178,175];
+const binalar=[60,55,50,48,45,42,80,120,180,195,200,198,195,190,185,192,198,185,150,100,80,70,65,62];
+const trafik=[30,28,25,22,20,18,35,60,90,95,92,90,88,85,82,88,92,95,90,80,60,50,40,35];
+new Chart(document.getElementById('trendChart'),{
+  type:'line',
+  data:{labels:hours,datasets:[
+    {label:'Sokak aydınlatma',data:aydinlatma,borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.08)',tension:0.4,fill:true,borderWidth:2,pointRadius:0},
+    {label:'Kamu binaları',data:binalar,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',tension:0.4,fill:true,borderWidth:2,pointRadius:0,borderDash:[5,3]},
+    {label:'Trafik sistemleri',data:trafik,borderColor:'#D85A30',backgroundColor:'rgba(216,90,48,0.05)',tension:0.4,fill:true,borderWidth:2,pointRadius:0,borderDash:[2,4]}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(128,128,128,0.1)'},ticks:{font:{size:11},maxTicksLimit:12}},y:{grid:{color:'rgba(128,128,128,0.1)'},ticks:{font:{size:11},callback:v=>v+' kWh'}}}}
+});
+new Chart(document.getElementById('pieChart'),{
+  type:'doughnut',
+  data:{labels:['Sokak aydınlatma','Kamu binaları','Trafik sistemleri'],datasets:[{data:[44,41,15],backgroundColor:['#378ADD','#1D9E75','#D85A30'],borderWidth:0,hoverOffset:6}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'65%'}
+});
+document.getElementById('zaman').addEventListener('change',function(){
+  const m=this.value==='Son 7 gün'?7:this.value==='Son 30 gün'?30:this.value==='Bu yıl'?365:1;
+  document.getElementById('m1').textContent=(4820*m).toLocaleString()+' kWh';
+  document.getElementById('m4').textContent=(680*m).toLocaleString()+' kWh';
+});
+</script>
+</body>
+</html>
