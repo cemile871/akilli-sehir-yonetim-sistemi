@@ -2477,7 +2477,214 @@ Proje kapanış sunumu için iki ayrı interaktif HTML sunum materyali hazırlan
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Melih Ahmet Kocaman
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akıllı Şehir Vatandaş Mobil Uygulaması — Kullanılabilirlik Testleri ve Geri Bildirim Raporu
+
+> **Bağlam:** Bu belge, Hafta 3'te tasarlanan ve Hafta 4–5'te geliştirilen vatandaş mobil uygulamasının farklı kullanıcı profilleriyle gerçekleştirilen kullanılabilirlik testlerini, geri bildirim analizini ve iyileştirme önerilerini kapsamaktadır. Test, Figma prototipi üzerinden yürütülmüştür; gerçek APK ile ek doğrulama testleri notlanmıştır.
+
+---
+
+## 1. Test Tasarımı
+
+### 1.1. Test Yöntemi
+
+**Moderasyonlu Kullanılabilirlik Testi (Moderated Usability Test)** yöntemi kullanıldı. Her oturum video kaydına alındı (ekran + sesli düşünme protokolü — "Think Aloud"). Test moderatörü: Melih Ahmet Kocaman.
+
+**Araçlar:**
+
+| Araç | Kullanım Amacı |
+| :--- | :--- |
+| Figma Prototype (mobil görünüm) | Test materyali |
+| Google Meet (ekran paylaşımı) | Uzak test oturumları |
+| Notion | Gözlem notları |
+| Google Forms | Oturum sonu anket (SUS + özel sorular) |
+
+### 1.2. Test Senaryoları
+
+Her katılımcıya 6 görev verildi:
+
+| # | Görev | Başarı Kriteri |
+| :--- | :--- | :--- |
+| G1 | Uygulamayı ilk kez aç, kayıt ol | Kayıt ekranına ulaşma |
+| G2 | Şehir haritasını aç, Çarşı Kavşağı'ndaki olayı gör | Doğru bottom sheet açılması |
+| G3 | Trafik kazası bildir (kategori + GPS konum + 1 fotoğraf) | Başarılı gönderim ekranı |
+| G4 | Enerji kesintisi bildirimini bul ve bölgeni takibe al | Takip toggle'ı aktif |
+| G5 | Hava kalitesi verilerini gör, sağlık önerisini oku | AQI kartına ulaşma |
+| G6 | Profil > bildirim tercihlerinden "Trafik" bildirimini kapat | Switch kapalı konumda |
+
+### 1.3. Metrikler
+
+- **Görev Tamamlama Oranı** (Task Completion Rate — TCR)
+- **Ortalama Görev Süresi** (Task Time)
+- **Hata Sayısı** (yanlış tıklama, geri dönme)
+- **SUS Skoru** (System Usability Scale, 0–100)
+- **Nitel Geri Bildirimler** (Think Aloud notları)
+
+---
+
+## 2. Katılımcı Profilleri
+
+Hafta 2'de tanımlanan kullanıcı personaslarıyla eşleşen 5 profil seçildi:
+
+| # | Profil | Yaş | Teknoloji Düzeyi | Personası |
+| :--- | :--- | :--- | :--- | :--- |
+| K1 | Erkek, sürücü, ofis çalışanı | 34 | Orta | Ahmet — Sürücü |
+| K2 | Kadın, çevre gönüllüsü | 27 | Yüksek | Ayşe — Çevreci Vatandaş |
+| K3 | Erkek, emekli öğretmen | 58 | Düşük | Mehmet — Bölge Sakini |
+| K4 | Kadın, üniversite öğrencisi | 21 | Yüksek | İrem — Aktif Bildirici |
+| K5 | Erkek, esnaf | 45 | Orta-Düşük | Karma — Genel Vatandaş |
+
+---
+
+## 3. Görev Bazlı Test Sonuçları
+
+### 3.1. Görev Tamamlama Oranları
+
+| Görev | K1 | K2 | K3 | K4 | K5 | Ort. TCR | Ort. Süre |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| G1 — Kayıt | ✅ | ✅ | ✅ | ✅ | ✅ | **%100** | 1 dk 42 sn |
+| G2 — Harita + Olay | ✅ | ✅ | ⚠️ | ✅ | ⚠️ | **%60** | 2 dk 18 sn |
+| G3 — Bildirim Yap | ✅ | ✅ | ❌ | ✅ | ✅ | **%80** | 3 dk 05 sn |
+| G4 — Kesinti Takip | ✅ | ✅ | ⚠️ | ✅ | ❌ | **%60** | 2 dk 51 sn |
+| G5 — Hava Kalitesi | ✅ | ✅ | ✅ | ✅ | ✅ | **%100** | 0 dk 48 sn |
+| G6 — Bildirim Kapat | ✅ | ✅ | ❌ | ✅ | ✅ | **%80** | 1 dk 12 sn |
+
+**Göstergeler:** ✅ Başarılı | ⚠️ Yardımla başarılı | ❌ Başarısız
+
+**Genel Görev Tamamlama Oranı:** %80 (Hedef: > %80 — sınırda)
+
+### 3.2. SUS Skorları
+
+| Katılımcı | SUS Skoru | Yorum |
+| :--- | :--- | :--- |
+| K1 | 82.5 | "Harita kısmı biraz kafa karıştırıcı ama genel olarak güzel." |
+| K2 | 90.0 | "Çok sezgisel, harita katmanları süper." |
+| K3 | 62.5 | "Küçük yazılar var, butonlar nerede tam bilemedim." |
+| K4 | 87.5 | "Bildirim yapma adımları mantıklı." |
+| K5 | 72.5 | "Enerji kesintisi bölümüne nasıl gidiyorum bulamadım." |
+| **Ortalama** | **79.0** | **Kabul edilebilir** (Hedef: > 75) |
+
+SUS skalasına göre **79 puan "İyi" kategorisinin alt sınırındadır** (≥ 85 = Mükemmel, 70–84 = İyi, < 70 = Sorunlu).
+
+---
+
+## 4. Tespit Edilen Sorunlar — Öncelik Matrisi
+
+### 4.1. Kritik Sorunlar (Blocker — Hemen Düzeltilmeli)
+
+**S1 — Harita katman seçicisi görünmüyor (K3, K5)**
+
+Katman toggle'ının harita ekranındaki konumu (sağ üst köşe, şeffaf arka plan) düşük teknoloji kullanıcıları tarafından fark edilmedi. K3: *"Renkleri değiştirmek için bir şey var mıydı, göremedim."*
+
+- **Etki:** Trafik yoğunluğu katmanını açamayan kullanıcı uygulamanın temel değer önerisini keşfedemiyor.
+- **Önerilen Düzeltme:** Katman toggle'ını küçük etiket ile birlikte daha belirgin bir FAB grubuna taşı.
+
+**S2 — Enerji kesintisi ekranına navigasyon belirsiz (K5)**
+
+K5, Ana Sayfa'daki "Enerji" kartını bulmak için Harita, Duyurular ve Profil sekmelerini denedi. Enerji modülünün navigasyonda açık bir yeri yok.
+
+- **Etki:** %40 kullanıcı (%60 tamamlama oranı) bu ekrana ulaşamadı.
+- **Önerilen Düzeltme:** Bottom navigation'a 5. sekme olarak "Enerji" ikonu ekle (veya Ana Sayfa kartını daha belirgin "Detaylar →" butonuyla donat).
+
+---
+
+### 4.2. Önemli Sorunlar (Major — Yakın Sprint'te Düzeltilmeli)
+
+**S3 — "Anonim gönder" checkbox'ının anlamı anlaşılmıyor (K3, K5)**
+
+K3: *"Anonim derken ne demek, kim görecek bunu?"* K5 checkbox'ı işaretleyip kaldırmayı tekrarladı.
+
+- **Önerilen Düzeltme:** Checkbox yanına (i) bilgi ikonu ekle; tıklandığında kısa açıklama tooltip göster: "İsminiz ve kullanıcı bilgileriniz gizlenir; yalnızca olay konumu ve fotoğrafı paylaşılır."
+
+**S4 — Bildirim gönderim sonrası "Ne yapacağım?" belirsizliği (K1, K3)**
+
+Başarılı gönderim ekranından sonra kullanıcılar neye döneceklerini bilemedi; K1 manuel olarak Ana Sayfa'ya geçti.
+
+- **Önerilen Düzeltme:** Onay ekranına "Bildirimi Takip Et" (primary) + "Ana Sayfaya Dön" (secondary) butonları ekle.
+
+**S5 — Profil ekranında bildirim tercihleri için hiyerarşi yok (K3)**
+
+K3, "Trafik" bildirimini kapatmak için 4 farklı switch'i tek tek inceledi, hangisinin trafik bildirimi olduğunu bulmak 1 dk 12 sn sürdü.
+
+- **Önerilen Düzeltme:** Kategori başlıklarını gruplara ayır, her gruba açıklayıcı alt başlık ekle. İkon kullanımı tanıma süresini azaltır.
+
+---
+
+### 4.3. Küçük Sorunlar (Minor — Sonraki Versiyonda)
+
+| Kod | Sorun | Tespit Eden | Öneri |
+| :--- | :--- | :--- | :--- |
+| S6 | Hava kalitesi AQI skoru renk anlamı bilinmiyor | K3, K5 | Skor yanına renk efsanesi ekle |
+| S7 | Fotoğraf seçim alt menüsü (kamera/galeri) kapatmak zor | K3 | Dışarı tıklayınca kapansın |
+| S8 | Kayıt formunda şifre gücü göstergesi metni küçük | K3 | Font büyütülsün (min 14 sp) |
+| S9 | Bottom sheet kaydırma çubuğu (handle) görünmüyor | K5 | Handle çubuğunu belirginleştir |
+
+---
+
+## 5. Olumlu Geri Bildirimler
+
+> "Haritada renk kodlaması çok anlaşılır, anlık yoğunluğu hemen görüyorum." — K1
+
+> "Bildirim yaparken konum otomatik seçildi, çok pratik." — K2, K4
+
+> "Hava kalitesi kartı tam ihtiyacım olan şeydi, her gün bakacağım." — K2
+
+> "Ana sayfada her şeyin özeti var, giriş yapar yapmaz durumu anlıyorum." — K1, K4
+
+**Beğenilen özellikler (katılımcı sayısına göre):**
+
+| Özellik | Beğenen Katılımcı Sayısı |
+| :--- | :--- |
+| Renk kodlu trafik haritası | 5/5 |
+| GPS ile otomatik konum | 4/5 |
+| Ana sayfa özet kartları | 4/5 |
+| Hava kalitesi AQI kartı | 3/5 |
+| Bildirim durum takibi | 3/5 |
+
+---
+
+## 6. Öncelikli İyileştirme Planı
+
+### 6.1. Sprint Planlaması
+
+| Sorun | Sprint | Sorumlu | Tahmini Süre |
+| :--- | :--- | :--- | :--- |
+| S1 — Harita katman seçicisi | Hafta 7 Sprint 1 | Melih | 4 saat |
+| S2 — Enerji navigasyonu | Hafta 7 Sprint 1 | Melih | 6 saat |
+| S4 — Sonraki adım yönlendirmesi | Hafta 7 Sprint 1 | Melih | 2 saat |
+| S3 — Anonim açıklama tooltip | Hafta 7 Sprint 2 | Melih | 1 saat |
+| S5 — Bildirim tercihleri hiyerarşisi | Hafta 7 Sprint 2 | Melih | 3 saat |
+| S6 — AQI renk efsanesi | Hafta 8 | Melih | 1 saat |
+| S7–S9 — Küçük UI sorunları | Hafta 8 | Melih | 3 saat |
+
+### 6.2. Erişilebilirlik İyileştirmeleri (K3 Bulgularına Göre)
+
+K3 (58 yaş, düşük teknoloji yetkinliği) testinden elde edilen bulgular doğrultusunda:
+
+- Tüm FontSize değerleri minimum **14 sp** (body) / **16 sp** (başlık) olarak güncellendi.
+- Dokunma hedefleri **56 dp** minimum olarak artırıldı (kritik aksiyon butonları için).
+- TalkBack etiketi eksik olan 7 bileşene `contentDescription` eklendi.
+- "Büyük Metin" Android erişilebilirlik ayarında layout bozulmalarını önlemek için tüm CardView bileşenlerine `wrap_content` uygulandı.
+
+---
+
+## 7. Yeniden Test (Re-Test) Planı
+
+Yapılacak düzeltmeler uygulandıktan sonra S1 ve S2 için kısmi yeniden test planlandı. Hedef metrikler:
+
+| Metrik | Mevcut | Hedef |
+| :--- | :--- | :--- |
+| Genel TCR | %80 | ≥ %92 |
+| SUS Skoru | 79.0 | ≥ 85 |
+| G2 (Harita) TCR | %60 | ≥ %90 |
+| G4 (Enerji) TCR | %60 | ≥ %85 |
+| K3 SUS | 62.5 | ≥ 72 |
+
+---
+
+## 8. Sonuç
+
+Kullanılabilirlik testi; uygulamanın **temel akışlarının (%80 TCR, SUS 79)** işlevsel olduğunu doğrulamıştır. Yüksek teknoloji kullanıcıları (K2, K4) mükemmel deneyim (SUS > 87) bildirirken, düşük teknoloji kullanıcısı K3 önemli erişilebilirlik sorunları ortaya koymuştur. **2 kritik (S1, S2) ve 3 önemli (S3, S4, S5) sorun** bir sonraki sprint'te öncelikli olarak ele alınacaktır. Düzeltmeler tamamlandıktan sonra yapılacak yeniden testte **SUS ≥ 85** hedefine ulaşılması beklenmektedir.
+
 
 ## Cemile Akay
 # Trafik Optimizasyon Algoritması Teknik Dokümantasyonu ve Sonuç Analizi
