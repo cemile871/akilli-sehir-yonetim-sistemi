@@ -932,7 +932,387 @@ GÖREVİN BURAYA YAPIŞTIRILACAK.
 GÖREVİN BURAYA YAPIŞTIRILACAK.
 
 ## Melih Ahmet Kocaman
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akıllı Şehir Vatandaş Mobil Uygulaması — Bildirim ve Acil Durum Özellikleri Geliştirme Belgesi
+
+> **Bağlam:** Bu belge, Hafta 3 prototip tasarımı ve Hafta 2 gereksinim analizinde tanımlanan bildirim ve acil durum modülünün **Android Studio** ortamında **Kotlin** (XML View / ViewBinding tabanlı) ile gerçeklenmesini kapsamaktadır. Geliştirme sürecinde tespit edilen kullanılabilirlik sorunları giderilmiş; konum seçimi harita tabanlı hale getirilmiş, yerel olay deposu eklenmiş ve karanlık mod kalıcı hale getirilmiştir.
+
+---
+
+## 1. Geliştirilen ve Güncellenen Özellikler
+
+Bu hafta kapsamında dört ana modül geliştirilmiş, iki modül düzeltilmiştir:
+
+1. **Vatandaştan gelen bildirim (Citizen Reporting)** — 4 adımlı akış: kategori → harita konum seçimi → fotoğraf → özet/gönder.
+2. **Harita Tabanlı Konum Seçici (MapPickerDialog)** — Kullanıcı GPS veya haritaya dokunarak olay konumunu belirler.
+3. **Yerel Olay Deposu (IncidentStore)** — Bildirilen olaylar bellekte saklanır; haritada ve duyurularda anlık görünür.
+4. **FCM Push Bildirimi** — Firebase Cloud Messaging entegrasyonu.
+5. **WebSocket** — Canlı olay akışı altyapısı.
+6. **Karanlık Mod** — SharedPreferences'a kaydedilen tercih uygulama yeniden başlatılsa da korunur.
+
+---
+
+## 2. Android Studio Proje Yapısı
+
+```
+app/
+├── manifests/
+│   └── AndroidManifest.xml
+├── java/com.akillisehirapp/
+│   ├── data/
+│   │   ├── api/
+│   │   │   ├── ApiService.kt
+│   │   │   └── RetrofitClient.kt
+│   │   ├── model/
+│   │   │   ├── Models.kt
+│   │   │   └── IncidentStore.kt        ← YENİ: yerel olay deposu
+│   │   ├── repository/
+│   │   └── websocket/
+│   │       └── WebSocketManager.kt
+│   ├── service/
+│   │   └── AkilliSehirMessagingService.kt
+│   └── ui/
+│       ├── report/
+│       │   ├── ReportActivity.kt       ← GÜNCELLENDİ
+│       │   ├── ReportViewModel.kt      ← GÜNCELLENDİ
+│       │   └── MapPickerDialog.kt      ← YENİ
+│       ├── map/
+│       │   └── MapFragment.kt          ← GÜNCELLENDİ: gerçek zamanlı konum + olaylar
+│       ├── announcements/
+│       │   └── AnnouncementsFragment.kt ← GÜNCELLENDİ: olaylar duyurularda görünür
+│       └── profile/
+│           └── ProfileFragment.kt      ← GÜNCELLENDİ: karanlık mod ve bildirim tercihleri
+```
+
+---
+
+## 3. Harita Tabanlı Konum Seçici (MapPickerDialog)
+
+### 3.1. Tasarım Gerekçesi
+
+Önceki sürümde yalnızca GPS koordinatı alınıyordu. Kullanılabilirlik testlerinde kullanıcıların "olay nerede tam olarak?" sorusunu yanıtlayamadığı görüldü. Bu nedenle kullanıcının haritaya dokunarak pin bırakabileceği tam ekran bir konum seçici eklendi.
+
+İlk implementasyon ayrı bir `Activity` (`MapPickerActivity`) olarak yazılmıştı; ancak test sürecinde bazı cihazlarda `SupportMapFragment`'ın `supportFragmentManager` üzerinden başlatılmasında kararlılık sorunu yaşandı. Bu nedenle konum seçici, `DialogFragment` tabanlı `MapPickerDialog`'a dönüştürüldü. Bu yaklaşım, uygulamanın normal harita ekranı (`MapFragment`) ile aynı `childFragmentManager` mekanizmasını kullandığından tüm ortamlarda kararlı çalışmaktadır.
+
+### 3.2. Akış
+
+```
+[ReportActivity — Konum Adımı]
+        │
+        ├── [GPS Konumumu Kullan] → FusedLocationClient → koordinat
+        │
+        └── [Haritadan Seç] ──► MapPickerDialog (tam ekran DialogFragment) açılır
+                                        │
+                                   Tam ekran harita
+                                   (Elazığ'a odaklı)
+                                        │
+                                   Haritaya dokunulur
+                                        │
+                                   Turuncu pin yerleşir
+                                        │
+                                   Koordinat alt çubukta gösterilir
+                                        │
+                                   [Bu Konumu Seç] butonu aktif
+                                        │
+                                   onLocationPicked(LatLng) callback
+                                        │
+                              [Dialog kapanır, ReportActivity'de kalır]
+                                        │
+                              viewModel.konumGuncelle(LatLng)
+```
+
+### 3.3. MapPickerDialog — Temel Kod
+
+```kotlin
+map.setOnMapClickListener { latLng ->
+    map.clear()
+    map.addMarker(MarkerOptions().position(latLng).title("Seçilen Konum"))
+    seciliKonum = latLng
+    tvKonumRef?.text = "Enlem: %.5f\nBoylam: %.5f".format(latLng.latitude, latLng.longitude)
+    btnSecRef?.isEnabled = true
+}
+```
+
+Seçilen koordinat lambda callback ile `ReportActivity`'ye iletilir — ayrı Activity başlatmaya ve `ActivityResult` mekanizmasına gerek kalmaz:
+
+```kotlin
+// ReportActivity.kt
+binding.btnHaritadanSec.setOnClickListener {
+    MapPickerDialog().also { dialog ->
+        dialog.onLocationPicked = { latLng ->
+            viewModel.konumGuncelle(latLng)
+        }
+        dialog.show(supportFragmentManager, "map_picker")
+    }
+}
+```
+
+---
+
+## 4. Yerel Olay Deposu (IncidentStore)
+
+Backend bağlantısı olmadan bildirilen olayların haritada ve duyurularda anlık görünmesi için `IncidentStore` singleton nesnesi tasarlandı.
+
+```kotlin
+object IncidentStore {
+    private val _incidents = MutableLiveData<List<LocalIncident>>(emptyList())
+    val incidents: LiveData<List<LocalIncident>> = _incidents
+
+    fun ekle(incident: LocalIncident) {
+        val liste = _incidents.value?.toMutableList() ?: mutableListOf()
+        liste.add(0, incident)
+        _incidents.postValue(liste)
+    }
+}
+```
+
+**Veri akışı:**
+
+```
+ReportViewModel.gonderi()
+        │
+        ▼
+IncidentStore.ekle(LocalIncident)
+        │
+        ├──► MapFragment gözlemler → turuncu marker eklenir
+        │
+        └──► AnnouncementsFragment gözlemler → "Vatandaş Bildirimi" olarak listelenir
+```
+
+### 4.1. MapFragment entegrasyonu
+
+```kotlin
+IncidentStore.incidents.observe(viewLifecycleOwner) { liste ->
+    liste.forEach { incident ->
+        map.addMarker(
+            MarkerOptions()
+                .position(LatLng(incident.lat, incident.lng))
+                .title(incident.kategori)
+                .snippet("${incident.takipNo} · ${incident.zaman}")
+                .icon(BitmapDescriptorFactory.defaultMarker(
+                    BitmapDescriptorFactory.HUE_ORANGE))
+        )
+    }
+}
+```
+
+### 4.2. AnnouncementsFragment entegrasyonu
+
+```kotlin
+IncidentStore.incidents.observe(viewLifecycleOwner) { incidents ->
+    val incidentDuyurular = incidents.map { inc ->
+        Announcement(
+            id = inc.id.hashCode(),
+            title = "Vatandaş Bildirimi: ${inc.kategori}",
+            description = inc.aciklama.ifEmpty {
+                "Konum: %.4f, %.4f".format(inc.lat, inc.lng)
+            },
+            category = AnnouncementCategory.EMERGENCY,
+            isImportant = false,
+            createdAt = inc.zaman
+        )
+    }
+    adapter.submitList(incidentDuyurular + allAnnouncements)
+}
+```
+
+---
+
+## 5. Karanlık Mod — Kalıcı Tercih
+
+### 5.1. Sorun
+
+İlk implementasyonda `AppCompatDelegate.getDefaultNightMode()` çağrısı Activity yeniden oluşturulduğunda (tema değişiminden sonra) her zaman doğru değeri döndürmüyordu. Ayrıca `isChecked` atanması listener'ı tekrar tetikleyerek sonsuz döngüye yol açıyordu.
+
+### 5.2. Çözüm
+
+Tema tercihi `SharedPreferences`'a kaydedilir. `AkilliSehirApp.onCreate()` içinde uygulama başlarken okunur ve uygulanır. Listener atanmadan önce sıfırlanarak döngü engellenir.
+
+```kotlin
+// AkilliSehirApp.kt
+override fun onCreate() {
+    super.onCreate()
+    val isDark = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        .getBoolean("dark_mode", false)
+    AppCompatDelegate.setDefaultNightMode(
+        if (isDark) AppCompatDelegate.MODE_NIGHT_YES
+        else AppCompatDelegate.MODE_NIGHT_NO
+    )
+    createNotificationChannels()
+}
+```
+
+```kotlin
+// ProfileFragment.kt
+private fun setupDarkMode() {
+    val appPrefs = requireContext()
+        .getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    binding.switchDarkMode.setOnCheckedChangeListener(null)   // döngü önleme
+    binding.switchDarkMode.isChecked = appPrefs.getBoolean("dark_mode", false)
+    binding.switchDarkMode.setOnCheckedChangeListener { _, checked ->
+        appPrefs.edit().putBoolean("dark_mode", checked).apply()
+        AppCompatDelegate.setDefaultNightMode(
+            if (checked) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
+        )
+    }
+}
+```
+
+---
+
+## 6. Bildirim Tercihleri — 4 Kategori
+
+`ProfileFragment` içinde `include` etiketiyle eklenen dört `ItemPrefSwitchBinding` nesnesine doğrudan ViewBinding üzerinden erişildi; `findViewById` yerine `binding.prefX.tvPrefLabel` şeklinde kullanıldı.
+
+```kotlin
+private fun setupNotificationPrefs() {
+    val prefs = requireContext()
+        .getSharedPreferences("notif_prefs", Context.MODE_PRIVATE)
+    listOf(
+        Triple(binding.prefTraffic,    "Trafik Bildirimleri",         "notif_traffic"),
+        Triple(binding.prefAirQuality, "Hava Kalitesi Bildirimleri",  "notif_air"),
+        Triple(binding.prefEnergy,     "Enerji Kesinti Bildirimleri", "notif_energy"),
+        Triple(binding.prefEmergency,  "Acil Durum Bildirimleri",     "notif_emergency")
+    ).forEach { (pref, label, key) ->
+        pref.tvPrefLabel.text = label
+        pref.switchPref.isChecked = prefs.getBoolean(key, true)
+        pref.switchPref.setOnCheckedChangeListener { _, checked ->
+            prefs.edit().putBoolean(key, checked).apply()
+        }
+    }
+}
+```
+
+---
+
+## 7. Kamera URI — ViewModel'de Saklama
+
+Activity yeniden oluşturulduğunda (kamera uygulaması ön plana geçince) `geciciFotoUri` alanı kayboluyordu. ViewModel'e taşındı:
+
+```kotlin
+// ReportViewModel.kt
+var geciciFotoUri: Uri? = null   // Activity recreate'den etkilenmez
+
+// ReportActivity.kt
+private val kameraLauncher = registerForActivityResult(
+    ActivityResultContracts.TakePicture()
+) { basarili ->
+    if (basarili) viewModel.geciciFotoUri?.let { viewModel.fotografEkle(it) }
+}
+
+private fun kameraAc() {
+    try {
+        val dosya = File.createTempFile("foto_", ".jpg", cacheDir)
+        val uri = FileProvider.getUriForFile(this, "${packageName}.provider", dosya)
+        viewModel.geciciFotoUri = uri
+        kameraLauncher.launch(uri)
+    } catch (e: Exception) {
+        Toast.makeText(this, "Kamera açılamadı", Toast.LENGTH_SHORT).show()
+    }
+}
+```
+
+---
+
+## 8. Yerel Kimlik Doğrulama (Local Auth)
+
+Backend hazır olmadan uygulamanın tam akışıyla test edilebilmesi için yerel kimlik doğrulama mekanizması eklendi.
+
+### 8.1. Kayıt Akışı
+
+Kullanıcı kayıt olduğunda bilgileri `SharedPreferences`'a kaydedilir:
+
+```kotlin
+// RegisterActivity.kt — catch bloğu (backend yokken)
+authPrefs.edit()
+    .putString("registered_email",    email)
+    .putString("registered_password", password)
+    .putString("access_token",        "local_$email")
+    .apply()
+userPrefs.edit()
+    .putString("user_name",  name)
+    .putString("user_email", email)
+    .apply()
+```
+
+### 8.2. Giriş Akışı
+
+```kotlin
+// LoginActivity.kt
+when {
+    // Kayıtlı kullanıcı eşleşiyor → giriş başarılı
+    savedEmail != null && email == savedEmail && password == savedPass -> goMain()
+    // Şifre yanlış
+    savedEmail != null && email == savedEmail -> binding.tilPassword.error = "Şifre hatalı"
+    // Hiç kayıt yok → demo mod
+    savedEmail == null -> goMain()
+    else -> binding.tilEmail.error = "Bu e-posta kayıtlı değil"
+}
+```
+
+Backend bağlandığında `catch` bloğundaki yerel kayıt kaldırılıp gerçek API yanıtı kullanılacak.
+
+---
+
+## 9. Karanlık Mod — Tam Tema Desteği
+
+### 9.1. Layout Renkleri
+
+Tüm layout dosyalarında sabit renk referansları tema attribute'larıyla değiştirildi:
+
+| Eski | Yeni |
+| :--- | :--- |
+| `android:background="@color/surface"` | `android:background="?attr/colorSurface"` |
+| `android:textColor="@color/on_surface"` | `android:textColor="?attr/colorOnSurface"` |
+| `android:textColor="@color/on_surface_variant"` | `android:textColor="?attr/colorOnSurfaceVariant"` |
+
+Bu sayede sistem tema değiştiğinde arka plan ve metin renkleri otomatik güncellenir.
+
+### 9.2. Gece Teması (`values-night/themes.xml`)
+
+```xml
+<style name="Theme.AkilliSehir" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <item name="colorPrimary">#90CAF9</item>
+    <item name="colorSurface">#1A1C1E</item>
+    <item name="colorOnSurface">#E3E2E6</item>
+    <item name="colorOnSurfaceVariant">#C4C6CF</item>
+    <item name="colorSurfaceVariant">#44474F</item>
+    <item name="android:colorBackground">#1A1C1E</item>
+    <item name="android:statusBarColor">#1A1C1E</item>
+    <item name="android:navigationBarColor">#1A1C1E</item>
+    <item name="android:windowLightStatusBar">false</item>
+</style>
+```
+
+`colorBackground` (attr olmayan) yerine `android:colorBackground` kullanıldı — aksi hâlde `resource linking failed` hatası oluşuyordu.
+
+---
+
+## 10. Test Sonuçları
+
+| Senaryo | Sonuç |
+| :--- | :--- |
+| Kategori seç → haritadan konum → fotoğraf → gönder | ✅ |
+| Haritadan Seç → MapPickerDialog tam ekran açılır | ✅ |
+| GPS ile konum al → pin yerleşir | ✅ |
+| Kamera açılır, fotoğraf çekilir, Activity dönünce URI kaybolmaz | ✅ |
+| Bildirim sonrası turuncu marker haritada görünür | ✅ |
+| Bildirim duyurular listesinde "Vatandaş Bildirimi" olarak görünür | ✅ |
+| Karanlık modda arka plan, yazılar ve kartlar doğru renkte görünür | ✅ |
+| Karanlık mod toggle → uygulama yeniden açılınca tercih korunur | ✅ |
+| 4 bildirim kategorisi ayrı ayrı toggle edilebilir | ✅ |
+| Kayıt ol → giriş yap → profil adı/e-posta doğru gösterilir | ✅ |
+| Yanlış şifre → hata mesajı gösterilir | ✅ |
+
+---
+
+## 11. Sonraki Adımlar
+
+1. Backend hazır olunca `IncidentStore` yerine gerçek API çağrısı bağlanacak.
+2. Yerel auth (`SharedPreferences`) yerine JWT token akışı kullanılacak.
+3. `MapPickerDialog`'da mahalle/adres gösterimi (Geocoder) eklenecek.
+4. Hafta 6 kullanılabilirlik testleri bu versiyonla gerçekleştirilecek.
+
 
 ## Cemile Akay
 GÖREVİN BURAYA YAPIŞTIRILACAK.
