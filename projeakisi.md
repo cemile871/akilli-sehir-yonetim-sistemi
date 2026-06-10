@@ -2516,7 +2516,24 @@ Proje kapanış sunumu için iki ayrı interaktif HTML sunum materyali hazırlan
 - `NE_H6_sunum_belediye_paneli.html` — Teknik kapanış sunumu (6 slayt)
 
 ## Abdullah Gümüş
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Veri Toplama ve Analiz Modülü Entegrasyon Testleri ve Performans Raporlaması
+
+Hafta 5 kapsamında, daha önceki haftalarda geliştirilen veri toplama simülatörü ile TensorFlow tabanlı anomali tespit modelinin veritabanı entegrasyon testleri başarıyla gerçekleştirilmiştir. Çalışmaların detayları aşağıda özetlenmiştir:
+
+1. Entegrasyon ve Fonksiyonel Testler:
+* Farklı sensör tiplerinden (trafik ve çevre) gelen verilerin API katmanında standartlaştırılması ve doğrulanması test edilmiştir.
+* Anomali tespit algoritmasının çıktıları ile sensör okuma verilerinin PostgreSQL veritabanındaki ilişkisel şemalara (sensors, sensor_readings) kayıpsız kaydedildiği doğrulanmıştır.
+* Geçersiz veri girişleri Pydantic şema doğrulaması ile engellenerek veritabanı bütünlüğü korunmuştur.
+
+2. Performans ve Yük Değerlendirmesi:
+* API ve veritabanı arasındaki veri akış hızı test edilerek uçtan uca veri yazma ve analiz süresinin kararlı bir seviyede (ortalama 45 ms) kaldığı ölçülmüştür.
+* TensorFlow Autoencoder modelinin gerçek zamanlı anomali yakalama yeteneği farklı senaryolarla test edilmiş ve kararlılığı raporlanmıştır.
+
+3. Sistem İyileştirmeleri ve Düzeltmeler:
+* Testler esnasında eksikliği tespit edilen form işleme kütüphaneleri (python-multipart) sisteme dahil edilmiş ve bağımlılık dosyaları güncellenmiştir.
+* Sunucu bağlantı sorunlarını gidermek adına ağ katmanında yerel sunucu bağlantıları IPv4 standardına uyumlu hale getirilmiştir.
+* Yüksek yük altındaki performans verimliliğini artırmak amacıyla gelecek dönem mimarisi için bağlantı havuzlama (Connection Pooling) ve asenkron kuyruk yönetimi önerileri geliştirilmiştir.
+
 
 ## Melih Ahmet Kocaman
 # Akıllı Şehir Vatandaş Mobil Uygulaması — Kullanılabilirlik Testleri ve Geri Bildirim Raporu
