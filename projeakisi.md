@@ -1608,7 +1608,30 @@ Tüm kavşakların AQI, PM2.5, gürültü, CO2 ve sıcaklık verilerini bir arad
 - `NE_H4_web_cevresensoranalizi.html` — İnteraktif çevresel sensör analiz dashboard'u
 
 ## Abdullah Gümüş
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Akıllı Şehir Veri Toplama Modülleri ve Merkezi Veritabanı Entegrasyonu
+
+Hafta 3 kapsamında geliştirilen veri toplama simülatörleri ve veri akış modülleri, PostgreSQL tabanlı merkezi akıllı şehir veritabanına entegre edilmiştir. Bu entegrasyon sürecinde veri akışının doğruluğu, bütünlüğü ve güvenliği ön planda tutulmuştur.
+
+## 1. Veri Toplama Modüllerinin Veritabanı Entegrasyonu
+
+Geliştirilen Python veri simülasyon modülü, şehrin dinamik yapısını yansıtacak şekilde yapılandırılarak merkezi veritabanındaki ilgili tablolara bağlanmıştır.
+* **Sensör Verileri Akışı:** Simülatör tarafından üretilen trafik yoğunluğu, araç hızı ve enerji tüketim verileri, tanımlanan sensör kimlikleri (`sensor_id`) ile eşleştirilerek gerçek zamanlı olarak `sensor_readings` tablosuna aktarılmaktadır.
+* **Olay ve Anomali Kaydı:** Yapay zeka modülü tarafından tespit edilen veya simüle edilen acil durumlar, otomatik olarak `incidents` tablosuna yazılmaktadır.
+
+## 2. Veri Akışı ve Bütünlük Doğrulaması
+
+Veri akışının hatasız ve kararlı bir şekilde gerçekleşmesi için veri doğrulama katmanları uygulanmıştır:
+* **Şema ve Tip Doğrulama:** FastAPI backend mimarisindeki Pydantic modelleri aracılığıyla veritabanına yazılacak her veri tipi (JSON, Coğrafi koordinatlar, sayısal metrikler) önceden doğrulanır. Hatalı veya eksik veri paketleri veritabanına ulaşmadan elenir.
+* **İlişkisel Bütünlük:** Veritabanındaki yabancı anahtar (Foreign Key) ilişkileri sayesinde, sistemde kayıtlı olmayan bir sensörden veri girişi yapılması engellenmiştir.
+* **İşlem (Transaction) Yönetimi:** Olası bağlantı kesintilerinde veri kaybını önlemek amacıyla SQLAlchemy ORM transaction yapısı kullanılmıştır. Bir veri paketinin yazılması sırasında hata oluşursa işlem geri alınır (rollback).
+
+## 3. Veri Güvenliği ve İletişim Güvenliği
+
+Şehir altyapısına ait kritik verilerin güvenli bir şekilde taşınması ve saklanması için şu önlemler alınmıştır:
+* **Güvenli Bağlantı (SSL/TLS):** Simülatör ve backend servislerinin PostgreSQL veritabanı ile iletişimi SSL şifrelemesi üzerinden güvenli kanallarla sağlanır.
+* **Gizlilik ve Çevre Değişkenleri:** Veritabanı bağlantı adresleri, kullanıcı adları ve şifreler kod içerisine yazılmamış; `.env` dosyası üzerinden çevre değişkenleri olarak güvenli bir şekilde sisteme aktarılmıştır.
+* **Rol ve Yetkilendirme (RBAC):** Veri yazma modülünün veritabanına erişimi, yalnızca veri ekleme (INSERT) yetkisine sahip sınırlı bir PostgreSQL kullanıcısı üzerinden gerçekleştirilmiştir.
+
 
 ## Melih Ahmet Kocaman
 # Akıllı Şehir Enerji Yönetim Sistemi — Enerji Verimliliği Algoritması Optimizasyon Raporu
