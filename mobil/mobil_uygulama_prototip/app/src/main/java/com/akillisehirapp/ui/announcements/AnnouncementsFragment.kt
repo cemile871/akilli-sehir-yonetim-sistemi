@@ -15,6 +15,7 @@ import com.akillisehirapp.data.model.AnnouncementCategory
 import com.akillisehirapp.databinding.FragmentAnnouncementsBinding
 import com.akillisehirapp.databinding.ItemAnnouncementBinding
 import android.view.LayoutInflater
+import com.akillisehirapp.data.model.IncidentStore
 
 class AnnouncementsFragment : Fragment(R.layout.fragment_announcements) {
 
@@ -54,6 +55,21 @@ class AnnouncementsFragment : Fragment(R.layout.fragment_announcements) {
         binding.rvAnnouncements.adapter = adapter
 
         setupFilters()
+        IncidentStore.incidents.observe(viewLifecycleOwner) { incidents ->
+            val incidentAnnouncements = incidents.map { inc ->
+                Announcement(
+                    id          = inc.id.hashCode(),
+                    title       = "Vatandaş Bildirimi: ${inc.kategori}",
+                    description = inc.aciklama.ifEmpty { "${inc.zaman} bildirildi" },
+                    category    = AnnouncementCategory.EMERGENCY,
+                    isImportant = false,
+                    createdAt   = inc.zaman,
+                    photoUris   = inc.photoUris
+                )
+            }
+            val tumListe = incidentAnnouncements + allAnnouncements
+            adapter.submitList(tumListe)
+        }
     }
 
     private fun setupFilters() {
@@ -94,6 +110,14 @@ class AnnouncementAdapter(
             binding.tvDescription.text = item.description
             binding.tvDate.text = item.createdAt
             binding.chipCategory.text = item.category.label
+
+            // Fotoğraflar varsa göster
+            if (item.photoUris.isNotEmpty()) {
+                binding.rvPhotos.visibility = View.VISIBLE
+                binding.rvPhotos.adapter = PhotoMiniAdapter(item.photoUris)
+            } else {
+                binding.rvPhotos.visibility = View.GONE
+            }
             binding.root.setOnClickListener { onClick(item) }
         }
     }
@@ -110,4 +134,40 @@ class AnnouncementAdapter(
         items = newItems
         notifyDataSetChanged()
     }
+}
+class PhotoMiniAdapter(private val uris: List<String>) :
+    RecyclerView.Adapter<PhotoMiniAdapter.VH>() {
+
+    inner class VH(val iv: android.widget.ImageView) : RecyclerView.ViewHolder(iv)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val iv = android.widget.ImageView(parent.context).apply {
+            layoutParams = ViewGroup.MarginLayoutParams(200, 200).also { it.marginEnd = 8 }
+            scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+            clipToOutline = true
+        }
+        return VH(iv)
+    }
+
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        val uri = android.net.Uri.parse(uris[position])
+        holder.iv.setImageURI(uri)
+        holder.iv.setOnClickListener {
+            fotografTamEkranGoster(holder.iv.context, uri)
+        }
+    }
+
+    private fun fotografTamEkranGoster(context: android.content.Context, uri: android.net.Uri) {
+        val dialog = android.app.Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val iv = android.widget.ImageView(context).apply {
+            setImageURI(uri)
+            scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+            setBackgroundColor(android.graphics.Color.BLACK)
+            setOnClickListener { dialog.dismiss() }
+        }
+        dialog.setContentView(iv)
+        dialog.show()
+    }
+
+    override fun getItemCount() = uris.size
 }

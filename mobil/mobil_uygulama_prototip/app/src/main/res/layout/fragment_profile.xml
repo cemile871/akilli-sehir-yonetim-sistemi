@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface">
+    android:background="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,16 +19,26 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="24dp">
 
-            <TextView
-                android:id="@+id/tvAvatar"
+            <FrameLayout
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:gravity="center"
-                android:text="M"
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:background="@color/primary"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginEnd="16dp">
+                <TextView
+                    android:id="@+id/tvAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="M"
+                    android:textSize="24sp"
+                    android:textColor="@color/white"
+                    android:background="@color/primary" />
+                <ImageView
+                    android:id="@+id/ivProfilePhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -43,7 +53,15 @@
                     android:text="Kullanıcı"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/on_surface" />
+                    android:textColor="?attr/colorOnSurface" />
+
+                <Button
+                    android:id="@+id/btnProfilDuzenle"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profili Düzenle"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvUserEmail"
@@ -51,6 +69,22 @@
                     android:layout_height="wrap_content"
                     android:text="kullanici@email.com"
                     android:textSize="14sp"
+                    android:textColor="@color/on_surface_variant" />
+
+                <TextView
+                    android:id="@+id/tvUserPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Telefon: -"
+                    android:textSize="12sp"
+                    android:textColor="@color/on_surface_variant" />
+
+                <TextView
+                    android:id="@+id/tvUserAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yaş: -"
+                    android:textSize="12sp"
                     android:textColor="@color/on_surface_variant" />
             </LinearLayout>
         </LinearLayout>
@@ -115,7 +149,7 @@
                     android:layout_weight="1"
                     android:text="Karanlık Mod"
                     android:textSize="16sp"
-                    android:textColor="@color/on_surface" />
+                    android:textColor="?attr/colorOnSurface" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchDarkMode"

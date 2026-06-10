@@ -2037,7 +2037,26 @@ Zaman aralığı, kavşak ve modül seçilerek özel rapor oluşturulabilmektedi
 - `belediye-panel/` — React kaynak kodu (Vite + Recharts)
 
 ## Abdullah Gümüş
-GÖREVİN BURAYA YAPIŞTIRILACAK.
+# Python ve TensorFlow Tabanlı Sensör Veri Analizi ve Anomali Tespit Modülü
+
+Şehir genelindeki IoT sensörlerinden (trafik kameraları, hava kalitesi ve çevre sensörleri) toplanan verilerin işlenmesi, TensorFlow tabanlı bir yapay zeka modeliyle analiz edilmesi ve sonuçların merkezi PostgreSQL veritabanına kaydedilmesi amacıyla uçtan uca çalışan bir veri boru hattı modülü geliştirilmiştir. Gerçekleştirilen teknik detaylar şu şekildedir:
+
+1. Veri Ön İşleme, Standartlaştırma ve Kalite Kontrolü:
+* Trafik sensörlerinden gelen sayısal metrikler (araç sayısı, ortalama hız, bekleme süresi) ile çevre sensörlerinden gelen metrikler (hava kalitesi indeksi - AQI, PM2.5 seviyesi, gürültü desibeli) standart bir JSON formatına dönüştürülmüştür.
+* TensorFlow modelinin kararlı çalışabilmesi için tüm sensör verileri kendi fiziksel maksimum sınırları temel alınarak 0 ile 1 aralığında normalize edilmiştir.
+* Veri kalitesini korumak ve eksik/hatalı girişleri ayıklamak amacıyla sınır değer kontrolleri ve veri temizleme adımları uygulanmıştır.
+
+2. TensorFlow ile Autoencoder Yapay Zeka Modeli Geliştirilmesi:
+* Gelen sensör verilerindeki anormallikleri (kazalar, aşırı hava kirliliği vb.) tespit edebilmek amacıyla TensorFlow Keras API kullanılarak bir Autoencoder (Ototodlayıcı) sinir ağı mimarisi kurulmuştur.
+* Model, normal şehir davranışlarını öğrenmek üzere başlangıçta normal dağılıma sahip verilerle eğitilmiştir.
+* Giriş verileri Encoder katmanlarında sıkıştırılarak gizli boyuta (latent space) indirilmiş, ardından Decoder katmanlarında orijinal boyutlarına geri getirilerek yeniden yapılandırılmıştır.
+* Gerçek veri ile yeniden yapılandırılan veri arasındaki fark, Ortalama Karesel Hata (MSE) metodu kullanılarak hesaplanmıştır.
+* Eğitim sonrasında normal veriler üzerindeki yeniden yapılandırma kaybının 98. yüzdelik dilimi (98th percentile) baz alınarak dinamik bir anomali eşik değeri (threshold) belirlenmiştir. Geliştirilen fonksiyonlar, anlık kayıp değerini bu eşikle kıyaslayarak anomali durumunu tespit etmektedir.
+
+3. Sonuçların PostgreSQL Veritabanına Kaydedilmesi:
+* Analiz edilen veriler, anomali tespit sonuçları (is_anomaly parametresi), yeniden yapılandırma kayıp oranları ve zaman damgaları (recorded_at) ile birlikte ilişkisel veritabanı şemasına uygun olarak PostgreSQL'e aktarılmıştır.
+* Veritabanı katmanında sensör okumaları için tasarlanan JSONB şemasıyla doğrudan entegrasyon sağlanarak esnek metrik yapısı korunmuştur.
+
 
 ## Melih Ahmet Kocaman
 # Akıllı Şehir Vatandaş Mobil Uygulaması — Bildirim ve Acil Durum Özellikleri Geliştirme Belgesi

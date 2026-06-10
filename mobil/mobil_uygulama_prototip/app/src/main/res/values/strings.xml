@@ -40,4 +40,22 @@
     <string name="kvkk">KVKK Aydınlatma Metni</string>
     <string name="privacy_policy">Gizlilik Politikası</string>
     <string name="version">Sürüm</string>
+
+
+    <!-- Aşama 2 -->
+    <string name="report_title">Olay Bildir</string>
+    <string name="step_kategori">1. Kategori Seçin</string>
+    <string name="step_konum">2. Konumu Belirleyin</string>
+    <string name="step_foto">3. Fotoğraf Ekleyin</string>
+    <string name="step_ozet">4. Özet ve Gönderin</string>
+    <string name="btn_gonder">Gönder</string>
+    <string name="btn_ileri">İleri</string>
+    <string name="btn_geri">Geri</string>
+    <string name="bildirim_basarili">Bildiriminiz alındı!</string>
+    <string name="ana_sayfaya_don">Ana Sayfaya Dön</string>
+    <string name="konum_sec_baslik">Haritaya dokunarak olay konumunu seçin</string>
+    <string name="konum_gps_git">📍 Konumuma Git</string>
+    <string name="konum_secilmedi">Henüz konum seçilmedi</string>
+    <string name="btn_iptal">İptal</string>
+    <string name="konum_sec_btn">Bu Konumu Seç</string>
 </resources>

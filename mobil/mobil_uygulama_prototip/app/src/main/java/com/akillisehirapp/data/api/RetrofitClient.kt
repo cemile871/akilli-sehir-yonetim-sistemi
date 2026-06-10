@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     // TODO: Backend URL'ini buraya yaz
-    private const val BASE_URL = "https://api.akillisehir.belediye.gov.tr/api/v1/"
+    private const val BASE_URL = "http://10.0.2.2:8000/api/v1/"
 
     private fun buildClient(context: Context): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {

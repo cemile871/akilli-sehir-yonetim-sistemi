@@ -6,6 +6,7 @@ const PAGE_TITLES = {
   cevre: 'Çevre İzleme',
   acil: 'Acil Durum',
   rapor: 'Raporlar & Analiz',
+  api: 'API',
 }
 
 const KAVSAK_DATA = {

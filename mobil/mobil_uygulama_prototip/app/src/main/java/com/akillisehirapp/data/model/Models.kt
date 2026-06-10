@@ -24,7 +24,18 @@ data class User(
     val id: String,
     val name: String,
     val email: String,
-    val role: String = "citizen"
+    val role: String = "citizen",
+    @SerializedName("phone_number") val phoneNumber: String? = null,
+    val age: Int? = null,
+    @SerializedName("profile_photo") val profilePhoto: String? = null,
+    @SerializedName("deletion_scheduled") val deletionScheduled: Boolean = false
+)
+
+data class ProfileUpdateRequest(
+    val name: String? = null,
+    @SerializedName("phone_number") val phoneNumber: String? = null,
+    val age: Int? = null,
+    @SerializedName("profile_photo") val profilePhoto: String? = null
 )
 
 // ─── Trafik ──────────────────────────────────────────────────────────────────
@@ -72,7 +83,8 @@ data class Announcement(
     val category: AnnouncementCategory,
     val isImportant: Boolean,
     val createdAt: String,
-    val photoUrl: String? = null
+    val photoUrl: String? = null,
+    val photoUris: List<String> = emptyList()
 )
 
 enum class AnnouncementCategory(val label: String) {
@@ -96,4 +108,10 @@ data class ApiResponse<T>(
     val success: Boolean,
     val data: T?,
     val message: String?
+)
+
+// ─── Bildirim Yanıtı (Aşama 2) ───────────────────────────────────────────────
+data class BildirimYaniti(
+    val id: Int,
+    @SerializedName("takip_no") val takipNo: String
 )

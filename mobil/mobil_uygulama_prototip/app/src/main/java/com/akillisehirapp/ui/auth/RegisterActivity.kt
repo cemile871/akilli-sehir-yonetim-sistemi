@@ -74,25 +74,43 @@ class RegisterActivity : AppCompatActivity() {
         if (password.length < 8) { binding.tilPassword.error = "En az 8 karakter"; return }
         if (password != confirm) { binding.tilPasswordConfirm.error = "Şifreler eşleşmiyor"; return }
 
+        binding.tilName.error = null
+        binding.tilEmail.error = null
+        binding.tilPassword.error = null
+        binding.tilPasswordConfirm.error = null
+
         lifecycleScope.launch {
             try {
                 val response = apiService.register(RegisterRequest(name, email, password))
-                if (response.isSuccessful) {
-                    val body = response.body()!!
-                    getSharedPreferences("auth_prefs", Context.MODE_PRIVATE).edit()
-                        .putString("access_token", body.accessToken)
+                if (response.isSuccessful && response.body() != null) {
+                    val authData = response.body()!!
+                    
+                    val authPrefs = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+                    val userPrefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                    
+                    authPrefs.edit()
+                        .putString("access_token", authData.accessToken)
+                        .putString("user_email", authData.user.email)
                         .apply()
-                    startActivity(Intent(this@RegisterActivity, MainActivity::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                        
+                    userPrefs.edit()
+                        .putBoolean("is_guest", false)
+                        .putString("user_name", authData.user.name)
+                        .putString("user_email", authData.user.email)
+                        .apply()
+                        
+                    Toast.makeText(this@RegisterActivity, "Kayıt başarıyla tamamlandı", Toast.LENGTH_SHORT).show()
+                    
+                    startActivity(
+                        Intent(this@RegisterActivity, MainActivity::class.java)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    )
                 } else {
-                    Toast.makeText(this@RegisterActivity,
-                        "Kayıt başarısız: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    val errorMsg = "Kayıt başarısız: " + (response.errorBody()?.string() ?: "Bilinmeyen Hata")
+                    Toast.makeText(this@RegisterActivity, errorMsg, Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@RegisterActivity,
-                    "Bağlantı hatası (demo mod)", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this@RegisterActivity, MainActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                Toast.makeText(this@RegisterActivity, "Bağlantı hatası: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }

@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
-    // alias(libs.plugins.google.services)  // Firebase eklenince aktif et
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -84,8 +84,8 @@ dependencies {
     // Security
     implementation(libs.security.crypto)
 
-    // Firebase (google-services plugin aktif edildikten sonra)
-    // implementation(libs.firebase.messaging)
+    // Firebase
+    implementation(libs.firebase.messaging)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

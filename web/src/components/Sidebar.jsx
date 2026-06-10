@@ -6,9 +6,12 @@ const NAV_ITEMS = [
   { id: 'cevre', label: 'Çevre İzleme', icon: '🌿' },
   { id: 'acil', label: 'Acil Durum', icon: '🚑', badge: 1 },
   { id: 'rapor', label: 'Raporlar & Analiz', icon: '📈' },
+  { id: 'api', label: 'API', icon: '🔧' },
 ]
 
-export default function Sidebar({ activePage, setActivePage }) {
+export default function Sidebar({ activePage, setActivePage, onLogout }) {
+  const userEmail = localStorage.getItem('email') || 'admin@belediye.gov'
+  
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -33,7 +36,7 @@ export default function Sidebar({ activePage, setActivePage }) {
             {item.badge && <span className="nav-badge">{item.badge}</span>}
           </button>
         ))}
-        <div className="nav-section">Raporlama</div>
+        <div className="nav-section">Sistem ve Analiz</div>
         {NAV_ITEMS.slice(6).map(item => (
           <button
             key={item.id}
@@ -45,12 +48,17 @@ export default function Sidebar({ activePage, setActivePage }) {
           </button>
         ))}
       </div>
-      <div className="sidebar-footer">
-        <div className="user-box">
-          <div className="user-avatar">YE</div>
+      <div className="sidebar-footer" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div 
+          className="user-box" 
+          onClick={onLogout} 
+          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
+          title="Çıkış Yapmak İçin Tıklayın"
+        >
+          <div className="user-avatar" style={{ background: '#E24B4A', color: '#fff' }}>🚪</div>
           <div>
-            <div className="user-name">Yetkili Operatör</div>
-            <div className="user-role">Belediye Yöneticisi</div>
+            <div className="user-name" style={{ fontSize: '11px', color: '#fff' }}>Çıkış Yap</div>
+            <div className="user-role" style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)' }}>{userEmail}</div>
           </div>
         </div>
       </div>

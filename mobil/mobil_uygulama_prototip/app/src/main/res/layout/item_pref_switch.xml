@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:text="Trafik Bildirimleri"
         android:textSize="16sp"
-        android:textColor="@color/on_surface" />
+        android:textColor="?attr/colorOnSurface" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switchPref"
