@@ -27,9 +27,18 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener { attemptLogin() }
 
         binding.btnGuest.setOnClickListener {
-            // Misafir mod: token kaydetmeden direkt ana sayfaya
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            // Misafir mod: SharedPreferences'a misafir kaydı düşüp direkt ana sayfaya git
+            val userPrefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+            val authPrefs = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+            
+            authPrefs.edit().clear().apply() // Tokenı temizle
+            userPrefs.edit()
+                .putBoolean("is_guest", true)
+                .putString("user_name", "Misafir Kullanıcı")
+                .putString("user_email", "")
+                .apply()
+                
+            goMain()
         }
 
         binding.tvRegister.setOnClickListener {
@@ -45,45 +54,54 @@ class LoginActivity : AppCompatActivity() {
         val email    = binding.etEmail.text?.toString()?.trim() ?: ""
         val password = binding.etPassword.text?.toString() ?: ""
 
-        // Basit validasyon
         if (email.isEmpty()) {
-            binding.tilEmail.error = "E-posta gerekli"
+            binding.tilEmail.error = "Kullanıcı adı veya e-posta girin"
             return
         }
-        if (password.length < 6) {
-            binding.tilPassword.error = "Şifre en az 6 karakter olmalı"
+        if (password.length < 4) {
+            binding.tilPassword.error = "Şifre en az 4 karakter olmalı"
             return
         }
         binding.tilEmail.error    = null
         binding.tilPassword.error = null
-
         setLoading(true)
 
         lifecycleScope.launch {
             try {
                 val response = apiService.login(LoginRequest(email, password))
-                if (response.isSuccessful) {
-                    val body = response.body()!!
-                    // Token kaydet
-                    getSharedPreferences("auth_prefs", Context.MODE_PRIVATE).edit()
-                        .putString("access_token", body.accessToken)
-                        .putString("refresh_token", body.refreshToken)
+                if (response.isSuccessful && response.body() != null) {
+                    val authData = response.body()!!
+                    
+                    val authPrefs = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+                    val userPrefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                    
+                    authPrefs.edit()
+                        .putString("access_token", authData.accessToken)
+                        .putString("user_email", authData.user.email)
                         .apply()
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                    finish()
+                        
+                    userPrefs.edit()
+                        .putBoolean("is_guest", false)
+                        .putString("user_name", authData.user.name)
+                        .putString("user_email", authData.user.email)
+                        .apply()
+                        
+                    goMain()
                 } else {
-                    binding.tilPassword.error = "E-posta veya şifre hatalı"
+                    val errorMsg = if (response.code() == 401) "Kullanıcı adı veya şifre hatalı" else "Giriş başarısız: " + response.code()
+                    Toast.makeText(this@LoginActivity, errorMsg, Toast.LENGTH_LONG).show()
+                    setLoading(false)
                 }
             } catch (e: Exception) {
-                // Geliştirme aşamasında: direkt ana sayfaya git
-                Toast.makeText(this@LoginActivity,
-                    "Sunucuya bağlanılamadı (demo mod)", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                finish()
-            } finally {
+                Toast.makeText(this@LoginActivity, "Bağlantı hatası: ${e.message}", Toast.LENGTH_LONG).show()
                 setLoading(false)
             }
         }
+    }
+
+    private fun goMain() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     private fun setLoading(loading: Boolean) {

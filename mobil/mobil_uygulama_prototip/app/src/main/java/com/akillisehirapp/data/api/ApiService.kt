@@ -1,6 +1,8 @@
 package com.akillisehirapp.data.api
 
 import com.akillisehirapp.data.model.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -13,8 +15,15 @@ interface ApiService {
     @POST("auth/register")
     suspend fun register(@Body request: RegisterRequest): Response<AuthResponse>
 
-    @POST("auth/logout")
-    suspend fun logout(): Response<Unit>
+    // ─── Profil Yönetimi ───────────────────────────────────────────────────────
+    @GET("users/me")
+    suspend fun getMe(): Response<User>
+
+    @PUT("users/profile")
+    suspend fun updateProfile(@Body request: ProfileUpdateRequest): Response<User>
+
+    @POST("users/delete-schedule")
+    suspend fun deleteAccountSchedule(): Response<User>
 
     // ─── Trafik ───────────────────────────────────────────────────────────────
     @GET("traffic/current")
@@ -28,16 +37,23 @@ interface ApiService {
     @GET("announcements")
     suspend fun getAnnouncements(
         @Query("category") category: String? = null,
-        @Query("page") page: Int = 1,
-        @Query("limit") limit: Int = 20
+        @Query("page") page: Int = 1
     ): Response<List<Announcement>>
 
-    @GET("announcements/{id}")
-    suspend fun getAnnouncementDetail(@Path("id") id: Int): Response<Announcement>
-
-    // ─── Olaylar ──────────────────────────────────────────────────────────────
+    // ─── Olaylar (Aşama 2) ───────────────────────────────────────────────────
     @GET("incidents/active")
     suspend fun getActiveIncidents(): Response<List<Incident>>
+
+    @Multipart
+    @POST("incidents")
+    suspend fun bildirimGonder(
+        @Part("kategori")    kategori: RequestBody,
+        @Part("aciklama")    aciklama: RequestBody,
+        @Part("enlem")       enlem:    RequestBody,
+        @Part("boylam")      boylam:   RequestBody,
+        @Part("reported_by") reportedBy: RequestBody?,
+        @Part fotograflar: List<MultipartBody.Part>
+    ): Response<BildirimYaniti>
 
     // ─── FCM Token ────────────────────────────────────────────────────────────
     @PUT("users/fcm-token")

@@ -4,13 +4,16 @@
         <item name="colorPrimaryVariant">#1565C0</item>
         <item name="colorOnPrimary">#003064</item>
         <item name="colorSecondary">#4FD8EB</item>
-        <item name="colorSurface">@color/surface_dark</item>
-        <item name="colorOnSurface">@color/on_surface_dark</item>
-        <item name="android:colorBackground">@color/surface_dark</item>
-        <item name="android:statusBarColor">@color/surface_dark</item>
-        <item name="android:navigationBarColor">@color/surface_dark</item>
+        <item name="colorSurface">#1A1C1E</item>
+        <item name="colorOnSurface">#E3E2E6</item>
+        <item name="colorOnSurfaceVariant">#C4C6CF</item>
+        <item name="colorSurfaceVariant">#44474F</item>
+        <item name="android:colorBackground">#1A1C1E</item>
+        <item name="android:statusBarColor">#1A1C1E</item>
+        <item name="android:navigationBarColor">#1A1C1E</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
+
     <style name="Theme.AkilliSehir.Splash" parent="Theme.AkilliSehir">
         <item name="android:windowBackground">#1565C0</item>
     </style>

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:name=".AkilliSehirApp"
@@ -17,10 +18,8 @@
         android:theme="@style/Theme.AkilliSehir"
         android:supportsRtl="true">
 
-        <!-- Splash -->
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true"
+
+        <activity android:name=".SplashActivity" android:exported="true"
             android:theme="@style/Theme.AkilliSehir.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,32 +27,40 @@
             </intent-filter>
         </activity>
 
-        <!-- Onboarding -->
-        <activity
-            android:name=".ui.onboarding.OnboardingActivity"
-            android:exported="false" />
+        <activity android:name=".ui.onboarding.OnboardingActivity" android:exported="false" />
+        <activity android:name=".ui.auth.LoginActivity"    android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.auth.RegisterActivity" android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.main.MainActivity"     android:exported="false" />
 
-        <!-- Auth -->
-        <activity
-            android:name=".ui.auth.LoginActivity"
-            android:exported="false"
+        <!-- Aşama 2: ReportActivity -->
+        <activity android:name=".ui.report.ReportActivity" android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".ui.auth.RegisterActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+        <!-- Aşama 2: FCM Servisi -->
+        <service android:name=".service.AkilliSehirMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
-        <!-- Main -->
-        <activity
-            android:name=".ui.main.MainActivity"
-            android:exported="false" />
-
-        <!-- Maps API Key -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
+        <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDVUC3dkJSLOkzmVF8MDzxlhe0-UlNei-M" />
 
-    </application>
+            <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
+        <activity
+            android:name=".ui.report.MapPickerActivity"
+            android:exported="false" />
+    </application>
 </manifest>

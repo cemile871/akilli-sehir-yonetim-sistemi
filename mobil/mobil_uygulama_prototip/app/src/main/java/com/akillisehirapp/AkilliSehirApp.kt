@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 
 class AkilliSehirApp : Application() {
 
@@ -15,6 +16,12 @@ class AkilliSehirApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        val isDark = getSharedPreferences("app_prefs", MODE_PRIVATE)
+            .getBoolean("dark_mode", false)
+        AppCompatDelegate.setDefaultNightMode(
+            if (isDark) AppCompatDelegate.MODE_NIGHT_YES
+            else        AppCompatDelegate.MODE_NIGHT_NO
+        )
         createNotificationChannels()
     }
 
