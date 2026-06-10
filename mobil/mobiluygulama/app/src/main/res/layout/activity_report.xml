@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorSurface">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:title="Olay Bildir" />
+
+    <!-- Adım göstergesi -->
+    <ProgressBar
+        android:id="@+id/progressAdim"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:max="100"
+        android:progress="25"
+        android:progressTint="@color/primary" />
+
+    <TextView
+        android:id="@+id/tvAdimBaslik"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+         />
+
+    <!-- Adım 1: Kategori -->
+    <LinearLayout android:id="@+id/stepKategori"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="3"
+            android:useDefaultMargins="true">
+
+            <Button android:id="@+id/btnKaza"
+                android:layout_width="0dp" android:layout_columnWeight="1"
+                android:layout_height="80dp" android:text="🚗 Trafik Kazası"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_margin="4dp" />
+
+            <Button android:id="@+id/btnYangin"
+                android:layout_width="0dp" android:layout_columnWeight="1"
+                android:layout_height="80dp" android:text="🔥 Yangın"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_margin="4dp" />
+
+            <Button android:id="@+id/btnSuBaskini"
+                android:layout_width="0dp" android:layout_columnWeight="1"
+                android:layout_height="80dp" android:text="🌊 Su Baskını"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_margin="4dp" />
+
+            <Button android:id="@+id/btnAltyapi"
+                android:layout_width="0dp" android:layout_columnWeight="1"
+                android:layout_height="80dp" android:text="🔧 Altyapı Arızası"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_margin="4dp" />
+
+            <Button android:id="@+id/btnYolHasari"
+                android:layout_width="0dp" android:layout_columnWeight="1"
+                android:layout_height="80dp" android:text="🚧 Yol Hasarı"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_margin="4dp" />
+
+            <Button android:id="@+id/btnDiger"
+                android:layout_width="0dp" android:layout_columnWeight="1"
+                android:layout_height="80dp" android:text="❓ Diğer"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_margin="4dp" />
+        </GridLayout>
+    </LinearLayout>
+
+    <!-- Adım 2: Konum -->
+    <LinearLayout android:id="@+id/stepKonum"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Olay nerede yaşandı?" android:textSize="15sp"
+            android:textColor="@color/on_surface_variant" android:layout_marginBottom="16dp" />
+
+        <Button android:id="@+id/btnGpsKullan"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="📍 GPS Konumumu Kullan"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnHaritadanSec"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🗺️ Haritadan Seç"
+            android:layout_marginTop="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp" app:cardCornerRadius="8dp">
+            <TextView android:id="@+id/tvKonumBilgisi"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:padding="16dp" android:text="Konum seçilmedi"
+                android:textColor="@color/on_surface_variant" />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <!-- Adım 3: Fotoğraf -->
+    <LinearLayout android:id="@+id/stepFoto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Fotoğraf ekleyin (isteğe bağlı, maks 3)"
+            android:textSize="15sp" android:textColor="@color/on_surface_variant"
+            android:layout_marginBottom="16dp" />
+
+        <Button android:id="@+id/btnFotoEkle"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="📷 Fotoğraf Ekle"
+            android:layout_marginBottom="8dp" />
+
+        <TextView android:id="@+id/tvFotoSayisi"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="0/3 fotoğraf"
+            android:textColor="@color/on_surface_variant" />
+    </LinearLayout>
+
+    <!-- Adım 4: Özet -->
+    <LinearLayout android:id="@+id/stepOzet"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="Kısa açıklama (maks 500 karakter)"
+            android:layout_marginBottom="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etAciklama"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:inputType="textMultiLine" android:lines="4"
+                android:maxLength="500" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox android:id="@+id/cbAnonim"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Anonim olarak gönder"
+            android:layout_marginBottom="16dp" />
+
+        <Button android:id="@+id/btnGonder"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Gönder" android:visibility="gone" />
+
+        <ProgressBar android:id="@+id/progressGonder"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="center" android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Başarı ekranı -->
+    <LinearLayout android:id="@+id/layoutBasari"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:visibility="gone">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="✅" android:textSize="64sp" android:layout_marginBottom="16dp" />
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Bildiriminiz alındı!" android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView android:id="@+id/tvTakipNo"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textSize="16sp" android:textColor="@color/primary"
+            android:layout_marginBottom="32dp" />
+
+        <Button android:id="@+id/btnAnaSayfa"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Ana Sayfaya Dön" />
+    </LinearLayout>
+
+    <!-- Alt butonlar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <Button android:id="@+id/btnGeri"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Geri"
+            android:layout_marginEnd="8dp"
+            android:visibility="invisible" />
+
+        <Button android:id="@+id/btnIleri"
+            android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="İleri"
+            android:enabled="false" />
+    </LinearLayout>
+
+</LinearLayout>

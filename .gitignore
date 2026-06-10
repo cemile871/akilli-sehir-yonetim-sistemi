@@ -1,0 +1,47 @@
+# Virtual Environment
+venv/
+backend/venv/
+**/venv/
+
+# Environment files and credentials
+.env
+backend/.env
+web/belediye-panel/.env
+*.key
+*.pem
+**/.env
+
+# Local databases
+*.db
+backend/akillisehir.db
+**/*.db
+
+# Python cache
+__pycache__/
+*.pyc
+**/__pycache__/
+**/*.pyc
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.iml
+.gradle/
+local.properties
+**/.idea/
+**/.vscode/
+**/*.iml
+**/.gradle/
+**/local.properties
+
+# Build files and dependencies
+node_modules/
+dist/
+**/node_modules/
+**/dist/
+**/build/
+web/belediye-panel/.vite/
+
+# Temporary / helper scripts
+read_docs.py
+read_week3.py
